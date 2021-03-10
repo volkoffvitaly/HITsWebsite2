@@ -1,71 +1,77 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+﻿/*Gradient border*/
+.module-border-wrap {
+    position: relative;
+    background: linear-gradient(135deg, #BD4EEE 33%, rgba(0, 133, 255, 0.5) 66%, rgba(0, 154, 99, 0.5) 100%);
+    background-size: 300% 300%;
+    -webkit-animation: Gradient 7s ease infinite;
+    -moz-animation: Gradient 7s ease infinite;
+    animation: Gradient 7s ease infinite;
+    padding: 10px;
 }
 
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
+.module {
+    min-height: calc(100vh - 20px);
+    width: %;
+    border-radius: 10px;
+    background: #FBFBFB;
+    color: black;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+@-webkit-keyframes Gradient {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+@-moz-keyframes Gradient {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
 }
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
+@keyframes Gradient {
+    0% {
+        background-position: 0% 50%
+    }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
+    50% {
+        background-position: 100% 50%
+    }
 
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    100% {
+        background-position: 0% 50%
+    }
 }
+/*Gradient border*/
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
 
-/* Sticky footer styles
--------------------------------------------------- */
-html {
-  position: relative;
-  min-height: 100%;
-}
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
+    line-height: 60px;
 }
+
+
+
+
+
+/*Debug only is here*/
+
+/*.blank-test {
+    height: 100vh;
+}*/
