@@ -11,7 +11,7 @@
 
 .module {
     min-height: calc(100vh - 20px);
-    width: %;
+    width: 100%;
     border-radius: 10px;
     background: #FBFBFB;
     color: black;
@@ -60,7 +60,39 @@
 }
 /*Gradient border*/
 
+/*Header*/
+nav > a > div {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 20px;
+    color: #393939;
+}
 
+nav > a > div > p {
+    margin-bottom: 0;
+}
+
+/*Kostil*/
+nav > div {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 22px;
+    color: #2F3843;
+}
+
+nav > div > a {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 22px;
+    color: #2F3843;
+}
+/*Header*/
 
 .footer {
     line-height: 60px;
