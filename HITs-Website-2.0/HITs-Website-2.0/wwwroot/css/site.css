@@ -10,8 +10,9 @@
 }
 
 .module {
+    position: relative;
     min-height: calc(100vh - 20px);
-    width: %;
+    width: 100%;
     border-radius: 10px;
     background: #FBFBFB;
     color: black;
@@ -63,7 +64,35 @@
 
 
 .footer {
-    line-height: 60px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    min-height: 400px;
+}
+
+footer h3 {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 36px;
+}
+
+footer p {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+}
+
+footer img {
+    height: 36px;
+    width: auto;
+}
+
+footer .social_media_conteiner{
+    letter-spacing: 16px;
 }
 
 

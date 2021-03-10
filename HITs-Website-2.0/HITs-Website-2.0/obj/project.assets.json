@@ -6720,19 +6720,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Senior Volkov\\.nuget\\packages\\": {}
+    "C:\\Users\\Артем\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Senior Volkov\\Desktop\\HITsWebsite2\\HITs-Website-2.0\\HITs-Website-2.0\\HITs-Website-2.0.csproj",
+      "projectUniqueName": "D:\\GitHub\\HITsWebsite2\\HITs-Website-2.0\\HITs-Website-2.0\\HITs-Website-2.0.csproj",
       "projectName": "HITs-Website-2.0",
-      "projectPath": "C:\\Users\\Senior Volkov\\Desktop\\HITsWebsite2\\HITs-Website-2.0\\HITs-Website-2.0\\HITs-Website-2.0.csproj",
-      "packagesPath": "C:\\Users\\Senior Volkov\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Senior Volkov\\Desktop\\HITsWebsite2\\HITs-Website-2.0\\HITs-Website-2.0\\obj\\",
+      "projectPath": "D:\\GitHub\\HITsWebsite2\\HITs-Website-2.0\\HITs-Website-2.0\\HITs-Website-2.0.csproj",
+      "packagesPath": "C:\\Users\\Артем\\.nuget\\packages\\",
+      "outputPath": "D:\\GitHub\\HITsWebsite2\\HITs-Website-2.0\\HITs-Website-2.0\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\Senior Volkov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Артем\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

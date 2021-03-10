@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+
+    @*Временно, пока отсутствуют свои иконки*@
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 </head>
 <body class="module-border-wrap">
     <div class="module">
@@ -15,16 +18,51 @@
             This is header
         </header>
 
-
         <div class="container">
             <main role="main" class="pb-3">
                 @RenderBody()
             </main>
         </div>
 
-        <footer class="border-top footer text-muted">
-            <div class="container">
-                This is footer
+        <footer class="footer border-top">
+            <div class="row m-0 pl-3">
+                <div class="col-6">
+                    <div class="container px-5">
+
+                        <div class="d-flex">
+                            <img src="~/svg/logo.svg">
+                            <div class="align-self-center ml-2">
+                                <h3>Высшая IT Школа</h3>
+                            </div>
+                        </div>
+
+                        @*<h3 class="d-flex"><img src="~/svg/logo.svg"> Высшая IT Школа</h3>*@
+
+                        <p class="pt-4">
+                            634050, Томск, Проспект Ленина, 36 <br>
+                            <br>
+                            Пн-пт: с 9:00 до 17:00 <br>
+                            Сб: с 9:00 до 13:00 <br>
+                            Воскресенье — выходной день <br>
+                            <br>
+                            Email: abiturient@hits.tsu.ru <br>
+                            Приёмная комиссия: +7(3822)942-101, +7(953)911-76-59 <br>
+                            (только в рабочие часы) <br>
+                        </p>
+
+                        <div class="d-inline-block social_media_conteiner">
+                            <a href="#"><img src="~/svg/vk-logo.svg"></a>
+                            <a href="#"><img src="~/svg/facebook-logo.svg"></a>
+                            <a href="#"><img src="~/svg/instagram-logo.svg"></a>
+                            <a href="#"><img src="~/svg/youtube-logo.svg"></a>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="col-6 m-0 p-0">
+                    fff
+                </div>
             </div>
         </footer>
     </div>
