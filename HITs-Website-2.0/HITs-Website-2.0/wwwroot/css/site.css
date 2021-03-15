@@ -60,8 +60,9 @@
 }
 /*Gradient border*/
 
+
 /*Header*/
-nav > a > div {
+.header-logo-name {
     font-family: Montserrat;
     font-style: normal;
     font-weight: 500;
@@ -70,27 +71,80 @@ nav > a > div {
     color: #393939;
 }
 
-nav > a > div > p {
+.header-logo-name > p {
     margin-bottom: 0;
 }
 
-/*Kostil*/
-nav > div {
+.header-list {
     font-family: Montserrat;
     font-style: normal;
     font-weight: 700;
     font-size: 18px;
     line-height: 22px;
-    color: #2F3843;
 }
 
-nav > div > a {
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 22px;
-    color: #2F3843;
+/*important used to override bootstrap link color*/
+.nav-link {
+    color: #2F3843!important;
+}
+
+.nav-link:hover {
+    color: #3FAEFF!important;
+}
+/**/
+
+.header-left-margin {
+    margin-left: 250px;
+}
+
+@media screen and (max-width: 1799px) {
+    .header-left-margin {
+        margin-left: 225px;
+    }
+}
+@media screen and (max-width: 1599px) {
+    .header-left-margin {
+        margin-left: 175px;
+    }
+}
+@media screen and (max-width: 1499px) {
+    .header-left-margin {
+        margin-left: 130px;
+    }
+}
+@media screen and (max-width: 1399px) {
+    .header-list {
+        font-size: 16px;
+    }
+}
+@media screen and (max-width: 1299px) {
+    .header-left-margin {
+        margin-left: 75px;
+    }
+}
+@media screen and (max-width: 1199px) {
+    .header-list {
+        font-size: 14px;
+    }
+}
+@media screen and (max-width: 1099px) {
+    .header-left-margin {
+        margin-left: 40px;
+    }
+}
+@media screen and (max-width: 1049px) {
+    .custom-margin {
+        margin-left: 15px;
+    }
+}
+@media screen and (max-width: 991px) {
+    .header-list {
+        font-size: 18px;
+    }
+
+    .header-left-margin {
+        margin-left: 0px;
+    }
 }
 /*Header*/
 
@@ -99,7 +153,16 @@ nav > div > a {
 }
 
 
+.a {
+    position: relative;
+    z-index: 1;
+}
 
+.b {
+    top: 5px;
+
+    position: absolute;
+}
 
 
 /*Debug only is here*/
