@@ -182,18 +182,6 @@ footer .social_media_conteiner{
 }
 
 
-.a {
-    position: relative;
-    z-index: 1;
-}
-
-.b {
-    top: 5px;
-
-    position: absolute;
-}
-
-
 /*Debug only is here*/
 
 /*.blank-test {
