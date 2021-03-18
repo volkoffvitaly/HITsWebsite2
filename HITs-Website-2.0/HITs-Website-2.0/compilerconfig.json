@@ -6,5 +6,9 @@
   {
     "outputFile": "wwwroot/scss/StyleSheet.css",
     "inputFile": "wwwroot/scss/StyleSheet.scss"
+  },
+  {
+    "outputFile": "wwwroot/scss/site.css",
+    "inputFile": "wwwroot/scss/site.scss"
   }
 ]
