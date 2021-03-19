@@ -33,9 +33,9 @@
 
 
         <header>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light pt-4 pb-4">
+            <nav class="navbar navbar-expand-lg navbar-light bg-transparent pt-4 pb-4">
                 <a class="navbar-brand d-flex" href="#">
-                    <img class="mr-xl-3 mr-lg-2 mr-3" src="~/svg/logo.svg">
+                    <img class="mr-3" src="~/svg/logo.svg">
                     <div class="align-self-center header-logo-name">
                         <p>Высшая<p>
                         <p>IT Школа<p>
@@ -50,16 +50,16 @@
                             <li class="nav-item active header-left-margin text-nowrap mr-xl-4 mr-lg-3">
                                 <a class="nav-link" href="#">Профессии</a>
                             </li>
-                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-3">
+                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
                                 <a class="nav-link" href="#">Поступление</a>
                             </li>
-                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-3">
+                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
                                 <a class="nav-link" href="#">Жизнь в Томске</a>
                             </li>
-                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-3">
+                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
                                 <a class="nav-link" href="#">О Высшей IT школе</a>
                             </li>
-                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-3">
+                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
                                 <a class="nav-link" href="#">Контакты</a>
                             </li>
                             <li class="nav-item dropdown ml-lg-auto">
@@ -84,52 +84,58 @@
                 
             </main>
         </div>
+            </nav>
+        </header>
+
+
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+
 
         <footer class="footer">
-            <div class="row m-0">
-                <div class="col-6">
-                    <div class="container px-5">
+                <div class="row m-0">
+                    <div class="col-6">
+                        <div class="container px-5">
 
-                        <div class="d-flex">
-                            <img src="~/svg/logo.svg">
-                            <div class="align-self-center ml-2">
-                                <h3>Высшая IT Школа</h3>
+                            <div class="d-flex">
+                                <img src="~/svg/logo.svg">
+                                <div class="align-self-center ml-2">
+                                    <h3>Высшая IT Школа</h3>
+                                </div>
                             </div>
+
+                            <p class="pt-4">
+                                634050, Томск, Проспект Ленина, 36 <br>
+                                <br>
+                                Пн-пт: с 9:00 до 17:00 <br>
+                                Сб: с 9:00 до 13:00 <br>
+                                Воскресенье — выходной день <br>
+                                <br>
+                                Email: abiturient@hits.tsu.ru <br>
+                                Приёмная комиссия: +7(3822)942-101, +7(953)911-76-59 <br>
+                                (только в рабочие часы) <br>
+                            </p>
+
+                            <div class="d-inline-block social_media_conteiner">
+                                <a href="#"><img src="~/svg/vk-logo.svg"></a>
+                                <a href="#"><img src="~/svg/facebook-logo.svg"></a>
+                                <a href="#"><img src="~/svg/instagram-logo.svg"></a>
+                                <a href="#"><img src="~/svg/youtube-logo.svg"></a>
+                            </div>
+
+
                         </div>
-
-                        @*<h3 class="d-flex"><img src="~/svg/logo.svg"> Высшая IT Школа</h3>*@
-
-                        <p class="pt-4">
-                            634050, Томск, Проспект Ленина, 36 <br>
-                            <br>
-                            Пн-пт: с 9:00 до 17:00 <br>
-                            Сб: с 9:00 до 13:00 <br>
-                            Воскресенье — выходной день <br>
-                            <br>
-                            Email: abiturient@hits.tsu.ru <br>
-                            Приёмная комиссия: +7(3822)942-101, +7(953)911-76-59 <br>
-                            (только в рабочие часы) <br>
-                        </p>
-
-                        <div class="d-inline-block social_media_conteiner">
-                            <a href="#"><img src="~/svg/vk-logo.svg"></a>
-                            <a href="#"><img src="~/svg/facebook-logo.svg"></a>
-                            <a href="#"><img src="~/svg/instagram-logo.svg"></a>
-                            <a href="#"><img src="~/svg/youtube-logo.svg"></a>
+                    </div>
+                    <div class="col-6 m-0 p-0">
+                        <div style="position:relative;overflow:hidden;">
+                            <a href="https://yandex.ru/maps/org/tomskiy_gosudarstvenny_universitet/1789939939/?utm_medium=mapframe&utm_source=maps" style="color:#eee;font-size:12px;position:absolute;top:0px;">Томский Государственный университет</a>
+                            <a href="https://yandex.ru/maps/67/tomsk/category/university_college/184106140/?utm_medium=mapframe&utm_source=maps" style="color:#eee;font-size:12px;position:absolute;top:14px;">ВУЗ в Томске</a>
+                            <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A1e32620ed2764c9c7daae7da82593244a65ba5218ce01ad0b837b9864e4782c4&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
                         </div>
-
-
                     </div>
                 </div>
-                <div class="col-6 m-0 p-0">
-                    <div style="position:relative;overflow:hidden;">
-                        <a href="https://yandex.ru/maps/org/tomskiy_gosudarstvenny_universitet/1789939939/?utm_medium=mapframe&utm_source=maps" style="color:#eee;font-size:12px;position:absolute;top:0px;">Томский Государственный университет</a>
-                        <a href="https://yandex.ru/maps/67/tomsk/category/university_college/184106140/?utm_medium=mapframe&utm_source=maps" style="color:#eee;font-size:12px;position:absolute;top:14px;">ВУЗ в Томске</a>
-                        <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A1e32620ed2764c9c7daae7da82593244a65ba5218ce01ad0b837b9864e4782c4&amp;source=constructor" width="100%" height="400" frameborder="0"></iframe>
-                    </div>
-                </div>
-            </div>
-        </footer>
+            </footer>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

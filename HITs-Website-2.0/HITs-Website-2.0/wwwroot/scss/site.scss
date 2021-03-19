@@ -1,22 +1,63 @@
-﻿/*Gradient border*/
+﻿@import "mixins_breakpoints.scss";
+
+
+//Adaptive gradient border
+@mixin min-height-include-borders($border-size) {
+    min-height: calc(100vh - #{$border-size}*2);
+}
+
+$border-size-xs: 0.25rem; // 4px/16
+$border-size-sm: 0.375rem; // 6px/16
+$border-size-md: 0.5rem; // 8px/16
+$border-size-lg: 0.625rem; // 10px/16
+
+
 .module-border-wrap {
     position: relative;
+    padding: $border-size-xs;
+
+    @include sm {
+        padding: $border-size-sm;
+    }
+
+    @include md {
+        padding: $border-size-md;
+    }
+
+    @include lg {
+        padding: $border-size-lg;
+    }
+
+    .module {
+        position: relative;
+        width: 100%;
+        border-radius: 5px;
+        background: #FBFBFB;
+
+        @include min-height-include-borders($border-size-xs);
+
+        @include sm {
+            @include min-height-include-borders($border-size-sm);
+            border-radius: 10px;
+        }
+
+        @include md {
+            @include min-height-include-borders($border-size-md);
+        }
+
+        @include lg {
+            @include min-height-include-borders($border-size-lg);
+        }
+    }
+    //Animation
     background: linear-gradient(135deg, #BD4EEE 33%, rgba(0, 133, 255, 0.5) 66%, rgba(0, 154, 99, 0.5) 100%);
     background-size: 300% 300%;
     -webkit-animation: Gradient 7s ease infinite;
     -moz-animation: Gradient 7s ease infinite;
     animation: Gradient 7s ease infinite;
-    padding: 10px;
+    //Animation
 }
 
-.module {
-    position: relative;
-    min-height: calc(100vh - 20px);
-    width: 100%;
-    border-radius: 10px;
-    background: #FBFBFB;
-    color: black;
-}
 
 @-webkit-keyframes Gradient {
     0% {
@@ -59,103 +100,120 @@
         background-position: 0% 50%
     }
 }
-/*Gradient border*/
+
+//Adaptive gradient border
 
 
-/*Header*/
-.header-logo-name {
+
+
+// Header
+
+$nav-padding: 1rem;
+$logo_margin-right: 1rem;
+$navbrand_margin-right: 1rem;
+$nav-link_padding-left: 0.5rem;
+
+$logo-width: 56px;
+
+$header-logo-name_font-size: 1.5rem;
+$header-logo-name_width: 5; // in em's
+
+$dynamic-left-margin-lg: 0.02;
+$dynamic-left-margin-rwd-1050: 0.045;
+$dynamic-left-margin-rwd-1100: 0.07;
+$dynamic-left-margin-rwd-1400: 0.13;
+
+nav {
     font-family: Montserrat;
     font-style: normal;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 20px;
-    color: #393939;
-}
+    font-size: 1.125rem;
 
-.header-logo-name > p {
-    margin-bottom: 0;
-}
+    @include lg {
+        font-size: 0.875rem;
+    }
 
-.header-list {
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 22px;
-}
+    @include xl {
+        font-size: 1rem;
+    }
 
-/*important used to override bootstrap link color*/
-.nav-link {
-    color: #2F3843 !important;
-}
+    @include rwd(1300) {
+        font-size: 1.125rem;
+    }
 
-.nav-link:hover {
-    color: #3FAEFF !important;
+    .header-logo-name {
+        font-size: $header-logo-name_font-size; // 1.5rem by default
+        width: $header-logo-name_width + em; // 5 by default (Fixed width to calculate left-margin for main content)
+        font-weight: 500;
+        line-height: 1.04em;
+        color: #393939;
+
+        > p {
+            margin-bottom: 0;
+        }
+    }
+
+    .header-list {
+        font-weight: 700;
+        line-height: 1.2em;
+
+        .nav-link {
+            color: #2F3843 !important; // !important used to override bootstrap link color
+            &:hover {
+                color: #3FAEFF !important; // !important used to override bootstrap link color
+            }
+        }
+    }
 }
-/**/
 
 .header-left-margin {
-    margin-left: 250px;
-}
+    margin-left: 0;
 
-@media screen and (max-width: 1799px) {
-    .header-left-margin {
-        margin-left: 225px;
-    }
-}
-
-@media screen and (max-width: 1599px) {
-    .header-left-margin {
-        margin-left: 175px;
-    }
-}
-
-@media screen and (max-width: 1499px) {
-    .header-left-margin {
-        margin-left: 130px;
-    }
-}
-
-@media screen and (max-width: 1399px) {
-    .header-list {
-        font-size: 16px;
-    }
-}
-
-@media screen and (max-width: 1299px) {
-    .header-left-margin {
-        margin-left: 75px;
-    }
-}
-
-@media screen and (max-width: 1199px) {
-    .header-list {
-        font-size: 14px;
-    }
-}
-
-@media screen and (max-width: 1099px) {
-    .header-left-margin {
-        margin-left: 40px;
-    }
-}
-
-@media screen and (max-width: 1049px) {
-    .custom-margin {
-        margin-left: 15px;
-    }
-}
-
-@media screen and (max-width: 991px) {
-    .header-list {
-        font-size: 18px;
+    @include lg {
+        margin-left: $dynamic-left-margin-lg * 100%;
     }
 
-    .header-left-margin {
-        margin-left: 0px;
+    @include rwd(1050) {
+        margin-left: $dynamic-left-margin-rwd-1050 * 100%;
+    }
+
+    @include rwd(1100) {
+        margin-left: $dynamic-left-margin-rwd-1100 * 100%;
+    }
+
+    @include rwd(1400) {
+        margin-left: $dynamic-left-margin-rwd-1400 * 100%;
     }
 }
-/*Header*/
+// Header
+
+
+// Main
+@mixin calculate-left-margin($dynamic-left-margin) {  // Calculates required margin-left for main content to match a pos of first link of navbar
+    $sum-of-rems: $nav-padding + $logo_margin-right + $navbrand_margin-right + $nav-link_padding-left + ($header-logo-name_font-size * $header-logo-name_width);
+    margin-left: calc(#{$sum-of-rems} + #{$logo-width} + (100vw - #{$sum-of-rems} - #{$logo-width}) * #{$dynamic-left-margin});
+}
+
+main {
+    margin-left: 1rem;
+
+    @include lg {
+        @include calculate-left-margin($dynamic-left-margin-lg);
+    }
+
+    @include rwd(1050) {
+        @include calculate-left-margin($dynamic-left-margin-rwd-1050);
+    }
+
+    @include rwd(1100) {
+        @include calculate-left-margin($dynamic-left-margin-rwd-1100);
+    }
+
+    @include rwd(1400) {
+        @include calculate-left-margin($dynamic-left-margin-rwd-1400);
+    }
+}
+// Main
+
 
 .footer {
     position: absolute;
@@ -189,9 +247,7 @@ footer .social_media_conteiner {
     letter-spacing: 16px;
 }
 
-
-/*Debug only is here*/
-
-/*.blank-test {
+Debug only is here
+.blank-test {
     height: 100vh;
-}*/
+}
