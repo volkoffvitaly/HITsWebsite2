@@ -23,6 +23,9 @@
     background: #FBFBFB;
     overflow: hidden;
     z-index: -100;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     min-height: calc(100vh - 0.25rem*2); }
     @media (min-width: 36em) {
       .module-border-wrap .module {
@@ -104,7 +107,8 @@ nav {
       margin-left: 13%; } }
 
 main {
-  margin-left: 1rem; }
+  margin-left: 1rem;
+  flex: 1; }
   @media (min-width: 62em) {
     main {
       margin-left: calc(11rem + 56px + (100vw - 11rem - 56px) * 0.02); } }
@@ -119,28 +123,30 @@ main {
       margin-left: calc(11rem + 56px + (100vw - 11rem - 56px) * 0.13); } }
 
 .footer {
-  position: absolute;
-  bottom: 0;
   width: 100%;
-  min-height: 400px; }
+  min-height: 25rem;
+  flex-shrink: 0; }
+  .footer #ymap {
+    width: auto;
+    height: 25rem; }
   .footer h3 {
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 24px;
-    line-height: 36px;
+    font-size: 1.5rem;
+    line-height: 1.5em;
     color: #393939; }
   .footer p {
     font-family: Montserrat;
     font-style: normal;
     font-weight: 500;
-    font-size: 18px;
-    line-height: 22px; }
+    font-size: 1.125rem;
+    line-height: 1.22em; }
   .footer img {
-    height: 36px;
+    height: 2.25rem;
     width: auto; }
   .footer .social_media_conteiner {
-    letter-spacing: 16px; }
+    letter-spacing: 1rem; }
 
 /*Debug only is here*/
 /*.blank-test {
@@ -438,7 +444,7 @@ main {
     transform: translate(-50%, -50%) scale(1); }
   80% {
     transform: translate(-50%, -50%) scale(1.1); }
-  95% {
+  100% {
     transform: translate(-50%, -50%) scale(1); } }
 
 @-moz-keyframes Round-scale-1 {
@@ -446,7 +452,7 @@ main {
     transform: translate(-50%, -50%) scale(1); }
   80% {
     transform: translate(-50%, -50%) scale(1.1); }
-  95% {
+  100% {
     transform: translate(-50%, -50%) scale(1); } }
 
 @keyframes Round-scale-1 {
@@ -454,5 +460,5 @@ main {
     transform: translate(-50%, -50%) scale(1); }
   80% {
     transform: translate(-50%, -50%) scale(1.1); }
-  95% {
+  100% {
     transform: translate(-50%, -50%) scale(1); } }
