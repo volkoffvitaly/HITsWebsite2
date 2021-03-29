@@ -65,8 +65,8 @@ namespace HITs_Website_2._0
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    name: "Professions",
+                    pattern: "{controller=Professions}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
         }
