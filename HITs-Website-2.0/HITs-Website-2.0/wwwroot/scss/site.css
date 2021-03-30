@@ -525,12 +525,16 @@ main {
   font-family: Montserrat;
   font-style: normal;
   font-weight: bold;
-  font-size: 3rem;
-  line-height: 3.7rem;
+  font-size: 2.4rem;
+  line-height: 3rem;
   color: #000000; }
+  @media (min-width: 36em) {
+    .info-block h2 {
+      font-size: 3rem;
+      line-height: 3.7rem; } }
 
 .specialty-container {
-  padding: 15px; }
+  padding-bottom: 30px; }
 
 .specialty {
   padding: 1.6rem;
@@ -545,9 +549,8 @@ main {
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-weight: bold;
     font-size: 1.75rem;
-    line-height: 2,125rem;
+    line-height: 2.125rem;
     color: #000000; }
   .specialty p {
     font-family: "Open Sans";
@@ -559,3 +562,34 @@ main {
   .specialty:hover {
     transform: translateY(-0.6rem);
     box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.15); }
+
+#side-navbar {
+  margin-top: 3.7rem;
+  font-family: Consolas;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 1.125rem;
+  line-height: 1.5rem; }
+  #side-navbar ul {
+    padding: 0;
+    margin: 0; }
+  #side-navbar li {
+    list-style: none; }
+  #side-navbar div {
+    padding: 0.5rem;
+    padding-left: 2rem;
+    border-left: 0.125rem solid #D9D9D9;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s; }
+    #side-navbar div a {
+      color: #000000;
+      text-decoration: none; }
+    #side-navbar div:hover {
+      border-left: 2px solid #75c5ff;
+      font-size: 1.25rem;
+      transform: translateX(-0.125rem); }
+  #side-navbar .side-navbar-selected {
+    border-left: 2px solid #3FAEFF; }
+    #side-navbar .side-navbar-selected a {
+      color: #3FAEFF; }
