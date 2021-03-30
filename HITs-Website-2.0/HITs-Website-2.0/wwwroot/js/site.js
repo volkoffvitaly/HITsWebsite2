@@ -3,6 +3,23 @@
 
 // Write your JavaScript code.
 
+
+var $navbar = $("#side-navbar");
+var startPoint = $("#info-block :header:first").first().offset().top
+var lenght = parseInt($($navbar).offset().top - $("#info-block :header:first").first().offset().top)
+
+$(window).scroll(function () {
+
+    if ($(this).scrollTop() > startPoint && $navbar.hasClass("default")) {
+        $navbar.removeClass("default").addClass("fixed");
+        $('.fixed').css('top', `${lenght}px`)
+    } else if ($(this).scrollTop() <= startPoint && $navbar.hasClass("fixed")) {
+        $navbar.removeClass("fixed").addClass("default");
+    }
+});//scroll
+
+
+
 function YandexReadyHandler() {
     var map = new ymaps.Map("ymap", {
         center: [56.46910481095714, 84.94797934925934],
@@ -28,3 +45,4 @@ function YandexReadyHandler() {
     })
     ); return map;
 }
+
