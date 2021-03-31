@@ -3,20 +3,53 @@
 
 // Write your JavaScript code.
 
+function AssignNavbarParameters() {
+    navbarWidth = $navbarContainer.width()
+    startPoint = $("#info-block :header:first").first().offset().top
+    topIndent = parseInt($($navbarPlace).offset().top - $("#info-block :header:first").first().offset().top)
+
+    console.log(topIndent)
+}
+
+function ChangeToFixed() {
+    $navbar.removeClass("default").addClass("fixed");
+    $navbar.css('top', `${topIndent}px`)
+    $navbar.css('width', `${navbarWidth}px`)
+}
+
+function ChangeToDefault() {
+    $navbar.removeClass("fixed").addClass("default");
+    $navbar.css('top', ``)
+    $navbar.css('width', ``)
+}
 
 var $navbar = $("#side-navbar");
-var startPoint = $("#info-block :header:first").first().offset().top
-var lenght = parseInt($($navbar).offset().top - $("#info-block :header:first").first().offset().top)
+var $navbarContainer = $("#side-navbar-container");
+var $navbarPlace = $("#side-navbar-place");
+
+var navbarWidth
+var startPoint
+var topIndent
+
+AssignNavbarParameters()
 
 $(window).scroll(function () {
-
     if ($(this).scrollTop() > startPoint && $navbar.hasClass("default")) {
-        $navbar.removeClass("default").addClass("fixed");
-        $('.fixed').css('top', `${lenght}px`)
+        ChangeToFixed()      
     } else if ($(this).scrollTop() <= startPoint && $navbar.hasClass("fixed")) {
-        $navbar.removeClass("fixed").addClass("default");
+        ChangeToDefault()
     }
 });//scroll
+
+$(window).resize(function () {
+    AssignNavbarParameters()
+
+    if ($(this).scrollTop() > startPoint) {
+        ChangeToFixed()
+    } else if ($(this).scrollTop() <= startPoint) {
+        ChangeToDefault()
+    }
+});//resize
 
 
 

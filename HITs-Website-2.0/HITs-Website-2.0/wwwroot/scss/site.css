@@ -597,3 +597,6 @@ main {
   #side-navbar.fixed {
     position: fixed;
     margin-top: 0; }
+
+#side-navbar-place {
+  margin-top: 3.7rem; }
