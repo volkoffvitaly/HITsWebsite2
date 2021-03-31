@@ -521,7 +521,7 @@ main {
   .title-block button:active {
     transform: scale(0.95); }
 
-#info-block h2 {
+#blocks-container h2 {
   font-family: Montserrat;
   font-style: normal;
   font-weight: bold;
@@ -529,7 +529,7 @@ main {
   line-height: 3rem;
   color: #000000; }
   @media (min-width: 36em) {
-    #info-block h2 {
+    #blocks-container h2 {
       font-size: 3rem;
       line-height: 3.7rem; } }
 

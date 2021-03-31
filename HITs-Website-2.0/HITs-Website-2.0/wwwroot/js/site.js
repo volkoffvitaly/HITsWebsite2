@@ -5,8 +5,8 @@
 
 function AssignNavbarParameters() {
     navbarWidth = $navbarContainer.width()
-    startPoint = $("#info-block :header:first").first().offset().top
-    topIndent = parseInt($($navbarPlace).offset().top - $("#info-block :header:first").first().offset().top)
+    startPoint = $("#blocks-container :header:first").first().offset().top
+    topIndent = parseInt($($navbarPlace).offset().top - $("#blocks-container :header:first").first().offset().top)
 
     console.log(topIndent)
 }
@@ -39,6 +39,8 @@ $(window).scroll(function () {
     } else if ($(this).scrollTop() <= startPoint && $navbar.hasClass("fixed")) {
         ChangeToDefault()
     }
+
+
 });//scroll
 
 $(window).resize(function () {
@@ -51,6 +53,24 @@ $(window).resize(function () {
     }
 });//resize
 
+$(document).ready(function () {
+
+    $(".info-block").each(function (index, elem) {
+
+        let title = $(elem).find("h2:first")
+        $(title).before(`<a name="#${index}"></a>`)
+
+        $navbar.find("ul").append(`<li><div><a href="#${index}">${$(title).text()}</a></div></li>`)
+    })
+
+    $navbar.on("click", "a", function (event) {
+        event.preventDefault();
+        var sc = $(this).attr("href")
+        var dn = $(`a[name*='${sc}']`).first().offset().top;
+        $('html, body').animate({ scrollTop: dn - 20 }, 700);
+    });
+
+});
 
 
 function YandexReadyHandler() {
