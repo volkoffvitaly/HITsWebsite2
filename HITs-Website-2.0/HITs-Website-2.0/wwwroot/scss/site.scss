@@ -808,6 +808,7 @@ main {
 
 #blocks-container {
     h2 {
+        margin-top: 1rem;
         font-family: Montserrat;
         font-style: normal;
         font-weight: bold;
@@ -860,15 +861,25 @@ main {
     }
 }
 
+#side-navbar-container {
+    position: relative;
+}
 
 #side-navbar {
-    margin-top: 3.7rem;
+    margin-top: 4.7rem;
     font-family: Consolas;
     font-style: normal;
     font-weight: bold;
     font-size: 1.125rem;
     line-height: 1.5rem;
     width: 100%;
+
+
+
+    &.press-down {
+        position: absolute;
+        bottom: 30px;
+    }
 
     ul {
         padding: 0;
@@ -883,18 +894,21 @@ main {
         padding: 0.7rem;
         padding-left: 2.5rem;
         border-left: 0.125rem solid #D9D9D9;
-        -webkit-transition: all 0.3s;
-        -moz-transition: all 0.3s;
-        transition: all 0.3s;
+        -webkit-transition: all 0.15s;
+        -moz-transition: all 0.15s;
+        transition: all 0.15s;
 
         a {
             color: #000000;
             text-decoration: none;
+            -webkit-transition: all 0.1s;
+            -moz-transition: all 0.1s;
+            transition: all 0.1s;
         }
 
         &:hover {
             border-left: 2px solid #75c5ff;
-            font-size: 1.25rem;
+            /*font-size: 1.25rem;*/
             transform: translateX(-0.125rem);
         }
 
@@ -914,5 +928,5 @@ main {
 }
 
 #side-navbar-place {
-    margin-top: 3.7rem;
+    margin-top: 4.7rem;
 }
