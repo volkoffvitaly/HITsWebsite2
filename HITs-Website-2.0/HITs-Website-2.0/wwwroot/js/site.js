@@ -7,19 +7,19 @@ function AssignNavbarParameters() {
     navbarWidth = $navbarContainer.width()
     topIndent = parseInt($($navbarPlace).offset().top - $("#blocks-container .info-block:first").first().offset().top)
     startPoint = $("#blocks-container .info-block:first").first().offset().top
-    finishPoint = $navbarContainer.height() + $navbarContainer.offset().top - $navbar.height() - topIndent
+    finishPoint = $("#blocks-container").height() + $("#blocks-container").offset().top - $navbar.height() - topIndent
 }
 
 function ChangeToFixed() {
-    $navbar.addClass("fixed").removeClass("default").removeClass("press-down");
     $navbar.css('top', `${topIndent}px`)
     $navbar.css('width', `${navbarWidth}px`)
+    $navbar.addClass("fixed").removeClass("default").removeClass("press-down");
 }
 
 function ChangeToDefault() {
-    $navbar.removeClass("fixed").addClass("default");
     $navbar.css('top', ``)
     $navbar.css('width', ``)
+    $navbar.removeClass("fixed").addClass("default");
 }
 
 function ChangeToPressDown() {
@@ -40,9 +40,12 @@ function SelectCurrentNavbarItem() {
         }
     })
 
-    $navbar.find(".side-navbar-selected").removeClass("side-navbar-selected")
     let sc = $(currElem).attr("name")
-    $(`a[href*='${sc}']`).first().parent().addClass("side-navbar-selected")
+    let currentDiv = $(`a[href*='${sc}']`).first().parent()
+    if (currentDiv != $navbar.find(".side-navbar-selected").first()) {
+        $navbar.find(".side-navbar-selected").removeClass("side-navbar-selected")
+        $(currentDiv).addClass("side-navbar-selected")
+    }
 }
 
 var $navbar = $("#side-navbar");
@@ -56,11 +59,14 @@ var topIndent
 
 $(window).scroll(function () {
 
-    if ($(this).scrollTop() <= startPoint && $navbar.hasClass("fixed")) {
+    let scrollTop = $(this).scrollTop()
+
+    if (scrollTop <= startPoint && $navbar.hasClass("fixed")) {
         ChangeToDefault()
-    } else if ($(this).scrollTop() > startPoint && $(this).scrollTop() < finishPoint && ($navbar.hasClass("default") || $navbar.hasClass("press-down"))) {
+    } else if ((scrollTop > startPoint && scrollTop < finishPoint)
+        && ($navbar.hasClass("default") || $navbar.hasClass("press-down"))) {
         ChangeToFixed()
-    } else if ($(this).scrollTop() >= finishPoint && $navbar.hasClass("fixed")) {
+    } else if (scrollTop >= finishPoint && $navbar.hasClass("fixed")) {        
         ChangeToPressDown()
     }    
 
@@ -69,6 +75,7 @@ $(window).scroll(function () {
     }
 
     SelectCurrentNavbarItem()
+
 });//scroll
 
 $(window).resize(function () {
@@ -88,19 +95,23 @@ $(document).ready(function () {
     //Добавляем пункты в навбар
     $(".info-block").each(function (index, elem) {
         let title = $(elem).find("h2:first")
-        $(title).before(`<a name="#${index}"></a>`)
+        $(elem).prepend(`<a name="#${index}"></a>`)
         $navbar.find("ul").append(`<li><div><a href="#${index}">${$(title).text()}</a></div></li>`)
     })
 
     //Делаем переход по якорям плавным
+
+    let animationTimeout
+    let animationTime = 700;
     $navbar.on("click", "a", function (event) {
         event.preventDefault();
         let sc = $(this).attr("href")
-        let dn = $(`a[name*='${sc}']`).first().offset().top
-        let animationTime = 700;
-        $('html, body').animate({ scrollTop: dn }, animationTime)
-        $navbar.addClass("inAnimState")
-        setTimeout('$navbar.removeClass("inAnimState")', animationTime)
+        let dn = $(`a[name*='${sc}']`).first().offset().top        
+        $('html, body').stop()                                                              //Остановка текущей анимации
+        $('html, body').animate({ scrollTop: dn }, animationTime)                           //Запуск анимации
+        $navbar.addClass("inAnimState")                                                     //Добваления класса, показываеющего что находится в состоянии анимации
+        clearTimeout(animationTimeout);                                                     //Остановка прошлого таймаута
+        animationTimeout = setTimeout('$navbar.removeClass("inAnimState")', animationTime)  //Запуск таймаута на удаления класса
         $navbar.find(".side-navbar-selected").removeClass("side-navbar-selected")
         $(this).parent().addClass("side-navbar-selected")
     });
