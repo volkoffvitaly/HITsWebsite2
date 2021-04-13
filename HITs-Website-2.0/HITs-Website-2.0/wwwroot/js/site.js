@@ -57,7 +57,7 @@ var startPoint
 var finishPoint
 var topIndent
 
-$(window).scroll(function () {
+window.onscroll = function () {
 
     let scrollTop = $(this).scrollTop()
 
@@ -76,7 +76,7 @@ $(window).scroll(function () {
 
     SelectCurrentNavbarItem()
 
-});//scroll
+};//scroll
 
 $(window).resize(function () {
     AssignNavbarParameters()

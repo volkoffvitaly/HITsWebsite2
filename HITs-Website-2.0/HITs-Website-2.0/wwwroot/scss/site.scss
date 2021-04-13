@@ -267,6 +267,14 @@ main {
 }*/
 
 
+
+#bg-shapes-container {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: -50;
+}
+
 .figure-container {
     position: absolute;
     user-select: none;
@@ -848,6 +856,10 @@ main {
     }
 }
 
+.purple-highlight {
+    color: #BD4EEE;
+}
+
 .title-block {
     span {
         font-family: Consolas;
@@ -858,13 +870,7 @@ main {
         color: #BD4EEE;
     }
 
-    h1 {
-        font-family: Montserrat;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 2.8rem;
-        line-height: 3rem;
-        color: #000000;
+    h1 {       
 
         @include sm {
             font-size: 4rem;
@@ -885,12 +891,7 @@ main {
 #blocks-container {
     h2 {
         margin-top: 1rem;
-        font-family: Montserrat;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 2.4rem;
-        line-height: 3rem;
-        color: #000000;
+        
 
         @include sm {
             font-size: 3rem;
@@ -902,24 +903,10 @@ main {
 .specialty-container {
     padding-bottom: 30px;
 
-    .specialty {
-        padding: 1.6rem;
-        background: #FFFFFF;
-        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-        border-radius: 0.925rem;
-        height: 100%;
+    .specialty {        
         -webkit-transition: all 0.3s;
         -moz-transition: all 0.3s;
         transition: all 0.3s;
-
-        h3 {
-            font-family: Montserrat;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 1.75rem;
-            line-height: 2.125rem;
-            color: #000000;
-        }
 
         p {
             font-family: "Open Sans";
@@ -938,15 +925,6 @@ main {
 }
 
 .test-hits {
-
-    h6 {
-        font-family: Montserrat;
-        font-style: normal;
-        font-weight: 500;
-        font-size: 18px;
-        line-height: 22px;
-        color: #262626;
-    }
 
     input {
         width: 100%;
@@ -982,5 +960,89 @@ main {
         &:focus {
             outline: none;
         }
+    }
+}
+
+h1 {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 2.8rem;
+    line-height: 3rem;
+    color: #000000;
+}
+
+h2 {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 2.4rem;
+    line-height: 3rem;
+    color: #000000;
+}
+
+h3 {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 44px;
+}
+
+h4 {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.75rem;
+    line-height: 2.125rem;
+    color: #000000;
+}
+
+h5 {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 40px;
+    color: #000000;
+}
+
+h6 {
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 22px;
+    color: #262626;
+}
+
+.box {
+    padding: 1.6rem;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 0.925rem;
+    height: 100%;
+}
+
+#budgetary-chance, #paid-chance {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 24px;
+    line-height: 164.1%;
+    /* or 39px */
+    color: #6F6F6F;
+}
+
+.small-addition {
+    display: flex;
+
+    & > div {
+        font-family: Open Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 16px;
+        color: #6F6F6F;
     }
 }

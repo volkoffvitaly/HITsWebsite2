@@ -156,6 +156,12 @@ main {
 /*.blank-test {
     height: 100vh;
 }*/
+#bg-shapes-container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: -50; }
+
 .figure-container {
   position: absolute;
   user-select: none;
@@ -544,6 +550,9 @@ main {
   .big-btn:focus {
     outline: none; }
 
+.purple-highlight {
+  color: #BD4EEE; }
+
 .title-block span {
   font-family: Consolas;
   font-style: normal;
@@ -552,17 +561,10 @@ main {
   line-height: 1.3125rem;
   color: #BD4EEE; }
 
-.title-block h1 {
-  font-family: Montserrat;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 2.8rem;
-  line-height: 3rem;
-  color: #000000; }
-  @media (min-width: 36em) {
-    .title-block h1 {
-      font-size: 4rem;
-      line-height: 4.875rem; } }
+@media (min-width: 36em) {
+  .title-block h1 {
+    font-size: 4rem;
+    line-height: 4.875rem; } }
 
 .title-block p {
   font-family: "Open Sans";
@@ -573,13 +575,7 @@ main {
   color: #000000; }
 
 #blocks-container h2 {
-  margin-top: 1rem;
-  font-family: Montserrat;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 2.4rem;
-  line-height: 3rem;
-  color: #000000; }
+  margin-top: 1rem; }
   @media (min-width: 36em) {
     #blocks-container h2 {
       font-size: 3rem;
@@ -588,21 +584,9 @@ main {
 .specialty-container {
   padding-bottom: 30px; }
   .specialty-container .specialty {
-    padding: 1.6rem;
-    background: #FFFFFF;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 0.925rem;
-    height: 100%;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s; }
-    .specialty-container .specialty h3 {
-      font-family: Montserrat;
-      font-style: normal;
-      font-weight: bold;
-      font-size: 1.75rem;
-      line-height: 2.125rem;
-      color: #000000; }
     .specialty-container .specialty p {
       font-family: "Open Sans";
       font-style: normal;
@@ -613,14 +597,6 @@ main {
     .specialty-container .specialty:hover {
       transform: translateY(-0.6rem);
       box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.15); }
-
-.test-hits h6 {
-  font-family: Montserrat;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 22px;
-  color: #262626; }
 
 .test-hits input {
   width: 100%;
@@ -649,3 +625,76 @@ main {
     transform: scale(0.95); }
   .test-hits button.answer:focus {
     outline: none; }
+
+h1 {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 2.8rem;
+  line-height: 3rem;
+  color: #000000; }
+
+h2 {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 2.4rem;
+  line-height: 3rem;
+  color: #000000; }
+
+h3 {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 36px;
+  line-height: 44px; }
+
+h4 {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 1.75rem;
+  line-height: 2.125rem;
+  color: #000000; }
+
+h5 {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 40px;
+  color: #000000; }
+
+h6 {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: #262626; }
+
+.box {
+  padding: 1.6rem;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 0.925rem;
+  height: 100%; }
+
+#budgetary-chance, #paid-chance {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 164.1%;
+  /* or 39px */
+  color: #6F6F6F; }
+
+.small-addition {
+  display: flex; }
+  .small-addition > div {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    color: #6F6F6F; }
