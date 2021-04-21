@@ -3,5 +3,9 @@
 }
 
 <div class="text-center">
+    @if (User.IsInRole(ApplicationRoles.Administrators))
+    {
+        <h1 class="display-4">@User.Identity.Name</h1>
+    }
     <h4 class="display-4">this is About.cshtml</h4>
 </div>

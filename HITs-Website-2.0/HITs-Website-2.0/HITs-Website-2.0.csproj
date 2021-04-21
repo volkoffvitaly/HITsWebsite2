@@ -22,6 +22,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +31,15 @@
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
+    <None Include="Views\Account\AccessDenied.cshtml" />
+    <None Include="Views\Account\Login.cshtml" />
+    <None Include="Views\Manage\ChangePassword.cshtml" />
+    <None Include="Views\Manage\Index.cshtml" />
+    <None Include="Views\Manage\SetPassword.cshtml" />
+    <None Include="Views\Manage\_Layout.cshtml" />
+    <None Include="Views\Manage\_ManageNav.cshtml" />
+    <None Include="Views\Manage\_StatusMessage.cshtml" />
+    <None Include="Views\Manage\_ViewImports.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,14 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Управление учетной записью</h2>
+
+@await Html.PartialAsync("_ManageNav")
+<div class="mt-3 ml-sm-5 ml-3">
+    @RenderBody()
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

@@ -1,0 +1,26 @@
+﻿@model HITs_Website_2._0.Models.ManageViewModels.IndexViewModel
+@using HITs_Website_2._0.Views.Manage
+@{
+    ViewData["Title"] = "Профиль";
+    ViewData.AddActivePage(HITs_Website_2._0.Views.Manage.ManageNavPages.Index);
+}
+
+<h4>@ViewData["Title"]</h4>
+<b>Имя пользователя (неизменно):</b> @Html.DisplayFor(model => model.Username)
+<div class="row">
+    <div @*class="col-md-6"*@>
+        <form method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Email"><b>E-mail</b></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

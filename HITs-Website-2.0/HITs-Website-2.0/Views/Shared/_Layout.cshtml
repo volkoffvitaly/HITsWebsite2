@@ -33,7 +33,7 @@
                 <img src="~/svg/background-round-2.svg" class="round-gradient" />
                 <img src="~/svg/background-round-3.svg" class="round-gradient" />
             </div>
-        </div>      
+        </div>
 
         <header>
             <nav class="navbar navbar-expand-lg navbar-light bg-transparent pt-4 pb-4">
@@ -82,50 +82,52 @@
         </header>
 
         <main role="main" class="pb-3">
-            @RenderBody()           
-            
+            @RenderBody()
+
         </main>
 
+        @if (ViewBag.DisplayLinkStatus == null || ViewBag.DisplayLinkStatus == "visible")
+        {
+            <footer class="footer">
+                <div class="row m-0">
+                    <div class="col-12 d-none d-sm-block col-lg-6 order-lg-last m-0 p-5 p-lg-0">
+                        <div id="ymap"></div>
+                        <script src="//api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru&onload=YandexReadyHandler" type="text/javascript"></script>
+                    </div>
+                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                        <div class="container px-sm-5">
 
-        <footer class="footer">
-            <div class="row m-0">
-                <div class="col-12 d-none d-sm-block col-lg-6 order-lg-last m-0 p-5 p-lg-0">
-                    <div id="ymap"></div>
-                    <script src="//api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru&onload=YandexReadyHandler" type="text/javascript"></script>
-                </div>
-                <div class="col-12 col-lg-6 mb-4 mb-lg-0">
-                    <div class="container px-sm-5">
-
-                        <div class="d-flex align-content-center">
-                            <img src="~/svg/logo.svg">
-                            <div class="align-self-center ml-2">
-                                <h3>Высшая IT Школа</h3>
+                            <div class="d-flex align-content-center">
+                                <img src="~/svg/logo.svg">
+                                <div class="align-self-center ml-2">
+                                    <h3>Высшая IT Школа</h3>
+                                </div>
                             </div>
+
+                            <p class="pt-4">
+                                634050, Томск, Проспект Ленина, 36 <br>
+                                <br>
+                                Пн-пт: с 9:00 до 17:00 <br>
+                                Сб: с 9:00 до 13:00 <br>
+                                Воскресенье — выходной день <br>
+                                <br>
+                                Email: abiturient@hits.tsu.ru <br>
+                                Приёмная комиссия: +7(3822)942-101, +7(953)911-76-59 <br>
+                                (только в рабочие часы) <br>
+                            </p>
+
+                            <div class="d-inline-block social_media_conteiner">
+                                <a href="#"><img src="~/svg/vk-logo.svg"></a>
+                                <a href="#"><img src="~/svg/facebook-logo.svg"></a>
+                                <a href="#"><img src="~/svg/instagram-logo.svg"></a>
+                                <a href="#"><img src="~/svg/youtube-logo.svg"></a>
+                            </div>
+
                         </div>
-
-                        <p class="pt-4">
-                            634050, Томск, Проспект Ленина, 36 <br>
-                            <br>
-                            Пн-пт: с 9:00 до 17:00 <br>
-                            Сб: с 9:00 до 13:00 <br>
-                            Воскресенье — выходной день <br>
-                            <br>
-                            Email: abiturient@hits.tsu.ru <br>
-                            Приёмная комиссия: +7(3822)942-101, +7(953)911-76-59 <br>
-                            (только в рабочие часы) <br>
-                        </p>
-
-                        <div class="d-inline-block social_media_conteiner">
-                            <a href="#"><img src="~/svg/vk-logo.svg"></a>
-                            <a href="#"><img src="~/svg/facebook-logo.svg"></a>
-                            <a href="#"><img src="~/svg/instagram-logo.svg"></a>
-                            <a href="#"><img src="~/svg/youtube-logo.svg"></a>
-                        </div>
-
                     </div>
                 </div>
-            </div>
-        </footer>
+            </footer>
+        }
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
