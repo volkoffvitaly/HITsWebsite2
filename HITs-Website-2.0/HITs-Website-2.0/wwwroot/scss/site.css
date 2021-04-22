@@ -587,6 +587,7 @@ main {
 .specialty-container {
   padding-bottom: 30px; }
   .specialty-container .specialty {
+    height: 100%;
     -webkit-transition: all 0.3s;
     -moz-transition: all 0.3s;
     transition: all 0.3s; }
@@ -680,7 +681,6 @@ h6 {
   background: #FFFFFF;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   border-radius: 0.925rem;
-  height: 100%;
   font-family: Open Sans;
   font-style: normal;
   font-weight: normal;
@@ -712,3 +712,80 @@ h6 {
     font-size: 12px;
     line-height: 16px;
     color: #6F6F6F; }
+
+#our-people > label {
+  float: left;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid rgba(143, 147, 154, 0.556885);
+  border-right: none;
+  outline: none;
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 2.3em;
+  color: #262626;
+  padding: .375rem .75rem;
+  -webkit-transition: all 0.15s;
+  -moz-transition: all 0.15s;
+  transition: all 0.15s; }
+  #our-people > label:nth-of-type(1) {
+    border-radius: 10px 0px 0px 10px; }
+  #our-people > label:nth-last-of-type(1) {
+    border-radius: 0px 10px 10px 0px;
+    border-right: 1px solid rgba(143, 147, 154, 0.556885); }
+  #our-people > label:hover {
+    background-color: #edf7ff; }
+
+#our-people > input {
+  display: none; }
+  #our-people > input:checked + label {
+    border-bottom: 1px solid #3FAEFF;
+    border-top: 1px solid #3FAEFF;
+    border-left: 1px solid #3FAEFF;
+    color: #3FAEFF;
+    text-shadow: 0 0 .65px #3FAEFF, 0 0 .65px #3FAEFF; }
+    #our-people > input:checked + label + input + label {
+      border-left: 1px solid #3FAEFF; }
+  #our-people > input:nth-last-of-type(1):checked + label {
+    border-right: 1px solid #3FAEFF; }
+
+#our-people .box > div {
+  display: none; }
+
+#students-geographic img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 100%; }
+
+#teachers .img-wrapper, #graduates .img-wrapper {
+  height: 300px;
+  position: relative; }
+  #teachers .img-wrapper img, #graduates .img-wrapper img {
+    max-width: 100%;
+    max-height: 300px;
+    margin: 0 auto;
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0; }
+
+#teachers p, #graduates p {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 25px;
+  color: #6F6F6F; }
+
+#teachers-btn:checked ~ .box #teachers {
+  display: block; }
+
+#students-btn:checked ~ .box #students-geographic {
+  display: block; }
+
+#graduates-btn:checked ~ .box #graduates {
+  display: block; }

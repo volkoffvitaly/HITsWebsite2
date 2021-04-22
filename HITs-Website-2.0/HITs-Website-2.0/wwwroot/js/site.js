@@ -31,6 +31,18 @@ function GetPostionTop(elem) {
     return $(elem).offset().top - $(this).scrollTop()
 }
 
+function HandlePageResizing(scrollTop) {
+    AssignNavbarParameters()
+
+    if (scrollTop > startPoint && scrollTop < finishPoint) {
+        ChangeToFixed()
+    } else if (scrollTop <= startPoint) {
+        ChangeToDefault()
+    } else {
+        ChangeToPressDown()
+    }
+}
+
 function SelectCurrentNavbarItem() {
     let currElem = $(".info-block > a").first()
 
@@ -51,6 +63,7 @@ function SelectCurrentNavbarItem() {
 var $navbar = $("#side-navbar");
 var $navbarContainer = $("#side-navbar-container");
 var $navbarPlace = $("#side-navbar-place");
+var buttons = [$("#teachers-btn"), $("#students-btn"), $("#graduates-btn")];
 
 var navbarWidth
 var startPoint
@@ -79,16 +92,12 @@ window.onscroll = function () {
 };//scroll
 
 $(window).resize(function () {
-    AssignNavbarParameters()
-
-    if ($(this).scrollTop() > startPoint && $(this).scrollTop() < finishPoint) {
-        ChangeToFixed()
-    } else if ($(this).scrollTop() <= startPoint) {
-        ChangeToDefault()
-    } else {
-        ChangeToPressDown()
-    }
+    HandlePageResizing($(this).scrollTop())
 });//resize
+
+buttons.forEach(btn => btn.click(function () {
+    HandlePageResizing($(window).scrollTop())
+}))
 
 $(document).ready(function () {
 

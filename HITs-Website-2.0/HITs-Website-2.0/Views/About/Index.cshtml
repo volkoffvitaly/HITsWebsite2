@@ -40,7 +40,7 @@
             </div>
 
             <div class="col-12 mt-3">
-                <div class="specialty box">
+                <div class="box">
                     <h4>Learning by Doing</h4>
                     <p class="pt-3">
                         Программист обучается тогда, когда что-то делает, а не тогда, когда он прослушал и пересказал лекцию на нужную тему
@@ -49,7 +49,7 @@
             </div>
 
             <div class="col-12 mt-4">
-                <div class="specialty box">
+                <div class="box">
                     <h4>Постоянное развитие предметов и преподавателей</h4>
                     <p class="pt-3">
                         После каждого проведённого года, в дисциплины вносятся изменения (потенциально, улучшения), как на уровне содержания, так и на уровне правил прохождения предмета
@@ -58,7 +58,7 @@
             </div>
 
             <div class="col-12 mt-4">
-                <div class="specialty box">
+                <div class="box">
                     <h4>Интересно → сложно</h4>
                     <p class="pt-3">
                         По своей структуре предметы и их компоновка готовят студентов к разным ситуациям, которые могут встречаться в профессиональной деятельности.
@@ -66,8 +66,141 @@
                 </div>
             </div>
 
-        </div>        
+        </div>
 
-        
+        <div class="row info-block mt-5">
+            <div class="col-12 w-100">
+                <h2>Наши люди</h2>
+            </div>
+
+            @*<div class="col-auto buttons-container">
+
+                <input type="radio" name="our-people" id="students-btn" checked><label for="students-btn">Студенты</label>
+
+                <input type="radio" name="our-people" id="teachers-btn"><label for="teachers-btn">Преподаватели</label>
+
+                <input type="radio" name="our-people" id="graduates-btn"><label for="graduates-btn">Выпускники</label>
+
+            </div>*@
+
+
+
+            <div class="col-12 mt-3" id="our-people">
+
+                <input type="radio" name="our-people" id="students-btn" checked><label for="students-btn">Студенты</label>
+
+                <input type="radio" name="our-people" id="teachers-btn"><label for="teachers-btn">Преподаватели</label>
+
+                <input type="radio" name="our-people" id="graduates-btn"><label for="graduates-btn">Выпускники</label>
+
+                <div class="clearfix"></div>
+
+                <div class="box mt-3">
+
+                    <div id="students-geographic">
+                        <h4 class="mt-2">География студентов</h4>
+                        <img class="mt-4" src="~/svg/map-students.svg">
+                    </div>
+
+                    <div id="teachers">
+                        <div class="row">
+                            <div class="col-4 p-2">
+                                <div class="img-wrapper">
+                                    <img src="~/img/Lidia.png">
+                                </div>
+                                <h4 align="center" class="mt-3">Иванова Лидия Сергеевна</h4>
+                                <p class="mt-3">Тренер чемпионов WOrldSkills и DigitalSkills, амбассадор Mail.ru</p>
+                            </div>
+
+                            <div class="col-4 p-2">
+                                <div class="img-wrapper">
+                                    <img src="~/img/Zmeev.png">
+                                </div>
+                                <h4 align="center" class="mt-3">Змеев Олег Алексеевич</h4>
+                                <p class="mt-3">Проректор по цифровой трансформации. Доктор физико-математических наук, профессор</p>
+                            </div>
+
+                            <div class="col-4 p-2">
+                                <div class="img-wrapper">
+                                    <img src="~/img/Sokov.png">
+                                </div>
+                                <h4 align="center" class="mt-3">Соколов Данила Александрович</h4>
+                                <p class="mt-3">Тренер чемпионов WOrldSkills и DigitalSkills, амбассадор Mail.ru</p>
+                            </div>
+                        </div>
+
+                        <p class="mt-2">Со всей командой наших преподавателей вы можете ознакомиться <a href="http://hits.tsu.ru/ru/teachers">здесь</a></p>
+                    </div>
+
+                    <div id="graduates">
+                        <div class="row">
+
+                            <div class="col-4 p-2">
+                                <div class="img-wrapper">
+                                    <img src="~/img/Lidia.png">
+                                </div>
+                                <h4 align="center" class="mt-3">Дмитрий Биматов</h4>
+                                <p class="mt-3">
+                                    Разработчик программного обеспечения в Microsoft
+                                </p>
+                            </div>
+
+                            <div class="col-4 p-2">
+                                <div class="img-wrapper">
+                                    <img src="~/img/Zmeev.png">
+                                </div>
+                                <h4 align="center" class="mt-3">Роман Чаднов</h4>
+                                <p class="mt-3">
+                                    Инженер-программист в Facebook
+                                </p>
+                            </div>
+
+                            <div class="col-4 p-2">
+                                <div class="img-wrapper">
+                                    <img src="~/img/Sokov.png">
+                                </div>
+                                <h4 align="center" class="mt-3">Евгений Агафонов</h4>
+                                <p class="mt-3">Инженер-разработчик программного обеспечения в Microsoft</p>
+                            </div>
+
+                            <div class="col-4 p-2">
+                                <div class="img-wrapper">
+                                    <img src="~/img/Lidia.png">
+                                </div>
+                                <h4 align="center" class="mt-3">Роман Малахов</h4>
+                                <p class="mt-3">
+                                    Генеральный директор и основатель в bombsquare и ZOOM
+                                </p>
+                            </div>
+
+                            <div class="col-4 p-2">
+                                <div class="img-wrapper">
+                                    <img src="~/img/Zmeev.png">
+                                </div>
+                                <h4 align="center" class="mt-3">Сергей Кондратьев</h4>
+                                <p class="mt-3">Инженер по надежности сайта в Google</p>
+                            </div>
+
+                            <div class="col-4 p-2">
+                                <div class="img-wrapper">
+                                    <img src="~/img/Sokov.png">
+                                </div>
+                                <h4 align="center" class="mt-3">Рената Пожидаева</h4>
+                                <p class="mt-3">
+                                    Ведущий разработчик в RevenueWell
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <p class="mt-2">Со всей командой наших преподавателей вы можете ознакомиться <a href="http://hits.tsu.ru/ru/teachers">здесь</a></p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
     </div>
 </div>
