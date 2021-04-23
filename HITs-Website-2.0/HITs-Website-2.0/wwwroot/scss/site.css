@@ -21,7 +21,6 @@
     width: 100%;
     border-radius: 5px;
     background: #FBFBFB;
-    overflow: hidden;
     z-index: -100;
     min-height: 100vh;
     display: flex;
@@ -158,6 +157,7 @@ main {
 }*/
 #bg-shapes-container {
   position: absolute;
+  overflow: hidden;
   height: 100%;
   width: 100%;
   z-index: -50; }
@@ -483,7 +483,8 @@ main {
   position: relative; }
 
 #side-navbar {
-  margin-top: 4.7rem;
+  position: sticky;
+  top: 0;
   font-family: Consolas;
   font-style: normal;
   font-weight: bold;
@@ -523,9 +524,6 @@ main {
     position: fixed;
     margin-top: 0; }
 
-#side-navbar-place {
-  margin-top: 4.7rem; }
-
 .big-btn {
   background: #3FAEFF;
   border-radius: 10px;
@@ -556,7 +554,7 @@ main {
 .blue-highlight {
   color: #3FAEFF; }
 
-.title-block span {
+.title-page span {
   font-family: Consolas;
   font-style: normal;
   font-weight: normal;
@@ -565,11 +563,11 @@ main {
   color: #BD4EEE; }
 
 @media (min-width: 36em) {
-  .title-block h1 {
+  .title-page h1 {
     font-size: 4rem;
     line-height: 4.875rem; } }
 
-.title-block p {
+.title-page p {
   font-family: "Open Sans";
   font-style: normal;
   font-weight: normal;
@@ -577,12 +575,10 @@ main {
   line-height: 2.0625rem;
   color: #000000; }
 
-#blocks-container h2 {
-  margin-top: 1rem; }
-  @media (min-width: 36em) {
-    #blocks-container h2 {
-      font-size: 3rem;
-      line-height: 3.7rem; } }
+@media (min-width: 36em) {
+  #blocks-container h2 {
+    font-size: 3rem;
+    line-height: 3.7rem; } }
 
 .specialty-container {
   padding-bottom: 30px; }
@@ -791,7 +787,7 @@ h6 {
   display: block; }
 
 .adding-card {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(230, 230, 230, 0.2);
   text-align: right;
   position: relative; }
   .adding-card .btn-add-container {
@@ -815,6 +811,8 @@ h6 {
       opacity: 0.2;
       height: 100%;
       width: 100%; }
+  .adding-card:hover {
+    background: rgba(255, 255, 255, 0.2); }
 
 .hidden {
   display: none !important; }
@@ -833,3 +831,28 @@ h6 {
   font-weight: normal;
   font-size: 24px;
   line-height: 33px; }
+
+.title-block {
+  display: flex; }
+  .title-block text {
+    float: left; }
+  .title-block .edit-title-btn {
+    visibility: hidden;
+    cursor: pointer;
+    background-image: url(/img/pencil.png);
+    background-position: bottom;
+    background-size: 0.8em;
+    background-repeat: no-repeat;
+    background-color: inherit;
+    border: none;
+    outline: none;
+    height: 1em;
+    width: 1em; }
+  .title-block:hover .edit-title-btn {
+    visibility: visible; }
+  .title-block .entry-field {
+    font-size: 3rem;
+    line-height: 3.7rem;
+    font-family: Montserrat;
+    font-style: normal;
+    /*font-weight: bold;*/ }

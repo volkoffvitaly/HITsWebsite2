@@ -33,8 +33,7 @@ $border-size-lg: 0.625rem; // 10px/16
         position: relative;
         width: 100%;
         border-radius: 5px;
-        background: #FBFBFB;
-        overflow: hidden;
+        background: #FBFBFB;        
         z-index: -100;
         min-height: 100vh;
         display: flex;
@@ -270,6 +269,7 @@ main {
 
 #bg-shapes-container {
     position: absolute;
+    overflow: hidden;
     height: 100%;
     width: 100%;
     z-index: -50;
@@ -761,7 +761,10 @@ main {
 }
 
 #side-navbar {
-    margin-top: 4.7rem;
+
+    position: sticky;
+    top: 0;
+
     font-family: Consolas;
     font-style: normal;
     font-weight: bold;
@@ -819,10 +822,6 @@ main {
         margin-top: 0;
     }
 }
-
-#side-navbar-place {
-    margin-top: 4.7rem;
-}
 //Navbar
 
 .big-btn {
@@ -864,7 +863,7 @@ main {
     color: #3FAEFF;
 }
 
-.title-block {
+.title-page {
     span {
         font-family: Consolas;
         font-style: normal;
@@ -893,10 +892,7 @@ main {
 }
 
 #blocks-container {
-    h2 {
-        margin-top: 1rem;
-        
-
+    h2 {        
         @include sm {
             font-size: 3rem;
             line-height: 3.7rem;
@@ -1176,7 +1172,7 @@ h6 {
 }
 
 .adding-card {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(230, 230, 230, 0.2);
     text-align: right;
     position: relative;
 
@@ -1204,6 +1200,10 @@ h6 {
             width: 100%;
         }
     }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
 }
 
 .hidden {
@@ -1228,4 +1228,40 @@ h6 {
     font-weight: normal;
     font-size: 24px;
     line-height: 33px;
+}
+
+.title-block {
+    display: flex;
+
+    text {
+        float: left;
+    }
+
+    .edit-title-btn {
+        visibility: hidden;
+        cursor: pointer;
+        background-image: url(/img/pencil.png);
+        background-position: bottom;
+        background-size: 0.8em;
+        background-repeat: no-repeat;
+        background-color: inherit;
+        border: none;
+        outline: none;
+        height: 1em;
+        width: 1em;
+    }
+
+    &:hover {
+        .edit-title-btn {
+            visibility: visible;
+        }
+    }
+
+    .entry-field {
+        font-size: 3rem;
+        line-height: 3.7rem;
+        font-family: Montserrat;
+        font-style: normal;
+        /*font-weight: bold;*/
+    }
 }
