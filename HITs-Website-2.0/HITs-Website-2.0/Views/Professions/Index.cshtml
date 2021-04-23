@@ -87,6 +87,24 @@
                         </div>
                     </div>
 
+                    @*Видет только модератор*@
+                    <div class="col-sm-6 col-md-4 specialty-container">
+                        <div class="specialty box adding-card">
+
+                            <div class="btn-add-container">
+                                <input class="add-btn" />
+                            </div>
+
+                            <form class="hidden">
+                                <input class="entry-field" type="text" name="name" value="" placeholder="Название" autocomplete="off" />
+                                <input class="entry-field mt-3" type="text" name="name" value="" placeholder="Описание" autocomplete="off" />
+                                <button type="button" class="cancel-adding btn btn-outline-danger mt-3">Отмена</button>
+                                <button type="submit" class="btn btn-primary mt-3">Добвавить</button>
+                            </form>
+                            
+                        </div>
+                    </div>
+
                 </div>                
             </div>
         </div>
@@ -105,7 +123,7 @@
                                 <h6>Шуточный вопрос</h6>
                             </div>
                             <div class="col-11 col-lg-6 col-xl-5">
-                                <input type="text" placeholder="Ответ" />
+                                <input class="entry-field" type="text" placeholder="Ответ" />
                             </div>
                         </div>
 
@@ -133,7 +151,7 @@
                                 <h6>Шуточный вопрос</h6>
                             </div>
                             <div class="col-11 col-lg-6 col-xl-5">
-                                <input type="text" placeholder="Ответ" />
+                                <input class="entry-field" type="text" placeholder="Ответ" />
                             </div>
                         </div>
 

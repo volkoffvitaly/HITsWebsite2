@@ -596,18 +596,10 @@ main {
       font-style: normal;
       font-weight: normal;
       font-size: 1.125rem;
-      line-height: 1,5625rem; }
-    .specialty-container .specialty:hover {
-      transform: translateY(-0.6rem);
-      box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.15); }
-
-.test-hits input {
-  width: 100%;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  border-bottom: solid 1px #8D96B2;
-  line-height: 40px; }
+      line-height: 1.5625rem; }
+  .specialty-container:hover .specialty {
+    transform: translateY(-0.6rem);
+    box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.15); }
 
 .test-hits button.answer {
   width: 100%;
@@ -628,6 +620,14 @@ main {
     transform: scale(0.95); }
   .test-hits button.answer:focus {
     outline: none; }
+
+.entry-field {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  border-bottom: solid 1px #8D96B2;
+  line-height: 40px; }
 
 h1 {
   font-family: Montserrat;
@@ -684,8 +684,8 @@ h6 {
   font-family: Open Sans;
   font-style: normal;
   font-weight: normal;
-  font-size: 24px;
-  line-height: 33px;
+  font-size: 18px;
+  line-height: 24.5px;
   color: #6F6F6F; }
   .box .additional-info {
     font-family: Open Sans;
@@ -789,3 +789,47 @@ h6 {
 
 #graduates-btn:checked ~ .box #graduates {
   display: block; }
+
+.adding-card {
+  background: rgba(255, 255, 255, 0.2);
+  text-align: right;
+  position: relative; }
+  .adding-card .btn-add-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+    .adding-card .btn-add-container .add-btn {
+      cursor: pointer;
+      background-image: url(/img/plus--v2.png);
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: inherit;
+      border: none;
+      outline: none;
+      opacity: 0.2;
+      height: 100%;
+      width: 100%; }
+
+.hidden {
+  display: none !important; }
+
+.company-container {
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+  .company-container img {
+    max-height: 64px;
+    max-width: 90%; }
+
+.large-text {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 33px; }

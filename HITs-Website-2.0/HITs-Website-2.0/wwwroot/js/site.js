@@ -141,6 +141,28 @@ $(document).ready(function () {
 
 
 
+
+var $addCards = $('.adding-card')
+
+$addCards.each(function () {
+    container = $(this).find('.btn-add-container').first()
+    addBtn = $(container).find('.add-btn').first()
+    form = $(this).find('form').first()
+    cancelBtn = $(this).find('.cancel-adding').first()
+
+    addBtn.click(function () {
+        $(form).removeClass('hidden')
+        $(container).addClass('hidden')
+    })
+
+    cancelBtn.click(function () {
+        $(container).removeClass('hidden')
+        $(form).addClass('hidden')
+    })
+})
+
+
+
 //Функция для выставление позици в Яндекс Картах и удаления элементов меню
 function YandexReadyHandler() {
     var map = new ymaps.Map("ymap", {
