@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HITs_Website_2._0.Controllers
 {
-    public class ProfessionsController : Controller
+    public class LiveController : Controller
     {
         public IActionResult Index()
         {

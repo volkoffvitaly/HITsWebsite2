@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 using HITs_Website_2._0.Models;
 using HITs_Website_2._0.Models.ManageViewModels;
 
-namespace BackendTest2.Controllers
+namespace HITs_Website_2._0.Controllers
 {
     [Authorize]
     [Route("[controller]/[action]")]

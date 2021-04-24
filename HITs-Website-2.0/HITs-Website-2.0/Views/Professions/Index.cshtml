@@ -1,5 +1,9 @@
-﻿@{
+﻿@using HITs_Website_2._0.Services
+@inject IDataProviderService DataProviderService
+
+@{
     ViewData["Title"] = "Home Page";
+    var professions = await DataProviderService.GetProfessions();
 }
 
 <div class="row mb-5">
@@ -26,7 +30,7 @@
     <div id="side-navbar-container" class="col-3 d-none d-lg-block pt-4">
         <div id="side-navbar-place"></div>
         <div id="side-navbar" class="default">
-            <ul>                
+            <ul>
             </ul>
         </div>
 
@@ -38,6 +42,16 @@
         <div class="row info-block">
             <div class="col-12">
                 <h2>Кем я стану?</h2>
+                @if (User.IsInRole(ApplicationRoles.Administrators))
+                {
+                    // Edit
+                }
+                @if (User.IsInRole(ApplicationRoles.Administrators)) // test
+                {
+                    <form asp-controller="Professions" asp-action="AddProfession" method="post">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </form>
+                }
             </div>
             <div class="col-12 mt-3">
                 <div class="row">
@@ -87,7 +101,35 @@
                         </div>
                     </div>
 
-                </div>                
+                    @if (User.IsInRole(ApplicationRoles.Administrators))
+                    {
+                        <div class="col-sm-6 col-md-4 specialty-container">
+                            <div class="specialty box">
+                                Здесь должна быть полупрозрачная карточка с "плюсиком". Т.е. кликабельная карточка. После нажатия на которое появляются (из hidden) два инпута.
+                            </div>
+                        </div>
+                    }
+
+
+                    @if (professions == null)
+                    {
+                        <text>Здесь пока пусто...</text>
+                    }
+                    else
+                    {
+                        @foreach (var profession in professions)
+                        {
+                            <div class="col-sm-6 col-md-4 specialty-container">
+                                <div class="specialty box">
+                                    <h4>@profession.Name</h4>
+                                    <p class="pt-3">
+                                        @profession.Description
+                                    </p>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
             </div>
         </div>
 
@@ -154,8 +196,3 @@
 
     </div>
 </div>
-
-
-@*<div class="text-center">
-        <h4 class="display-4">this is Professions.cshtml</h4>
-    </div>*@

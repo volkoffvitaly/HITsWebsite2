@@ -1,4 +1,5 @@
 using HITs_Website_2._0.Data;
+using HITs_Website_2._0.Services;
 using HITs_Website_2._0.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -41,7 +42,7 @@ namespace HITs_Website_2._0
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            //services.AddScoped<IUserPermissionsService, UserPermissionsService>();
+            services.AddScoped<IDataProviderService, DataProviderService>();
 
             services.AddControllersWithViews();
         }
