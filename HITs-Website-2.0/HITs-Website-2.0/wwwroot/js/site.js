@@ -4,31 +4,46 @@
 // Write your JavaScript code.
 
 function AssignNavbarParameters() {
-    navbarWidth = $navbarContainer.width()
-    topIndent = parseInt($($navbarPlace).offset().top - $("#blocks-container .info-block:first").first().offset().top)
-    startPoint = $("#blocks-container .info-block:first").first().offset().top
-    finishPoint = $("#blocks-container").height() + $("#blocks-container").offset().top - $navbar.height() - topIndent
+    //navbarWidth = $navbarContainer.width()
+    topIndent = parseInt($('.box').first().offset().top - $("#blocks-container .info-block:first").first().offset().top)
+    $navbar.css('margin-top',`${topIndent}px`)
+    $navbar.css('top',`${topIndent}px`)
+
+    //startPoint = $("#blocks-container .info-block:first").first().offset().top
+    //finishPoint = $("#blocks-container").height() + $("#blocks-container").offset().top - $navbar.height() - topIndent
 }
 
-function ChangeToFixed() {
-    $navbar.css('top', `${topIndent}px`)
-    $navbar.css('width', `${navbarWidth}px`)
-    $navbar.addClass("fixed").removeClass("default").removeClass("press-down");
-}
+//function ChangeToFixed() {
+//    $navbar.css('top', `${topIndent}px`)
+//    $navbar.css('width', `${navbarWidth}px`)
+//    $navbar.addClass("fixed").removeClass("default").removeClass("press-down");
+//}
 
-function ChangeToDefault() {
-    $navbar.css('top', ``)
-    $navbar.css('width', ``)
-    $navbar.removeClass("fixed").addClass("default");
-}
+//function ChangeToDefault() {
+//    $navbar.css('top', ``)
+//    $navbar.css('width', ``)
+//    $navbar.removeClass("fixed").addClass("default");
+//}
 
-function ChangeToPressDown() {
-    $navbar.css('top', ``)
-    $navbar.removeClass("fixed").addClass("press-down");
-}
+//function ChangeToPressDown() {
+//    $navbar.css('top', ``)
+//    $navbar.removeClass("fixed").addClass("press-down");
+//}
 
 function GetPostionTop(elem) {
     return $(elem).offset().top - $(this).scrollTop()
+}
+
+function HandlePageResizing(scrollTop) {
+    AssignNavbarParameters()
+
+    //if (scrollTop > startPoint && scrollTop < finishPoint) {
+    //    ChangeToFixed()
+    //} else if (scrollTop <= startPoint) {
+    //    ChangeToDefault()
+    //} else {
+    //    ChangeToPressDown()
+    //}
 }
 
 function SelectCurrentNavbarItem() {
@@ -51,6 +66,7 @@ function SelectCurrentNavbarItem() {
 var $navbar = $("#side-navbar");
 var $navbarContainer = $("#side-navbar-container");
 var $navbarPlace = $("#side-navbar-place");
+var buttons = [$("#teachers-btn"), $("#students-btn"), $("#graduates-btn")];
 
 var navbarWidth
 var startPoint
@@ -59,16 +75,16 @@ var topIndent
 
 window.onscroll = function () {
 
-    let scrollTop = $(this).scrollTop()
+    //let scrollTop = $(this).scrollTop()
 
-    if (scrollTop <= startPoint && $navbar.hasClass("fixed")) {
-        ChangeToDefault()
-    } else if ((scrollTop > startPoint && scrollTop < finishPoint)
-        && ($navbar.hasClass("default") || $navbar.hasClass("press-down"))) {
-        ChangeToFixed()
-    } else if (scrollTop >= finishPoint && $navbar.hasClass("fixed")) {        
-        ChangeToPressDown()
-    }    
+    //if (scrollTop <= startPoint && $navbar.hasClass("fixed")) {
+    //    ChangeToDefault()
+    //} else if ((scrollTop > startPoint && scrollTop < finishPoint)
+    //    && ($navbar.hasClass("default") || $navbar.hasClass("press-down"))) {
+    //    ChangeToFixed()
+    //} else if (scrollTop >= finishPoint && $navbar.hasClass("fixed")) {        
+    //    ChangeToPressDown()
+    //}    
 
     if ($navbar.hasClass("inAnimState")) {
         return true
@@ -79,16 +95,12 @@ window.onscroll = function () {
 };//scroll
 
 $(window).resize(function () {
-    AssignNavbarParameters()
-
-    if ($(this).scrollTop() > startPoint && $(this).scrollTop() < finishPoint) {
-        ChangeToFixed()
-    } else if ($(this).scrollTop() <= startPoint) {
-        ChangeToDefault()
-    } else {
-        ChangeToPressDown()
-    }
+    HandlePageResizing($(this).scrollTop())
 });//resize
+
+buttons.forEach(btn => btn.click(function () {
+    HandlePageResizing($(window).scrollTop())
+}))
 
 $(document).ready(function () {
 
@@ -118,18 +130,68 @@ $(document).ready(function () {
 
     //Выставляем позицию навбара
     AssignNavbarParameters()
-    if ($(this).scrollTop() > startPoint && $(this).scrollTop() < finishPoint) {
-        ChangeToFixed()
-    } else if ($(this).scrollTop() <= startPoint) {
-        ChangeToDefault()
-    } else {
-        ChangeToPressDown()
-    }
+
+    //if ($(this).scrollTop() > startPoint && $(this).scrollTop() < finishPoint) {
+    //    ChangeToFixed()
+    //} else if ($(this).scrollTop() <= startPoint) {
+    //    ChangeToDefault()
+    //} else {
+    //    ChangeToPressDown()
+    //}
 
     //Выделяем в навбаре наблюдаемый блок
     SelectCurrentNavbarItem()
 });
 
+
+
+
+var $addCards = $('.adding-card')
+
+$addCards.each(function () {
+    let container = $(this).find('.btn-add-container').first()
+    let addBtn = $(container).find('.add-btn').first()
+    let form = $(this).find('form').first()
+    let cancelBtn = $(this).find('.cancel-adding').first()
+
+    addBtn.click(function () {
+        $(form).removeClass('hidden')
+        $(container).addClass('hidden')
+
+        HandlePageResizing($(window).scrollTop())
+    })
+
+    cancelBtn.click(function () {
+        $(container).removeClass('hidden')
+        $(form).addClass('hidden')
+
+        HandlePageResizing($(window).scrollTop())
+    })
+})
+
+
+
+var $titleBlocks = $('.title-block');
+$titleBlocks.each(function () {
+    let container = $(this).find('h2').first()
+    let editBtn = $(container).find('.edit-title-btn').first()
+    let form = $(this).find('form').first()
+    let cancelBtn = $(this).find('.cancel-editing').first()
+
+    editBtn.click(function () {
+        $(form).removeClass('hidden')
+        $(container).addClass('hidden')
+
+        HandlePageResizing($(window).scrollTop())
+    })
+
+    cancelBtn.click(function () {
+        $(container).removeClass('hidden')
+        $(form).addClass('hidden')
+
+        HandlePageResizing($(window).scrollTop())
+    })
+})
 
 
 //Функция для выставление позици в Яндекс Картах и удаления элементов меню
