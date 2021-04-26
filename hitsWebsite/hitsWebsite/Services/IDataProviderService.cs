@@ -10,7 +10,7 @@ namespace hitsWebsite.Services
 {
     public interface IDataProviderService
     {
-        public Task<List<Profession>> GetProfessions();
+        public Task<List<ProfessionTranslation>> GetProfessions();
         public Task<int> CreateProfession(ProfessionEditModel model);
     }
 }

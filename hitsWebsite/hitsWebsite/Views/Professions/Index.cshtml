@@ -1,9 +1,11 @@
 ﻿@using hitsWebsite.Services
 @inject IDataProviderService DataProviderService
+@inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
 
 @{
     ViewData["Title"] = "Home Page";
     var professions = await DataProviderService.GetProfessions();
+    var supportedCultures = localizationOptions.Value.SupportedUICultures;
 }
 
 <div class="row mb-5">
@@ -104,7 +106,7 @@
                     }
                     else
                     {
-                        @foreach (var profession in professions)
+                        @foreach (var profession in professions.OrderBy(x => x.Name))
                         {
                             <div class="col-sm-6 col-md-4 specialty-container">
                                 <div class="specialty box">
@@ -127,16 +129,23 @@
                                 </div>
 
                                 <form asp-action="AddProfession" method="post" class="hidden">
-                                    @if (ViewBag.ProfessionModel == null)
+                                    @for (var i = 0; i < supportedCultures.Count; i++)
                                     {
-                                        <input class="entry-field" type="text" name="Name" value="" placeholder="Название" autocomplete="off" />
-                                        <input class="entry-field mt-3" type="text" name="Description" value="" placeholder="Описание" autocomplete="off" />
+                                        <h5>@supportedCultures[i].Name</h5>
+                                        <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="Название" autocomplete="off" />
+                                        <input class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="Описание" autocomplete="off" />
+                                        <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" />
                                     }
-                                    else
-                                    {
-                                        <input class="entry-field" type="text" name="Name" value="@ViewBag.ProfessionModel.Name" placeholder="Название" autocomplete="off" />
-                                        <input class="entry-field mt-3" type="text" name="Description" value="@ViewBag.ProfessionModel.Description" placeholder="Описание" autocomplete="off" />
-                                    }
+                                    @*@if (ViewBag.ProfessionModel == null)
+                                        {
+                                            <input class="entry-field" type="text" name="Name" value="" placeholder="Название" autocomplete="off" />
+                                            <input class="entry-field mt-3" type="text" name="Description" value="" placeholder="Описание" autocomplete="off" />
+                                        }
+                                        else
+                                        {
+                                            <input class="entry-field" type="text" name="Name" value="@ViewBag.ProfessionModel.Name" placeholder="Название" autocomplete="off" />
+                                            <input class="entry-field mt-3" type="text" name="Description" value="@ViewBag.ProfessionModel.Description" placeholder="Описание" autocomplete="off" />
+                                        }*@
                                     <button type="button" class="cancel-adding btn btn-outline-danger mt-3">Отмена</button>
                                     <button type="submit" class="btn btn-primary mt-3">Добавить</button>
                                 </form>

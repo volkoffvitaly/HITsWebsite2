@@ -6,9 +6,13 @@ using Microsoft.AspNetCore.Identity;
 
 namespace hitsWebsite.Models
 {
-    public class Profession
+    public class ProfessionTranslation
     {
         public Guid Id { get; set; } = Guid.NewGuid();
-        public ICollection<ProfessionTranslation> ProfessionTranslations { get; set; }
+        public String Language { get; set; }
+        public String Name { get; set; }
+        public String Description { get; set; }
+
+        public Guid Profession_Id { get; set; }
     }
 }

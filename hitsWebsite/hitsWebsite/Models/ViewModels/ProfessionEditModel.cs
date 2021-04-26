@@ -9,8 +9,12 @@ namespace hitsWebsite.Models.ViewModels
     public class ProfessionEditModel
     {
         [Required]
-        public String Name { get; set; }
+        public List<String> Name { get; set; }
+
         [Required]
-        public String Description { get; set; }
+        public List<String> Description { get; set; }
+
+        [Required]
+        public List<String> Language { get; set; }
     }
 }

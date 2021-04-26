@@ -2,6 +2,8 @@
 using hitsWebsite.Models;
 using hitsWebsite.Models.ViewModels;
 using hitsWebsite.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,11 @@ namespace hitsWebsite.Controllers
     public class ProfessionsController : Controller
     {
         private readonly IDataProviderService _dataProviderService;
-
-        public ProfessionsController(IDataProviderService dataProviderService)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ProfessionsController(IDataProviderService dataProviderService, UserManager<ApplicationUser> userManager)
         {
             this._dataProviderService = dataProviderService;
+            this._userManager = userManager;
         }
 
         [HttpGet]
@@ -25,8 +28,9 @@ namespace hitsWebsite.Controllers
             return View();
         }
 
-        [Route("Professions/AddProfession")]
         [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = ApplicationRoles.Administrators)]
         public async Task<IActionResult> AddProfession(ProfessionEditModel model)
         {
             if (ModelState.IsValid)
