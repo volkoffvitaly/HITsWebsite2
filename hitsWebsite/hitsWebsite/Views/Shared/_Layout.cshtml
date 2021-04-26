@@ -1,0 +1,135 @@
+﻿@using hitsWebsite.Models.ViewModels
+@using Microsoft.Extensions.Localization
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - hitsWebsite</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/scss/site.min.css" />
+</head>
+<body class="module-border-wrap">
+    <div class="module">
+
+
+        <div id="bg-shapes-container">
+            <div class="figure-container" id="first-figure">
+                <img src="~/svg/background-square-1.svg" class="square-gradient" />
+                <img src="~/svg/background-square-2.svg" class="square-gradient" />
+                <img src="~/svg/background-square-3.svg" class="square-gradient" />
+            </div>
+
+            <div class="figure-container" id="second-figure">
+                <div>
+                    <img src="~/svg/background-polygon-1.svg" class="polygon-gradient" />
+                    <img src="~/svg/background-polygon-2.svg" class="polygon-gradient" />
+                </div>
+            </div>
+
+            <div class="figure-container" id="third-figure">
+                <img src="~/svg/background-round-1.svg" class="round-gradient" />
+                <img src="~/svg/background-round-2.svg" class="round-gradient" />
+                <img src="~/svg/background-round-3.svg" class="round-gradient" />
+            </div>
+        </div>
+
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-transparent pt-4 pb-4">
+                <a class="navbar-brand d-flex" href="#">
+                    <img class="mr-3" src="~/svg/logo.svg">
+                    <div class="align-self-center header-logo-name">
+                        @localizer["SchoolName"]
+                        @*<p>Высшая<p>
+                        <p>IT Школа<p>*@
+                    </div>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse header-list mt-3 mt-sm-0 ml-3 ml-sm-0" id="navbarSupportedContent">
+                    <div class="w-100">
+                        <ul class="navbar-nav d-flex align-items-sm-center">
+                            <li class="nav-item active header-left-margin text-nowrap mr-xl-4 mr-lg-3">
+                                <a class="nav-link" asp-controller="Professions" asp-action="Index">Профессии</a>
+                            </li>
+                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
+                                <a class="nav-link" asp-controller="Admission" asp-action="Index">Поступление</a>
+                            </li>
+                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
+                                <a class="nav-link" asp-controller="Live" asp-action="Index">Жизнь в Томске</a>
+                            </li>
+                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
+                                <a class="nav-link" asp-controller="About" asp-action="Index">О Высшей IT школе</a>
+                            </li>
+                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
+                                <a class="nav-link" asp-controller="Contacts" asp-action="Index">Контакты</a>
+                            </li>
+                            <li class="nav-item dropdown ml-lg-auto">
+                                <partial name="_Culture" model="@new LanguageEditModel()">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </nav>
+        </header>
+
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+
+        @if (ViewBag.DisplayLinkStatus == null || ViewBag.DisplayLinkStatus == "visible")
+        {
+            <footer class="footer">
+                <div class="row m-0">
+                    <div class="col-12 d-none d-sm-block col-lg-6 order-lg-last m-0 p-5 p-lg-0">
+                        <div id="ymap"></div>
+                        <script src="//api-maps.yandex.ru/2.1/?apikey=YOUR_API_KEY&lang=ru&onload=YandexReadyHandler" type="text/javascript"></script>
+                    </div>
+                    <div class="col-12 col-lg-6 mb-4 mb-lg-0">
+                        <div class="container px-sm-5">
+
+                            <div class="d-flex align-content-center">
+                                <img src="~/svg/logo.svg">
+                                <div class="align-self-center ml-2">
+                                    <h3>Высшая IT Школа</h3>
+                                </div>
+                            </div>
+
+                            <p class="pt-4">
+                                634050, Томск, Проспект Ленина, 36 <br>
+                                <br>
+                                Пн-пт: с 9:00 до 17:00 <br>
+                                Сб: с 9:00 до 13:00 <br>
+                                Воскресенье — выходной день <br>
+                                <br>
+                                Email: abiturient@hits.tsu.ru <br>
+                                Приёмная комиссия: +7(3822)942-101, +7(953)911-76-59 <br>
+                                (только в рабочие часы) <br>
+                            </p>
+
+                            <div class="d-inline-block social_media_conteiner">
+                                <a href="#"><img src="~/svg/vk-logo.svg"></a>
+                                <a href="#"><img src="~/svg/facebook-logo.svg"></a>
+                                <a href="#"><img src="~/svg/instagram-logo.svg"></a>
+                                <a href="#"><img src="~/svg/youtube-logo.svg"></a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        }
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
