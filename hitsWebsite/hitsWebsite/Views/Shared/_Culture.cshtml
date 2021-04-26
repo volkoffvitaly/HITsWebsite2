@@ -17,7 +17,7 @@
     </form>*@
 <form asp-controller="Home" asp-action="CultureManagement" asp-route-returnUrl="@returnUrl" method="post">
     <select name="culture" asp-for="@culture.RequestCulture.UICulture.Name" asp-items="cultureList" onchange="this.form.submit()" class="nav-link dropdown-toggle"
-            data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="border: none; outline: none; background-color: transparent;">
+            data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="border: none; outline: none; background-color: transparent; text-align-last: end;">
         <option value="" selected disabled hidden>@localizer.GetString(culture.RequestCulture.UICulture.Name)</option>
     </select>
 </form>
