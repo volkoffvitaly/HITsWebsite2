@@ -33,7 +33,7 @@ $border-size-lg: 0.625rem; // 10px/16
         position: relative;
         width: 100%;
         border-radius: 5px;
-        background: #FBFBFB;        
+        background: #FBFBFB;
         z-index: -100;
         min-height: 100vh;
         display: flex;
@@ -193,7 +193,7 @@ nav {
 
 
 // Main
-@mixin calculate-left-margin($dynamic-left-margin) {  // Calculates required margin-left for main content to match a pos of first link of navbar
+@mixin calculate-left-margin($dynamic-left-margin) { // Calculates required margin-left for main content to match a pos of first link of navbar
     $sum-of-rems: $nav-padding + $logo_margin-right + $navbrand_margin-right + $nav-link_padding-left + ($header-logo-name_font-size * $header-logo-name_width);
     margin-left: calc(#{$sum-of-rems} + #{$logo-width} + (100vw - #{$sum-of-rems} - #{$logo-width}) * #{$dynamic-left-margin});
 }
@@ -201,7 +201,6 @@ nav {
 main {
     margin: 2rem;
     flex: 1;
-
     /*@include lg {
         @include calculate-left-margin($dynamic-left-margin-lg);
     }
@@ -761,10 +760,8 @@ main {
 }
 
 #side-navbar {
-
     position: sticky;
     top: 0;
-
     font-family: Consolas;
     font-style: normal;
     font-weight: bold;
@@ -873,7 +870,7 @@ main {
         color: #BD4EEE;
     }
 
-    h1 {       
+    h1 {
 
         @include sm {
             font-size: 4rem;
@@ -892,7 +889,7 @@ main {
 }
 
 #blocks-container {
-    h2 {        
+    h2 {
         @include sm {
             font-size: 3rem;
             line-height: 3.7rem;
@@ -1211,7 +1208,6 @@ h6 {
 }
 
 .company-container {
-
     display: flex;
     justify-content: center;
     align-items: center;

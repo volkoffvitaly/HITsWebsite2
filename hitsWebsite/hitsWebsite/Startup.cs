@@ -96,7 +96,7 @@ namespace hitsWebsite
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "Professions",
+                    name: "default",
                     pattern: "{controller=Professions}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });

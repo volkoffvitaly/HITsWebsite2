@@ -32,12 +32,11 @@ namespace hitsWebsite.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(String returnUrl = null)
+        public async Task<IActionResult> Login()
         {
             // Clear the existing external cookie to ensure a clean login process
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-            this.ViewData["ReturnUrl"] = returnUrl;
             ViewBag.DisplayLinkStatus = "hidden";
             return this.View();
         }
@@ -47,14 +46,13 @@ namespace hitsWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, String returnUrl = null)
         {
-            this.ViewData["ReturnUrl"] = returnUrl;
             if (this.ModelState.IsValid)
             {
                 var result = await this.signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     this.logger.LogInformation("User logged in.");
-                    return this.RedirectToLocal(returnUrl);
+                    return this.RedirectToAction("Index", "Professions");
                 }
                 else
                 {

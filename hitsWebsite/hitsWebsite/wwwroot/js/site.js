@@ -6,8 +6,8 @@
 function AssignNavbarParameters() {
     //navbarWidth = $navbarContainer.width()
     topIndent = parseInt($('.box').first().offset().top - $("#blocks-container .info-block:first").first().offset().top)
-    $navbar.css('margin-top',`${topIndent}px`)
-    $navbar.css('top',`${topIndent}px`)
+    $navbar.css('margin-top', `${topIndent}px`)
+    $navbar.css('top', `${topIndent}px`)
 
     //startPoint = $("#blocks-container .info-block:first").first().offset().top
     //finishPoint = $("#blocks-container").height() + $("#blocks-container").offset().top - $navbar.height() - topIndent
@@ -118,7 +118,7 @@ $(document).ready(function () {
     $navbar.on("click", "a", function (event) {
         event.preventDefault();
         let sc = $(this).attr("href")
-        let dn = $(`a[name*='${sc}']`).first().offset().top        
+        let dn = $(`a[name*='${sc}']`).first().offset().top
         $('html, body').stop()                                                              //Остановка текущей анимации
         $('html, body').animate({ scrollTop: dn }, animationTime)                           //Запуск анимации
         $navbar.addClass("inAnimState")                                                     //Добваления класса, показываеющего что находится в состоянии анимации
