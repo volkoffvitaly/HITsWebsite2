@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Localization;
 using System.IO;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Localization;
+using Microsoft.Extensions.Localization;
 
 namespace hitsWebsite.Services
 {
@@ -21,11 +23,13 @@ namespace hitsWebsite.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IList<CultureInfo> _cultures;
+        private readonly IStringLocalizer<DataProviderService> _localizer;
 
-        public DataProviderService(ApplicationDbContext context, IOptions<RequestLocalizationOptions> locOptions)
+        public DataProviderService(ApplicationDbContext context, IOptions<RequestLocalizationOptions> locOptions, IStringLocalizer<DataProviderService> localizer)
         {
             this._context = context;
             this._cultures = locOptions.Value.SupportedUICultures;
+            this._localizer = localizer;
         }
 
         public async Task<DynamicPageTranslation> GetDynamicPageInfo(String projectNameOfPage = null)
@@ -56,8 +60,8 @@ namespace hitsWebsite.Services
                 {
                     DynamicPage = dynamicPage,
                     DynamicPageId = dynamicPage.Id,
-                    Name = "---",
-                    Description = "---",
+                    Name = _localizer.GetString("DefaultPageName"),
+                    Description = _localizer.GetString("DefaultPageDescription"),
                     Language = CultureInfo.CurrentUICulture.Name.ToString()
                 };
 
