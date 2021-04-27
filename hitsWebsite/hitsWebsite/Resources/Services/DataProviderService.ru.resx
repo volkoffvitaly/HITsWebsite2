@@ -126,6 +126,6 @@
     <comment>Название динамической страницы, данных о которой еще нет в БД (название по умолчанию)</comment>
   </data>
   <data name="UnexpectedProjectBlockName" xml:space="preserve">
-    <value>Новый блок</value>
+    <value>Некорректное поведение, свяжитесь с администратором.</value>
   </data>
 </root>

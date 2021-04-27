@@ -7,6 +7,7 @@
     ViewData["Title"] = "Professions";
 
     const string PROFESSIONS_PROJECT_BLOCK_NAME = "ProfessionsBlock";
+    const string HITS_TEST_PROJECT_BLOCK_NAME = "HitsTestBlock";
 
     var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();
     var dynamicPage = await DataProviderService.GetDynamicPageInfo(ViewData["Title"] as String);
@@ -14,6 +15,7 @@
     var supportedCultures = localizationOptions.Value.SupportedUICultures;
 
     var professionsBlock = DataProviderService.GetBlock(PROFESSIONS_PROJECT_BLOCK_NAME);
+    var hitsTestBlock = DataProviderService.GetBlock(HITS_TEST_PROJECT_BLOCK_NAME);
 }
 
 <div class="row mb-5">
@@ -69,7 +71,7 @@
                         @for (var i = 0; i < supportedCultures.Count; i++)
                         {
                             <h5>@supportedCultures[i].Name</h5>
-                            <input class="entry-field" type="text" name=@("NewBlockName[" + i + "]") 
+                            <input class="entry-field" type="text" name=@("NewBlockName[" + i + "]")
                                    value="@professionsBlock.GetValueOrDefault(supportedCultures[i].Name)" placeholder="Название блока" autocomplete="off" />
                             <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
                         }
@@ -141,16 +143,36 @@
         <div class="row info-block mt-5">
             <div class="col-12 title-block">
                 <h2 class="d-flex w-100 justify-content-between align-items-center">
-                    <text>Тест на "HITsость"</text>
-                    <input type="button" class="edit-title-btn" />
+                    @if (@hitsTestBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value != null)
+                    {
+                        @hitsTestBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value
+                    }
+                    else
+                    {
+                        @localizer["BlockNameIsEmpty"]
+                    }
+
+                    @if (User.IsInRole(ApplicationRoles.Administrators))
+                    {
+                        <input type="button" class="edit-title-btn" />
+                    }
                 </h2>
-                <form class="hidden w-100">
-                    <input class="entry-field" type="text" name="name" value="" placeholder="Название блока" autocomplete="off" />
-                    <div class="mt-3 d-flex justify-content-end">
-                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
-                        <button type="submit" class="btn btn-outline-primary">Применить</button>
-                    </div>
-                </form>
+                @if (User.IsInRole(ApplicationRoles.Administrators))
+                {
+                    <form asp-action="EditBlockName" asp-route-projectBlockName="@HITS_TEST_PROJECT_BLOCK_NAME" method="post" class="hidden w-100">
+                        @for (var i = 0; i < supportedCultures.Count; i++)
+                        {
+                            <h5>@supportedCultures[i].Name</h5>
+                            <input class="entry-field" type="text" name=@("NewBlockName[" + i + "]")
+                                   value="@hitsTestBlock.GetValueOrDefault(supportedCultures[i].Name)" placeholder="Название блока" autocomplete="off" />
+                            <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                        }
+                        <div class="mt-3 d-flex justify-content-end">
+                            <button type="button" class="cancel-editing btn btn-outline-danger mr-2">@localizer["EditBlockNameCancel"]</button>
+                            <button type="submit" class="btn btn-outline-primary">@localizer["EditBlockNameSubmit"]</button>
+                        </div>
+                    </form>
+                }
             </div>
             <div class="col-12 mt-3 test-hits">
 
