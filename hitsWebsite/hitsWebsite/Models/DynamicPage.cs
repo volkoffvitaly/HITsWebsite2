@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,6 @@ namespace hitsWebsite.Models
         [Required]
         public String ProjectName { get; set; }
 
-        public ICollection<DynamicPageTranslation> DynamicPageTranslations { get; set; }
+        public ICollection<DynamicPageTranslation> DynamicPageTranslations { get; set; } = new Collection<DynamicPageTranslation>();
     }
 }

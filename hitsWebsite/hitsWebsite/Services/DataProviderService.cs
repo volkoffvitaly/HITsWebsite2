@@ -44,6 +44,14 @@ namespace hitsWebsite.Services
             {
                 var dynamicPage = await _context.DynamicPages.Where(x => x.ProjectName == projectNameOfPage).Include(x => x.DynamicPageTranslations).SingleOrDefaultAsync();
 
+                if (dynamicPage == null)
+                {
+                    dynamicPage = new DynamicPage()
+                    {
+                        ProjectName = projectNameOfPage
+                    };
+                }
+
                 translation = new DynamicPageTranslation
                 {
                     DynamicPage = dynamicPage,
