@@ -173,7 +173,7 @@ $addCards.each(function () {
 var $titleBlocks = $('.title-block');
 $titleBlocks.each(function () {
     let container = $(this).find('h2').first()
-    let editBtn = $(container).find('.edit-title-btn').first()
+    let editBtn = $(container).find('.edit-block-name').first()
     let form = $(this).find('form').first()
     let cancelBtn = $(this).find('.cancel-editing').first()
 
@@ -191,6 +191,38 @@ $titleBlocks.each(function () {
         HandlePageResizing($(window).scrollTop())
     })
 })
+
+var $popupContainer = $('.popup-container');
+$popupContainer.each(function () {
+    let container = $(this)
+    let cancelBtn = $(this).find('.cancel-editing').first()
+    let popup = $(this).find('.popup-content').first()
+
+    cancelBtn.click(function () {
+        hide()
+    })
+
+    container.click(function () {
+        hide()
+    })
+    function hide() {
+        $(popup).slideUp(300)
+        $(container).fadeOut(300)
+    }
+    popup.click(function (e) {
+        e.stopPropagation()
+    })
+})
+
+var $editPageTitle = $('.edit-page-title');
+$editPageTitle.each(function () {    
+    $(this).click(function () {
+        $(this).next('.popup-container').show('slow')
+        $(this).next('.popup-container').find('.popup-content').slideDown()
+    })
+})
+
+
 
 
 //Функция для выставление позици в Яндекс Картах и удаления элементов меню

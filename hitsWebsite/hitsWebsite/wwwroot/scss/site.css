@@ -837,7 +837,7 @@ h6 {
   display: flex; }
   .title-block text {
     float: left; }
-  .title-block .edit-title-btn {
+  .title-block .edit-block-name {
     visibility: hidden;
     cursor: pointer;
     background-image: url(/img/pencil.png);
@@ -849,7 +849,7 @@ h6 {
     outline: none;
     height: 1em;
     width: 1em; }
-  .title-block:hover .edit-title-btn {
+  .title-block:hover .edit-block-name {
     visibility: visible; }
   .title-block .entry-field {
     font-size: 3rem;
@@ -890,3 +890,37 @@ h6 {
     background-position-y: 40%; }
     .card-btns-container .btn-edit:hover {
       background-color: #209bf5; }
+
+.popup-container {
+  display: none;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: rgba(111, 111, 111, 0.5);
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100; }
+  .popup-container .popup-content {
+    overflow: auto;
+    max-height: 80%;
+    width: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 1.6rem;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 0.925rem; }
+    .popup-container .popup-content::-webkit-scrollbar {
+      width: 1.85rem; }
+    .popup-container .popup-content::-webkit-scrollbar-track {
+      background: #FFFFFF;
+      border-radius: 0 0.925rem 0.925rem 0; }
+    .popup-container .popup-content::-webkit-scrollbar-thumb {
+      border: 0.8rem solid #FFFFFF;
+      background-clip: padding-box;
+      border-radius: 0.925rem;
+      background-color: rgba(0, 0, 0, 0.15);
+      -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05); }
