@@ -117,16 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="en" xml:space="preserve">
-    <value>English</value>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Узнать подробнее</value>
   </data>
-  <data name="es" xml:space="preserve">
-    <value>espanol</value>
+  <data name="ProfessionAdd" xml:space="preserve">
+    <value>Добавить</value>
   </data>
-  <data name="ru" xml:space="preserve">
-    <value>Русский</value>
+  <data name="ProfessionCancel" xml:space="preserve">
+    <value>Отмена</value>
   </data>
-  <data name="zh" xml:space="preserve">
-    <value>中文</value>
+  <data name="ProfessionDescription" xml:space="preserve">
+    <value>Описание</value>
+  </data>
+  <data name="ProfessionName" xml:space="preserve">
+    <value>Название</value>
+  </data>
+  <data name="ProfessionsIsEmpty" xml:space="preserve">
+    <value>Ой, здесь пока пусто...</value>
   </data>
 </root>

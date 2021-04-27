@@ -8,16 +8,9 @@
     var returnUrl = string.IsNullOrWhiteSpace(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}{Context.Request.QueryString}";
 }
 
-@*<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Язык</a>
-    <form asp-controller="Home" asp-action="CultureManagement" method="post" class="dropdown-menu dropdown-menu-right">
-        @foreach (var language in cultureList)
-        {
-            <input type="submit" asp-for="@Model.Culture" value="@language.Text" class="dropdown-item">
-        }
-    </form>*@
 <form asp-controller="Home" asp-action="CultureManagement" asp-route-returnUrl="@returnUrl" method="post">
     <select name="culture" asp-for="@culture.RequestCulture.UICulture.Name" asp-items="cultureList" onchange="this.form.submit()" class="nav-link dropdown-toggle"
             data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="border: none; outline: none; background-color: transparent; text-align-last: end;">
-        <option value="" selected disabled hidden>@localizer.GetString(culture.RequestCulture.UICulture.Name)</option>
+        <option value="" selected disabled hidden>@localizer[$"{culture.RequestCulture.UICulture.Name}"]</option>
     </select>
 </form>

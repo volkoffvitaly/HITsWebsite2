@@ -38,4 +38,19 @@
     <None Include="Views\Manage\_ViewImports.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Resources\Views\Shared\_Culture.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>_Culture.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Views\Shared\_Culture.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>_Culture.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

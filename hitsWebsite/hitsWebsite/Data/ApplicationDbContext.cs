@@ -17,7 +17,9 @@ namespace hitsWebsite.Data
 
         public DbSet<Profession> Professions { get; set; }
         public DbSet<ProfessionTranslation> ProfessionTranslations { get; set; }
+
         public DbSet<DynamicPage> DynamicPages { get; set; }
+        public DbSet<DynamicPageTranslation> DynamicPageTranslations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

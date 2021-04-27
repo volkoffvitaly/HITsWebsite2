@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using hitsWebsite.Data;
 
 namespace hitsWebsite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210427060255_ReqAttributesAddedIntoProfessionAndDynamicPageTransaltions")]
+    partial class ReqAttributesAddedIntoProfessionAndDynamicPageTransaltions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,10 +223,6 @@ namespace hitsWebsite.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ProjectName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("DynamicPages");
@@ -240,7 +238,10 @@ namespace hitsWebsite.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("DynamicPageId")
+                    b.Property<Guid?>("DynamicPageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DynamicPage_Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Language")
@@ -287,7 +288,10 @@ namespace hitsWebsite.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ProfessionId")
+                    b.Property<Guid?>("ProfessionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("Profession_Id")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -352,18 +356,14 @@ namespace hitsWebsite.Data.Migrations
                 {
                     b.HasOne("hitsWebsite.Models.DynamicPage", null)
                         .WithMany("DynamicPageTranslations")
-                        .HasForeignKey("DynamicPageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DynamicPageId");
                 });
 
             modelBuilder.Entity("hitsWebsite.Models.ProfessionTranslation", b =>
                 {
                     b.HasOne("hitsWebsite.Models.Profession", null)
                         .WithMany("ProfessionTranslations")
-                        .HasForeignKey("ProfessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProfessionId");
                 });
 
             modelBuilder.Entity("hitsWebsite.Models.DynamicPage", b =>

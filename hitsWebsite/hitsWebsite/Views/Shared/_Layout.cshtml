@@ -1,6 +1,17 @@
 ﻿@using hitsWebsite.Models.ViewModels
-@using Microsoft.Extensions.Localization
+@using hitsWebsite.Services
+@inject IDataProviderService DataProviderService
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+@inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
+
+@{
+    var professionPage = await DataProviderService.GetDynamicPageInfo("Professions");
+    //var admissionPage = await DataProviderService.GetDynamicPageInfo("Admission");
+    //var livePage = await DataProviderService.GetDynamicPageInfo("Live");
+    //var aboutPage = await DataProviderService.GetDynamicPageInfo("About");
+    //var contactsPage = await DataProviderService.GetDynamicPageInfo("Contacts");
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +56,7 @@
                     <div class="align-self-center header-logo-name">
                         @localizer["SchoolName"]
                         @*<p>Высшая<p>
-                        <p>IT Школа<p>*@
+                          <p>IT Школа<p>*@
                     </div>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +66,7 @@
                     <div class="w-100">
                         <ul class="navbar-nav d-flex align-items-sm-center">
                             <li class="nav-item active header-left-margin text-nowrap mr-xl-4 mr-lg-3">
-                                <a class="nav-link" asp-controller="Professions" asp-action="Index">Профессии</a>
+                                <a class="nav-link" asp-controller="Professions" asp-action="Index">@professionPage.Name</a>
                             </li>
                             <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
                                 <a class="nav-link" asp-controller="Admission" asp-action="Index">Поступление</a>
@@ -98,7 +109,7 @@
                             <div class="d-flex align-content-center">
                                 <img src="~/svg/logo.svg">
                                 <div class="align-self-center ml-2">
-                                    <h3>Высшая IT Школа</h3>
+                                    <h3>@localizer["SchoolName"]</h3>
                                 </div>
                             </div>
 

@@ -170,7 +170,6 @@ $addCards.each(function () {
 })
 
 
-
 var $titleBlocks = $('.title-block');
 $titleBlocks.each(function () {
     let container = $(this).find('h2').first()

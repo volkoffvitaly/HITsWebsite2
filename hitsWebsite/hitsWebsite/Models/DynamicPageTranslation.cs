@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace hitsWebsite.Models
 {
-    public class ProfessionTranslation
+    public class DynamicPageTranslation
     {
         public Guid Id { get; set; } = Guid.NewGuid();
 
@@ -21,7 +21,7 @@ namespace hitsWebsite.Models
         public String Description { get; set; }
 
 
-        public Profession Profession { get; set; }
-        public Guid ProfessionId { get; set; }
+        public DynamicPage DynamicPage { get; set; }
+        public Guid DynamicPageId { get; set; }
     }
 }

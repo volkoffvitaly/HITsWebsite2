@@ -42,5 +42,19 @@ namespace hitsWebsite.Controllers
             ViewBag.ProfessionModel = model;
             return View("Index");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = ApplicationRoles.Administrators)]
+        public IActionResult EditBlockName(String projectBlockName, MainPageBlockEditModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                _dataProviderService.ChangeBlockName(projectBlockName, model);
+            }
+
+            ViewBag.ChangeBlockModel = model;
+            return RedirectToAction("Index");
+        }
     }
 }
