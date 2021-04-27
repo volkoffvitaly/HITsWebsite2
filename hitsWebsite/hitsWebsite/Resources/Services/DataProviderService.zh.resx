@@ -125,4 +125,7 @@
     <value>新页面</value>
     <comment>Название динамической страницы, данных о которой еще нет в БД (название по умолчанию)</comment>
   </data>
+  <data name="UnexpectedProjectBlockName" xml:space="preserve">
+    <value>新块</value>
+  </data>
 </root>

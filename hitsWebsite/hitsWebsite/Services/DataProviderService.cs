@@ -108,20 +108,35 @@ namespace hitsWebsite.Services
         {
             NameOfPageBlock block = null;
 
-            JsonSerializer serializer = new JsonSerializer();
-            using FileStream fileStreamer = File.Open("NameOfPageBlock.json", FileMode.Open);
-            using StreamReader streamReader = new StreamReader(fileStreamer);
-            using JsonReader jsonReader = new JsonTextReader(streamReader);
-
-            while (jsonReader.Read())
+            if (projectBlockName != null)
             {
-                // deserialize only when there's "[" character in the stream
-                if (jsonReader.TokenType == JsonToken.StartArray)
+                JsonSerializer serializer = new JsonSerializer();
+                using FileStream fileStreamer = File.Open("NameOfPageBlock.json", FileMode.Open);
+                using StreamReader streamReader = new StreamReader(fileStreamer);
+                using JsonReader jsonReader = new JsonTextReader(streamReader);
+
+                while (jsonReader.Read())
                 {
-                    block = serializer.Deserialize<List<NameOfPageBlock>>(jsonReader)
-                        .Where(x => x.ProjectName == projectBlockName)
-                        .FirstOrDefault();
+                    // deserialize only when there's "[" character in the stream
+                    if (jsonReader.TokenType == JsonToken.StartArray)
+                    {
+                        block = serializer.Deserialize<List<NameOfPageBlock>>(jsonReader)
+                            .Where(x => x.ProjectName == projectBlockName)
+                            .FirstOrDefault();
+                    }
                 }
+            }
+
+            if (projectBlockName == null || block == null) // протестить
+            {
+                var unexpectedBlockName = new Dictionary<String, String>();
+
+                for (var i = 0; i < _cultures.Count; i++)
+                {
+                    unexpectedBlockName.Add(_cultures[i].Name, _localizer.GetString("UnexpectedProjectBlockName"));
+                }
+
+                return unexpectedBlockName;
             }
 
             return block.Translations;
@@ -158,13 +173,13 @@ namespace hitsWebsite.Services
                 using (FileStream fs = new FileStream("NameOfPageBlock.json", FileMode.Create))
                 {
                     var block = blocks.Where(x => x.ProjectName == projectBlockName).FirstOrDefault();
-                    var a = new Dictionary<String, String>();
-                    for (var i = 0; i < block.Translations.Count; i++)
+                    var newTranslations = new Dictionary<String, String>();
+                    for (var i = 0; i < _cultures.Count; i++)
                     {
-                        a.Add(model.Language[i], model.NewBlockName[i]);
+                        newTranslations.Add(model.Language[i], model.NewBlockName[i]);
                     }
 
-                    block.Translations = a;
+                    block.Translations = newTranslations;
 
                     await System.Text.Json.JsonSerializer.SerializeAsync<List<NameOfPageBlock>>(fs, blocks);
                 }

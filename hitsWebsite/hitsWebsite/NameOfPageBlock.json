@@ -1,10 +1,1 @@
-[
-  {
-    "ProjectName": "ProfessionsBlock",
-    "Translations": {
-      "en": "What will I become?",
-      "ru": "\u041A\u0435\u043C \u044F \u0441\u0442\u0430\u043D\u0443?",
-      "zh": "\u6211\u4F1A\u53D8\u6210\u4EC0\u4E48\uFF1F"
-    }
-  }
-]
+[{"ProjectName":"ProfessionsBlock","Translations":{"en":"What will I become?","ru":"\u041A\u0435\u043C \u044F \u0441\u0442\u0430\u043D\u0443?","zh":"\u6211\u4F1A\u53D8\u6210\u4EC0\u4E48\uFF1F","es":null}}]
