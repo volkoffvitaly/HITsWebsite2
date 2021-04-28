@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace hitsWebsite.Models.ViewModels
 {
-    public class DynamicPageEditModel
+    public class ProfessionEditModel
     {
         public List<String> Name { get; set; }
         public List<String> Description { get; set; }

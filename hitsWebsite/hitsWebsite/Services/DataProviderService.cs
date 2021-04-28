@@ -32,44 +32,45 @@ namespace hitsWebsite.Services
             this._localizer = localizer;
         }
 
-        public async Task<DynamicPageTranslation> GetDynamicPageInfo(String projectNameOfPage = null)
+        public async Task<DynamicPage> GetDynamicPageInfo(String projectNameOfPage = null)
         {
-            DynamicPageTranslation translation = default;
+            DynamicPage dynamicPage = null;
 
             if (projectNameOfPage != null)
             {
-                translation = await _context.DynamicPageTranslations
-                    .Where(x => x.Language == CultureInfo.CurrentUICulture.Name && x.DynamicPage.ProjectName == projectNameOfPage)
+                dynamicPage = await _context.DynamicPages
+                    .Where(x => x.ProjectName == projectNameOfPage)
+                    .Include(x => x.DynamicPageTranslations)
                     .AsNoTracking()
                     .FirstOrDefaultAsync();
             }
 
-            if (translation == default)
+            if (dynamicPage == null)
             {
-                var dynamicPage = await _context.DynamicPages.Where(x => x.ProjectName == projectNameOfPage).Include(x => x.DynamicPageTranslations).SingleOrDefaultAsync();
-
-                if (dynamicPage == null)
+                dynamicPage = new DynamicPage()
                 {
-                    dynamicPage = new DynamicPage()
-                    {
-                        ProjectName = projectNameOfPage
-                    };
-                }
-
-                translation = new DynamicPageTranslation
-                {
-                    DynamicPage = dynamicPage,
-                    DynamicPageId = dynamicPage.Id,
-                    Name = _localizer.GetString("DefaultPageName"),
-                    Description = _localizer.GetString("DefaultPageDescription"),
-                    Language = CultureInfo.CurrentUICulture.Name.ToString()
+                    ProjectName = projectNameOfPage
                 };
 
-                await _context.DynamicPageTranslations.AddAsync(translation);
+                for (var i = 0; i < _cultures.Count; i++)
+                {
+                    var newTranslation = new DynamicPageTranslation()
+                    {
+                        DynamicPage = dynamicPage,
+                        DynamicPageId = dynamicPage.Id,
+                        Name = _localizer.GetString("DefaultPageName"),
+                        Description = _localizer.GetString("DefaultPageDescription"),
+                        Language = _cultures[i].Name.ToString()
+                    };
+
+                    dynamicPage.DynamicPageTranslations.Add(newTranslation);
+                }
+
+                await _context.DynamicPages.AddAsync(dynamicPage);
                 await _context.SaveChangesAsync();
             }
 
-            return translation;
+            return dynamicPage;
         }
 
 

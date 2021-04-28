@@ -117,31 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BlockNameIsEmpty" xml:space="preserve">
-    <value>New block</value>
-  </data>
-  <data name="EditBlockNameCancel" xml:space="preserve">
+  <data name="ButtonCancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="EditBlockNameSubmit" xml:space="preserve">
-    <value>Apply</value>
+  <data name="ButtonSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="EmptyBlockName" xml:space="preserve">
+    <value>New block</value>
+  </data>
+  <data name="EmptyCards" xml:space="preserve">
+    <value>Oh, it's empty here so far...</value>
+  </data>
+  <data name="InputDescription" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="InputName" xml:space="preserve">
+    <value>Name</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Learn more</value>
-  </data>
-  <data name="ProfessionAdd" xml:space="preserve">
-    <value>Add</value>
-  </data>
-  <data name="ProfessionCancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="ProfessionDescription" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="ProfessionName" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="ProfessionsIsEmpty" xml:space="preserve">
-    <value>Oh, it's empty here so far...</value>
   </data>
 </root>

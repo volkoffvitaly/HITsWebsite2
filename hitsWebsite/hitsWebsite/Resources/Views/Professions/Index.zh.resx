@@ -117,31 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BlockNameIsEmpty" xml:space="preserve">
-    <value>新块</value>
-  </data>
-  <data name="EditBlockNameCancel" xml:space="preserve">
+  <data name="ButtonCancel" xml:space="preserve">
     <value>取消</value>
   </data>
-  <data name="EditBlockNameSubmit" xml:space="preserve">
-    <value>申请</value>
+  <data name="ButtonSave" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="EmptyBlockName" xml:space="preserve">
+    <value>新块</value>
+  </data>
+  <data name="EmptyCards" xml:space="preserve">
+    <value>糟糕，这里是空的</value>
+  </data>
+  <data name="InputDescription" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="InputName" xml:space="preserve">
+    <value>名称</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>学到更多</value>
-  </data>
-  <data name="ProfessionAdd" xml:space="preserve">
-    <value>添加</value>
-  </data>
-  <data name="ProfessionCancel" xml:space="preserve">
-    <value>取消</value>
-  </data>
-  <data name="ProfessionDescription" xml:space="preserve">
-    <value>专业描述</value>
-  </data>
-  <data name="ProfessionName" xml:space="preserve">
-    <value>专业名称</value>
-  </data>
-  <data name="ProfessionsIsEmpty" xml:space="preserve">
-    <value>哦，现在这里是空的...</value>
   </data>
 </root>

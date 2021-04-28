@@ -4,7 +4,8 @@
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
 @inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
 
-@{
+@{var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();
+
     var professionPage = await DataProviderService.GetDynamicPageInfo("Professions");
     //var admissionPage = await DataProviderService.GetDynamicPageInfo("Admission");
     //var livePage = await DataProviderService.GetDynamicPageInfo("Live");
@@ -66,7 +67,7 @@
                     <div class="w-100">
                         <ul class="navbar-nav d-flex align-items-sm-center">
                             <li class="nav-item active header-left-margin text-nowrap mr-xl-4 mr-lg-3">
-                                <a class="nav-link" asp-controller="Professions" asp-action="Index">@professionPage.Name</a>
+                                <a class="nav-link" asp-controller="Professions" asp-action="Index">@professionPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</a>
                             </li>
                             <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
                                 <a class="nav-link" asp-controller="Admission" asp-action="Index">Поступление</a>

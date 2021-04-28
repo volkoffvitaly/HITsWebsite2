@@ -4,7 +4,7 @@
 @inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
 
 @{
-    ViewData["Title"] = "Professions";
+    ViewData["Title"] = "Professions"; // projectNameOfPage
 
     const string PROFESSIONS_PROJECT_BLOCK_NAME = "ProfessionsBlock";
     const string HITS_TEST_PROJECT_BLOCK_NAME = "HitsTestBlock";
@@ -23,62 +23,65 @@
     </div>
     <div class="col-lg-9 title-page">
         <span class="purple-highlight">&lt;title&gt;</span>
-        <h1>@dynamicPage.Name</h1>
+        @*  Page info  *@
+        <h1>@dynamicPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h1>
         <div class="row mt-5 align-items-center">
             <div class="col-md-8">
                 <p>
-                    @dynamicPage.Description
+                    @dynamicPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
                 </p>
             </div>
+
+
             <div class="col-md-4 mt-4 mt-md-0">
-                <button type="button" class="edit-page-title big-btn mb-3">Редактировать</button>
-                <div class="popup-container">
-                    <div class="popup-content">
+                @*  Edit page info  *@
+                @if (User.IsInRole(ApplicationRoles.Administrators))
+                {
+                    <button type="button" class="edit-page-title big-btn mb-3">Редактировать</button>
+                    <div class="popup-container">
+                        <div class="popup-content">
+                            <form asp-action="EditDynamicPageInfo" asp-route-projectNameOfPage="@ViewData["Title"].ToString()">
+                                @for (var i = 0; i < supportedCultures.Count; i++)
+                                {
+                                    <h5>@supportedCultures[i].Name</h5>
 
-                        <form>
-                            <h5>RU</h5>
-                            <input class="entry-field" type="text" value="" placeholder="Название" autocomplete="off" required />
-                            <textarea class="entry-field mt-3" type="text" value="" placeholder="Описание" autocomplete="off" required></textarea>
-                            <hr>
+                                    <input class="entry-field" type="text" name="@("Name[" + i + "]")"
+                                           value="@dynamicPage.DynamicPageTranslations.Where(x => x.Language == supportedCultures[i].Name).SingleOrDefault().Name"
+                                           placeholder="@localizer["InputName"]" autocomplete="off" required />
 
-                            <h5>ENG</h5>
-                            <input class="entry-field" type="text" value="" placeholder="Название" autocomplete="off" required />
-                            <textarea class="entry-field mt-3" type="text" value="" placeholder="Описание" autocomplete="off" required></textarea>
-                            <hr>
+                                    <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")"
+                                              placeholder="@localizer["InputDescription"]" autocomplete="off" required>
+                                              @dynamicPage.DynamicPageTranslations.Where(x => x.Language == supportedCultures[i].Name).SingleOrDefault().Description
+                                    </textarea>
 
-                            <h5>描述</h5>
-                            <input class="entry-field" type="text" value="" placeholder="Название" autocomplete="off" required />
-                            <textarea class="entry-field mt-3" type="text" value="" placeholder="Описание" autocomplete="off" required></textarea>
-                            <hr>
-
-                            <h5>描述</h5>
-                            <input class="entry-field" type="text" value="" placeholder="Название" autocomplete="off" required />
-                            <textarea class="entry-field mt-3" type="text" value="" placeholder="Описание" autocomplete="off" required></textarea>
-                            <hr>
-
-                            <h5>描述</h5>
-                            <input class="entry-field" type="text" value="" placeholder="Название" autocomplete="off" required />
-                            <textarea class="entry-field mt-3" type="text" value="" placeholder="Описание" autocomplete="off" required></textarea>
-                            <hr>
-
-                            <div class="mt-3 d-flex justify-content-end">
-                                <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
-                                <button type="submit" class="btn btn-outline-primary">Применить</button>
-                            </div>
-                        </form>
-
+                                    <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                                    <hr>
+                                }
+                                <div class="mt-3 d-flex justify-content-end">
+                                    <button type="button" class="cancel-editing btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                    <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
-                </div>
+                }
 
+                @*  Learn more  *@
                 <button type="button" class="big-btn">@localizer["LearnMore"]</button>
-
             </div>
+
+
         </div>
     </div>
 </div>
 
+
+
+
+@*  All content under page info  *@
 <div class="row pt-4">
 
+    @*  Left Bar  *@
     <div id="side-navbar-container" class="col-3 d-none d-lg-block">
         <div id="side-navbar" class="default">
             <ul>
@@ -87,8 +90,9 @@
     </div>
 
     <div id="blocks-container" class="col col-lg-9">
-
         <div class="row info-block">
+
+            @*  Block of professions  *@
             <div class="col-12 title-block">
                 <h2 class="d-flex w-100 justify-content-between align-items-center">
                     @if (@professionsBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value != null)
@@ -97,7 +101,7 @@
                     }
                     else
                     {
-                        @localizer["BlockNameIsEmpty"]
+                        @localizer["EmptyBlockName"]
                     }
 
                     @if (User.IsInRole(ApplicationRoles.Administrators))
@@ -112,22 +116,25 @@
                         {
                             <h5>@supportedCultures[i].Name</h5>
                             <input class="entry-field" type="text" name=@("NewBlockName[" + i + "]")
-                                   value="@professionsBlock.GetValueOrDefault(supportedCultures[i].Name)" placeholder="Название блока" autocomplete="off" />
+                                   value="@professionsBlock.GetValueOrDefault(supportedCultures[i].Name)" placeholder="@localizer["InputName"]" autocomplete="off" />
                             <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
                         }
                         <div class="mt-3 d-flex justify-content-end">
-                            <button type="button" class="cancel-editing btn btn-outline-danger mr-2">@localizer["EditBlockNameCancel"]</button>
-                            <button type="submit" class="btn btn-outline-primary">@localizer["EditBlockNameSubmit"]</button>
+                            <button type="button" class="cancel-editing btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                            <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
                         </div>
                     </form>
                 }
             </div>
+
+
+            @*  Cards of professions  *@
             <div class="col-12 mt-3">
                 <div class="row">
                     @if (professions.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
                     {
                         <div class="col-sm-6 col-md-4 specialty-container">
-                            <h6>@localizer["ProfessionsIsEmpty"]</h6>
+                            <h6>@localizer["EmptyCards"]</h6>
                         </div>
                     }
                     else
@@ -165,12 +172,12 @@
                                     @for (var i = 0; i < supportedCultures.Count; i++)
                                     {
                                         <h5>@supportedCultures[i].Name</h5>
-                                        <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["ProfessionName"]" autocomplete="off" required />
-                                        <input class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["ProfessionDescription"]" autocomplete="off" required />
+                                        <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                        <input class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required />
                                         <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
                                     }
-                                    <button type="button" class="cancel-adding btn btn-outline-danger mt-3">@localizer["ProfessionCancel"]</button>
-                                    <button type="submit" class="btn btn-primary mt-3">@localizer["ProfessionAdd"]</button>
+                                    <button type="button" class="cancel-adding btn btn-outline-danger mt-3">@localizer["ButtonCancel"]</button>
+                                    <button type="submit" class="btn btn-primary mt-3">@localizer["ButtonSave"]</button>
                                 </form>
 
                             </div>
@@ -180,6 +187,8 @@
             </div>
         </div>
 
+
+        @*  HITs Test  *@
         <div class="row info-block mt-5">
             <div class="col-12 title-block">
                 <h2 class="d-flex w-100 justify-content-between align-items-center">
@@ -189,7 +198,7 @@
                     }
                     else
                     {
-                        @localizer["BlockNameIsEmpty"]
+                        @localizer["EmptyBlockName"]
                     }
 
                     @if (User.IsInRole(ApplicationRoles.Administrators))
@@ -204,12 +213,12 @@
                         {
                             <h5>@supportedCultures[i].Name</h5>
                             <input class="entry-field" type="text" name=@("NewBlockName[" + i + "]")
-                                   value="@hitsTestBlock.GetValueOrDefault(supportedCultures[i].Name)" placeholder="Название блока" autocomplete="off" />
+                                   value="@hitsTestBlock.GetValueOrDefault(supportedCultures[i].Name)" placeholder="@localizer["InputName"]" autocomplete="off" />
                             <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
                         }
                         <div class="mt-3 d-flex justify-content-end">
-                            <button type="button" class="cancel-editing btn btn-outline-danger mr-2">@localizer["EditBlockNameCancel"]</button>
-                            <button type="submit" class="btn btn-outline-primary">@localizer["EditBlockNameSubmit"]</button>
+                            <button type="button" class="cancel-editing btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                            <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
                         </div>
                     </form>
                 }

@@ -10,7 +10,7 @@ namespace hitsWebsite.Services
 {
     public interface IDataProviderService
     {
-        public Task<DynamicPageTranslation> GetDynamicPageInfo(String name);
+        public Task<DynamicPage> GetDynamicPageInfo(String name);
         public Task<List<ProfessionTranslation>> GetProfessions();
         public Task<int> CreateProfession(ProfessionEditModel model);
 
