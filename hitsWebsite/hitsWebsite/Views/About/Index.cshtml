@@ -1,5 +1,28 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using hitsWebsite.Services
+@inject IDataProviderService DataProviderService
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+@inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
+
+@{
+    // projectNameOfPage
+    ViewData["Title"] = "About";
+
+    // Cultures info
+    var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();  // Current culture request
+    var supportedCultures = localizationOptions.Value.SupportedUICultures;  // Supported cultures in app
+
+    // projectNameOfBlocks
+
+
+    // DB entities
+    var dynamicPage = await DataProviderService.GetDynamicPageInfo(ViewData["Title"] as String);
+
+
+    // JSON entities
+
+
+    // Vars for displaying to any user
+    var dynamicPage_CurCulture = dynamicPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
 }
 
 <div class="row mb-5">
@@ -7,11 +30,11 @@
     </div>
     <div class="col-lg-9 title-page">
         <span class="purple-highlight">&lt;title&gt;</span>
-        <h1>О школе</h1>
+        <h1>@dynamicPage_CurCulture.Name</h1>
         <div class="row mt-5 align-items-center">
             <div class="col-md-8">
                 <p>
-                    Мы готовим действительно востребованных на IT- рынке специалистов
+                    @dynamicPage_CurCulture.Description
                 </p>
             </div>
             <div class="col-md-4 mt-4 mt-md-0">

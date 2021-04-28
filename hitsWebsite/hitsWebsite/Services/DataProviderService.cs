@@ -16,6 +16,8 @@ using System.IO;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
+using System.Resources;
+using System.Reflection;
 
 namespace hitsWebsite.Services
 {
@@ -24,6 +26,9 @@ namespace hitsWebsite.Services
         private readonly ApplicationDbContext _context;
         private readonly IList<CultureInfo> _cultures;
         private readonly IStringLocalizer<DataProviderService> _localizer;
+        private readonly ResourceManager _resourceManager = new ResourceManager("hitsWebsite.Resources.Services.DataProviderService", Assembly.GetExecutingAssembly());
+
+        //private readonly ResourceManager _resourceManager = new ResourceManager();
 
         public DataProviderService(ApplicationDbContext context, IOptions<RequestLocalizationOptions> locOptions, IStringLocalizer<DataProviderService> localizer)
         {
@@ -35,13 +40,13 @@ namespace hitsWebsite.Services
         public async Task<DynamicPage> GetDynamicPageInfo(String projectNameOfPage = null)
         {
             DynamicPage dynamicPage = null;
+            Boolean isTracked = true; // to separate new entity from a tracked
 
             if (projectNameOfPage != null)
             {
                 dynamicPage = await _context.DynamicPages
                     .Where(x => x.ProjectName == projectNameOfPage)
                     .Include(x => x.DynamicPageTranslations)
-                    .AsNoTracking()
                     .FirstOrDefaultAsync();
             }
 
@@ -52,17 +57,41 @@ namespace hitsWebsite.Services
                     ProjectName = projectNameOfPage
                 };
 
+                isTracked = false;
+            }
+
+            if (dynamicPage.DynamicPageTranslations.Count < _cultures.Count)
+            {
                 for (var i = 0; i < _cultures.Count; i++)
                 {
-                    dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
+                    if (dynamicPage.DynamicPageTranslations.Where(x => x.Language == _cultures[i].Name.ToString()).SingleOrDefault() == default)
                     {
-                        Name = _localizer.GetString("DefaultPageName"),
-                        Description = _localizer.GetString("DefaultPageDescription"),
-                        Language = _cultures[i].Name.ToString()
-                    });
+                        try
+                        {
+                            dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
+                            {
+                                Name = _resourceManager.GetString("DefaultPageName", _cultures[i]),
+                                Description = _resourceManager.GetString("DefaultPageDescription", _cultures[i]),
+                                Language = _cultures[i].Name.ToString(),
+                            });
+                        }
+                        catch // if we need to implement a new language but .resx file wasn't updated yet.
+                        {
+                            dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
+                            {
+                                Name = _localizer.GetString("DefaultPageName"),
+                                Description = _localizer.GetString("DefaultPageDescription"),
+                                Language = _cultures[i].Name.ToString(),
+                            });
+                        }
+                    }
                 }
 
-                await _context.DynamicPages.AddAsync(dynamicPage);
+                if (!isTracked)
+                {
+                    await _context.DynamicPages.AddAsync(dynamicPage);
+                }
+
                 await _context.SaveChangesAsync();
             }
 
@@ -89,7 +118,7 @@ namespace hitsWebsite.Services
 
                 await _context.SaveChangesAsync();
             }
-                        
+
             return;
         }
 
@@ -105,7 +134,6 @@ namespace hitsWebsite.Services
             {
                 ProfessionTranslations = new Collection<ProfessionTranslation>()
             };
-
 
             for (var i = 0; i < _cultures.Count; i++)
             {
