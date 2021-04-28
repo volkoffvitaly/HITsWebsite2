@@ -4,19 +4,33 @@
 @inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
 
 @{
-    ViewData["Title"] = "Professions"; // projectNameOfPage
+    // projectNameOfPage
+    ViewData["Title"] = "Professions";
 
+    // Cultures info
+    var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();  // Current culture request
+    var supportedCultures = localizationOptions.Value.SupportedUICultures;  // Supported cultures in app
+
+    // projectNameOfBlocks
     const string PROFESSIONS_PROJECT_BLOCK_NAME = "ProfessionsBlock";
     const string HITS_TEST_PROJECT_BLOCK_NAME = "HitsTestBlock";
 
-    var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();
+    // DB entities
     var dynamicPage = await DataProviderService.GetDynamicPageInfo(ViewData["Title"] as String);
     var professions = await DataProviderService.GetProfessions();
-    var supportedCultures = localizationOptions.Value.SupportedUICultures;
 
+    // JSON entities
     var professionsBlock = DataProviderService.GetBlock(PROFESSIONS_PROJECT_BLOCK_NAME);
     var hitsTestBlock = DataProviderService.GetBlock(HITS_TEST_PROJECT_BLOCK_NAME);
+
+
+    // Vars for displaying to any user
+    var dynamicPage_CurCulture = dynamicPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
+    var professionsBlock_CurCulture = professionsBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value;
+    var hitsTestBlock_CurCulture = hitsTestBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value;
 }
+
+
 
 <div class="row mb-5">
     <div class="d-none d-lg-block col-3">
@@ -24,11 +38,11 @@
     <div class="col-lg-9 title-page">
         <span class="purple-highlight">&lt;title&gt;</span>
         @*  Page info  *@
-        <h1>@dynamicPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h1>
+        <h1>@dynamicPage_CurCulture.Name</h1>
         <div class="row mt-5 align-items-center">
             <div class="col-md-8">
                 <p>
-                    @dynamicPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
+                    @dynamicPage_CurCulture.Description
                 </p>
             </div>
 
@@ -95,9 +109,9 @@
             @*  Block of professions  *@
             <div class="col-12 title-block">
                 <h2 class="d-flex w-100 justify-content-between align-items-center">
-                    @if (@professionsBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value != null)
+                    @if (professionsBlock_CurCulture != null)
                     {
-                        @professionsBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value
+                        @professionsBlock_CurCulture
                     }
                     else
                     {
@@ -139,7 +153,7 @@
                     }
                     else
                     {
-                        @foreach (var profession in professions.OrderBy(x => x.Name))
+                        @foreach (var profession in professions) // List ordered by Name
                         {
                             <div class="col-sm-6 col-md-4 specialty-container">
                                 <div class="specialty box">
@@ -192,9 +206,9 @@
         <div class="row info-block mt-5">
             <div class="col-12 title-block">
                 <h2 class="d-flex w-100 justify-content-between align-items-center">
-                    @if (@hitsTestBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value != null)
+                    @if (hitsTestBlock_CurCulture != null)
                     {
-                        @hitsTestBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value
+                        @hitsTestBlock_CurCulture
                     }
                     else
                     {

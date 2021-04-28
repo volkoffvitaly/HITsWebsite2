@@ -76,7 +76,7 @@ namespace hitsWebsite.Services
 
         public async Task<List<ProfessionTranslation>> GetProfessions()
         {
-            return await _context.ProfessionTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).AsNoTracking().ToListAsync();
+            return await _context.ProfessionTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
         }
 
 
