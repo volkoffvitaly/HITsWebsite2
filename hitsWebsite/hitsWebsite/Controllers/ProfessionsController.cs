@@ -16,10 +16,11 @@ namespace hitsWebsite.Controllers
     {
         private readonly IDataProviderService _dataProviderService;
         private readonly UserManager<ApplicationUser> _userManager;
+
         public ProfessionsController(IDataProviderService dataProviderService, UserManager<ApplicationUser> userManager)
         {
-            this._dataProviderService = dataProviderService;
-            this._userManager = userManager;
+            _dataProviderService = dataProviderService;
+            _userManager = userManager;
         }
 
         [HttpGet]

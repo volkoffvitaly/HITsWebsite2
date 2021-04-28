@@ -12,18 +12,24 @@
     var supportedCultures = localizationOptions.Value.SupportedUICultures;  // Supported cultures in app
 
     // projectNameOfBlocks
-
+    const string FEATURES_PROJECT_BLOCK_NAME = "FeaturesBlock";
+    const string OURPEOPLE_PROJECT_BLOCK_NAME = "OurPeopleBlock";
+    const string ACHIEVEMENTS_PROJECT_BLOCK_NAME = "AchievementsBlock";
 
     // DB entities
     var dynamicPage = await DataProviderService.GetDynamicPageInfo(ViewData["Title"] as String);
     var features = await DataProviderService.GetFeatures();
 
-
     // JSON entities
-
+    var featuresBlock = await DataProviderService.GetBlockName(FEATURES_PROJECT_BLOCK_NAME);
+    var ourPeopleBlock = await DataProviderService.GetBlockName(OURPEOPLE_PROJECT_BLOCK_NAME);
+    var achievementsBlock = await DataProviderService.GetBlockName(ACHIEVEMENTS_PROJECT_BLOCK_NAME);
 
     // Vars for displaying to any user
     var dynamicPage_CurCulture = dynamicPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
+    var featuresBlock_CurCulture = featuresBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value;
+    var ourPeopleBlock_CurCulture = ourPeopleBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value;
+    var achievementsBlock_CurCulture = achievementsBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value;
 }
 
 <div class="row mb-5">
@@ -59,7 +65,7 @@
         <div class="row info-block">
             <div class="col-12 title-block">
                 <h2 class="d-flex w-100 justify-content-between align-items-center">
-                    <text>Особенности учебного процесса</text>
+                    <text>@featuresBlock_CurCulture</text>
                     <input type="button" class="edit-block-name" />
                 </h2>
                 <form class="hidden w-100">
@@ -148,7 +154,7 @@
         <div class="row info-block mt-5">
             <div class="col-12 title-block">
                 <h2 class="d-flex w-100 justify-content-between align-items-center">
-                    <text>Наши люди</text>
+                    <text>@ourPeopleBlock_CurCulture</text>
                     <input type="button" class="edit-block-name" />
                 </h2>
                 <form class="hidden w-100">
@@ -280,7 +286,7 @@
 
             <div class="col-12 title-block">
                 <h2 class="d-flex w-100 justify-content-between align-items-center">
-                    <text>Достижения</text>
+                    <text>@achievementsBlock_CurCulture</text>
                     <input type="button" class="edit-block-name" />
                 </h2>
                 <form class="hidden w-100">

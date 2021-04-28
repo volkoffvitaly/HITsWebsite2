@@ -7,7 +7,7 @@ namespace hitsWebsite.Models
 {
     public class NameOfPageBlock
     {
-        public String ProjectName { get; set; } = "Block1";
+        public String ProjectName { get; set; }
         public Dictionary<String, String> Translations { get; set; }
     }
 }

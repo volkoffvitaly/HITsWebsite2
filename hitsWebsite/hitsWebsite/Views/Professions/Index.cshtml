@@ -20,8 +20,8 @@
     var professions = await DataProviderService.GetProfessions();
 
     // JSON entities
-    var professionsBlock = DataProviderService.GetBlock(PROFESSIONS_PROJECT_BLOCK_NAME);
-    var hitsTestBlock = DataProviderService.GetBlock(HITS_TEST_PROJECT_BLOCK_NAME);
+    var professionsBlock = await DataProviderService.GetBlockName(PROFESSIONS_PROJECT_BLOCK_NAME);
+    var hitsTestBlock = await DataProviderService.GetBlockName(HITS_TEST_PROJECT_BLOCK_NAME);
 
 
     // Vars for displaying to any user

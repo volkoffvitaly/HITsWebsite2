@@ -18,7 +18,7 @@ namespace hitsWebsite.Services
         public Task CreateFeature(FeatureEditModel model);
 
 
-        public Dictionary<String, String> GetBlock(String projectBlockName);
+        public Task<Dictionary<String, String>> GetBlockName(String projectBlockName = default);
         public void ChangeBlockName(String projectBlockName, MainPageBlockEditModel model);
     }
 }

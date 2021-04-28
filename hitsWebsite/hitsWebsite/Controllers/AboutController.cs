@@ -18,8 +18,8 @@ namespace hitsWebsite.Controllers
 
         public AboutController(IDataProviderService dataProviderService, UserManager<ApplicationUser> userManager)
         {
-            this._dataProviderService = dataProviderService;
-            this._userManager = userManager;
+            _dataProviderService = dataProviderService;
+            _userManager = userManager;
         }
 
 
