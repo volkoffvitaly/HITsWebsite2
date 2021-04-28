@@ -11,6 +11,7 @@ namespace hitsWebsite.Services
     public interface IDataProviderService
     {
         public Task<DynamicPage> GetDynamicPageInfo(String name);
+        public Task ChangeDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model);
         public Task<List<ProfessionTranslation>> GetProfessions();
         public Task<int> CreateProfession(ProfessionEditModel model);
 

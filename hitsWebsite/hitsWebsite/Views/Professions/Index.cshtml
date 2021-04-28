@@ -54,7 +54,7 @@
                     <button type="button" class="edit-page-title big-btn mb-3">Редактировать</button>
                     <div class="popup-container">
                         <div class="popup-content">
-                            <form asp-action="EditDynamicPageInfo" asp-route-projectNameOfPage="@ViewData["Title"].ToString()">
+                            <form asp-action="EditDynamicPageInfo" asp-route-projectNameOfPage="@ViewData["Title"].ToString()" method="post">
                                 @for (var i = 0; i < supportedCultures.Count; i++)
                                 {
                                     <h5>@supportedCultures[i].Name</h5>

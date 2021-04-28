@@ -73,6 +73,29 @@ namespace hitsWebsite.Services
             return dynamicPage;
         }
 
+        public async Task ChangeDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model)
+        {
+            var dynamicPage = await _context.DynamicPages.Where(x => x.ProjectName == projectNameOfPage).Include(x => x.DynamicPageTranslations).SingleOrDefaultAsync();
+
+            if (dynamicPage != null)
+            {
+                dynamicPage.DynamicPageTranslations.Clear();
+
+                for (var i = 0; i < _cultures.Count; i++)
+                {
+                    dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
+                    {
+                        Name = model.Name[i],
+                        Description = model.Description[i],
+                        Language = model.Language[i]
+                    });
+                }
+
+                await _context.SaveChangesAsync();
+            }
+                        
+            return;
+        }
 
         public async Task<List<ProfessionTranslation>> GetProfessions()
         {

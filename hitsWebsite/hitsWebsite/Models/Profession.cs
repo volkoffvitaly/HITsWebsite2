@@ -8,7 +8,7 @@ namespace hitsWebsite.Models
 {
     public class Profession
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; }
         public ICollection<ProfessionTranslation> ProfessionTranslations { get; set; }
     }
 }

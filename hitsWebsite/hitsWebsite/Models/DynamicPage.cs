@@ -10,7 +10,7 @@ namespace hitsWebsite.Models
 {
     public class DynamicPage
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; set; }
 
         [Required]
         public String ProjectName { get; set; }
