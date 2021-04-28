@@ -16,6 +16,7 @@
 
     // DB entities
     var dynamicPage = await DataProviderService.GetDynamicPageInfo(ViewData["Title"] as String);
+    var features = await DataProviderService.GetFeatures();
 
 
     // JSON entities
@@ -70,6 +71,26 @@
                 </form>
             </div>
 
+            @foreach (var feature in features) // List ordered by Name
+            {
+                <div class="col-12 mt-3">
+                    <div class="box">
+                        @if (User.IsInRole(ApplicationRoles.Administrators))
+                        {
+                            <form class="card-btns-container">
+                                <button class="btn-edit"></button>
+                                <button class="btn-delete"></button>
+                            </form>
+                        }
+                        <h4>@feature.Name</h4>
+                        <p class="pt-3">
+                            @feature.Description
+                        </p>
+                    </div>
+                </div>
+            }
+
+
             <div class="col-12 mt-3">
                 <div class="box">
                     <h4>Learning by Doing</h4>
@@ -96,6 +117,31 @@
                     </p>
                 </div>
             </div>
+
+            @if (User.IsInRole(ApplicationRoles.Administrators))
+            {
+                <div class="col-12 mt-4 specialty-container">
+                    <div class="specialty box adding-card">
+
+                        <div class="btn-add-container">
+                            <input type="button" class="add-btn" />
+                        </div>
+
+                        <form asp-action="AddFeature" method="post" class="hidden">
+                            @for (var i = 0; i < supportedCultures.Count; i++)
+                            {
+                                <h5>@supportedCultures[i].Name</h5>
+                                <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                <input class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required />
+                                <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                            }
+                            <button type="button" class="cancel-adding btn btn-outline-danger mt-3">@localizer["ButtonCancel"]</button>
+                            <button type="submit" class="btn btn-primary mt-3">@localizer["ButtonSave"]</button>
+                        </form>
+
+                    </div>
+                </div>
+            }
 
         </div>
 

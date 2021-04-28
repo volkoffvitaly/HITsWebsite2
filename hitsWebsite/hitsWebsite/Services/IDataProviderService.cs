@@ -13,7 +13,9 @@ namespace hitsWebsite.Services
         public Task<DynamicPage> GetDynamicPageInfo(String name);
         public Task ChangeDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model);
         public Task<List<ProfessionTranslation>> GetProfessions();
+        public Task<List<FeatureTranslation>> GetFeatures();
         public Task CreateProfession(ProfessionEditModel model);
+        public Task CreateFeature(FeatureEditModel model);
 
 
         public Dictionary<String, String> GetBlock(String projectBlockName);

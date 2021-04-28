@@ -18,6 +18,9 @@ namespace hitsWebsite.Data
         public DbSet<Profession> Professions { get; set; }
         public DbSet<ProfessionTranslation> ProfessionTranslations { get; set; }
 
+        public DbSet<Feature> Features { get; set; }
+        public DbSet<FeatureTranslation> FeatureTranslations { get; set; }
+
         public DbSet<DynamicPage> DynamicPages { get; set; }
         public DbSet<DynamicPageTranslation> DynamicPageTranslations { get; set; }
 

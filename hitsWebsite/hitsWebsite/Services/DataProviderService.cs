@@ -28,8 +28,6 @@ namespace hitsWebsite.Services
         private readonly IStringLocalizer<DataProviderService> _localizer;
         private readonly ResourceManager _resourceManager = new ResourceManager("hitsWebsite.Resources.Services.DataProviderService", Assembly.GetExecutingAssembly());
 
-        //private readonly ResourceManager _resourceManager = new ResourceManager();
-
         public DataProviderService(ApplicationDbContext context, IOptions<RequestLocalizationOptions> locOptions, IStringLocalizer<DataProviderService> localizer)
         {
             this._context = context;
@@ -60,32 +58,35 @@ namespace hitsWebsite.Services
                 isTracked = false;
             }
 
-            if (dynamicPage.DynamicPageTranslations.Count < _cultures.Count)
+            if (dynamicPage.DynamicPageTranslations.Count >= _cultures.Count)
             {
-                for (var i = 0; i < _cultures.Count; i++)
+                return dynamicPage;
+            }
+
+            foreach (var culture in _cultures)
+            {
+                if (dynamicPage.DynamicPageTranslations.Where(x => x.Language == culture.Name.ToString()).SingleOrDefault() == default)
                 {
-                    if (dynamicPage.DynamicPageTranslations.Where(x => x.Language == _cultures[i].Name.ToString()).SingleOrDefault() == default)
+                    try
                     {
-                        try
+                        dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
                         {
-                            dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
-                            {
-                                Name = _resourceManager.GetString("DefaultPageName", _cultures[i]),
-                                Description = _resourceManager.GetString("DefaultPageDescription", _cultures[i]),
-                                Language = _cultures[i].Name.ToString(),
-                            });
-                        }
-                        catch // if we need to implement a new language but .resx file wasn't updated yet.
+                            Name = _resourceManager.GetString("DefaultPageName", culture),
+                            Description = _resourceManager.GetString("DefaultPageDescription", culture),
+                            Language = culture.Name.ToString(),
+                        });
+                    }
+                    catch // if we need to implement a new language but .resx file wasn't updated yet.
+                    {
+                        dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
                         {
-                            dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
-                            {
-                                Name = _localizer.GetString("DefaultPageName"),
-                                Description = _localizer.GetString("DefaultPageDescription"),
-                                Language = _cultures[i].Name.ToString(),
-                            });
-                        }
+                            Name = _localizer.GetString("DefaultPageName"),
+                            Description = _localizer.GetString("DefaultPageDescription"),
+                            Language = culture.Name.ToString(),
+                        });
                     }
                 }
+
 
                 if (!isTracked)
                 {
@@ -127,6 +128,10 @@ namespace hitsWebsite.Services
             return await _context.ProfessionTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
         }
 
+        public async Task<List<FeatureTranslation>> GetFeatures()
+        {
+            return await _context.FeatureTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
+        }
 
         public async Task CreateProfession(ProfessionEditModel model)
         {
@@ -150,8 +155,32 @@ namespace hitsWebsite.Services
             return;
         }
 
+        public async Task CreateFeature(FeatureEditModel model)
+        {
+            var feature = new Feature()
+            {
+                FeatureTranslations = new Collection<FeatureTranslation>()
+            };
+
+            for (var i = 0; i < _cultures.Count; i++)
+            {
+                feature.FeatureTranslations.Add(new FeatureTranslation
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            await _context.Features.AddAsync(feature);
+            await _context.SaveChangesAsync();
+            return;
+        }
 
 
+
+        // JSON
+        // GET
         public Dictionary<String, String> GetBlock(String projectBlockName)
         {
             NameOfPageBlock block = null;
