@@ -63,10 +63,9 @@
                                            value="@dynamicPage.DynamicPageTranslations.Where(x => x.Language == supportedCultures[i].Name).SingleOrDefault().Name"
                                            placeholder="@localizer["InputName"]" autocomplete="off" required />
 
-                                    <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")"
-                                              placeholder="@localizer["InputDescription"]" autocomplete="off" required>
-                                              @dynamicPage.DynamicPageTranslations.Where(x => x.Language == supportedCultures[i].Name).SingleOrDefault().Description
-                                    </textarea>
+                                    // textarea shouldn't has any extra spaces between openning and closing tags
+                                    <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off" 
+                                              required>@dynamicPage.DynamicPageTranslations.Where(x => x.Language == supportedCultures[i].Name).SingleOrDefault().Description</textarea>
 
                                     <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
                                     <hr>
