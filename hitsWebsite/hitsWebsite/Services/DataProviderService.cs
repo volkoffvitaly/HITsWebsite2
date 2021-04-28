@@ -54,16 +54,12 @@ namespace hitsWebsite.Services
 
                 for (var i = 0; i < _cultures.Count; i++)
                 {
-                    var newTranslation = new DynamicPageTranslation()
+                    dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
                     {
-                        DynamicPage = dynamicPage,
-                        DynamicPageId = dynamicPage.Id,
                         Name = _localizer.GetString("DefaultPageName"),
                         Description = _localizer.GetString("DefaultPageDescription"),
                         Language = _cultures[i].Name.ToString()
-                    };
-
-                    dynamicPage.DynamicPageTranslations.Add(newTranslation);
+                    });
                 }
 
                 await _context.DynamicPages.AddAsync(dynamicPage);
@@ -103,7 +99,7 @@ namespace hitsWebsite.Services
         }
 
 
-        public async Task<int> CreateProfession(ProfessionEditModel model)
+        public async Task CreateProfession(ProfessionEditModel model)
         {
             var profession = new Profession()
             {
@@ -122,8 +118,8 @@ namespace hitsWebsite.Services
             }
 
             await _context.Professions.AddAsync(profession);
-
-            return await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
+            return;
         }
 
 

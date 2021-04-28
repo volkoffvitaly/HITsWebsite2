@@ -13,7 +13,7 @@ namespace hitsWebsite.Services
         public Task<DynamicPage> GetDynamicPageInfo(String name);
         public Task ChangeDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model);
         public Task<List<ProfessionTranslation>> GetProfessions();
-        public Task<int> CreateProfession(ProfessionEditModel model);
+        public Task CreateProfession(ProfessionEditModel model);
 
 
         public Dictionary<String, String> GetBlock(String projectBlockName);
