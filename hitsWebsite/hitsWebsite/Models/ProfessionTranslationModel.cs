@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace hitsWebsite.Models
 {
-    public class FeatureTranslation
+    public class ProfessionTranslationModel
     {
         public Guid Id { get; set; }
 
@@ -21,7 +21,7 @@ namespace hitsWebsite.Models
         public String Description { get; set; }
 
 
-        public Feature Feature { get; set; }
-        public Guid FeatureId { get; set; }
+        public ProfessionModel Profession { get; set; }
+        public Guid ProfessionId { get; set; }
     }
 }

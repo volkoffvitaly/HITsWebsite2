@@ -40,9 +40,9 @@ namespace hitsWebsite.Services
 
         #region DynamicPage
 
-        public async Task<DynamicPage> GetDynamicPageInfo(String projectNameOfPage = null)
+        public async Task<DynamicPageModel> GetDynamicPageInfo(String projectNameOfPage = null)
         {
-            DynamicPage dynamicPage = null;
+            DynamicPageModel dynamicPage = null;
             Boolean isTracked = true; // to separate new entity from a tracked
 
             if (projectNameOfPage != null)
@@ -55,7 +55,7 @@ namespace hitsWebsite.Services
 
             if (dynamicPage == null)
             {
-                dynamicPage = new DynamicPage()
+                dynamicPage = new DynamicPageModel()
                 {
                     ProjectName = projectNameOfPage
                 };
@@ -74,7 +74,7 @@ namespace hitsWebsite.Services
                 {
                     try
                     {
-                        dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
+                        dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslationModel()
                         {
                             Name = _resourceManager.GetString("DefaultPageName", culture),
                             Description = _resourceManager.GetString("DefaultPageDescription", culture),
@@ -83,7 +83,7 @@ namespace hitsWebsite.Services
                     }
                     catch // if we need to implement a new language but .resx file wasn't updated yet.
                     {
-                        dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
+                        dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslationModel()
                         {
                             Name = _localizer.GetString("DefaultPageName"),
                             Description = _localizer.GetString("DefaultPageDescription"),
@@ -114,7 +114,7 @@ namespace hitsWebsite.Services
 
                 for (var i = 0; i < _cultures.Count; i++)
                 {
-                    dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
+                    dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslationModel()
                     {
                         Name = model.Name[i],
                         Description = model.Description[i],
@@ -132,12 +132,12 @@ namespace hitsWebsite.Services
 
         #region GetLists
 
-        public async Task<List<ProfessionTranslation>> GetProfessions()
+        public async Task<List<ProfessionTranslationModel>> GetProfessions()
         {
             return await _context.ProfessionTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
         }
 
-        public async Task<List<FeatureTranslation>> GetFeatures()
+        public async Task<List<FeatureTranslationModel>> GetFeatures()
         {
             return await _context.FeatureTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
         }
@@ -148,14 +148,14 @@ namespace hitsWebsite.Services
 
         public async Task CreateProfession(ProfessionEditModel model)
         {
-            var profession = new Profession()
+            var profession = new ProfessionModel()
             {
-                ProfessionTranslations = new Collection<ProfessionTranslation>()
+                ProfessionTranslations = new Collection<ProfessionTranslationModel>()
             };
 
             for (var i = 0; i < _cultures.Count; i++)
             {
-                profession.ProfessionTranslations.Add(new ProfessionTranslation
+                profession.ProfessionTranslations.Add(new ProfessionTranslationModel
                 {
                     Name = model.Name[i],
                     Description = model.Description[i],
@@ -170,14 +170,14 @@ namespace hitsWebsite.Services
 
         public async Task CreateFeature(FeatureEditModel model)
         {
-            var feature = new Feature()
+            var feature = new FeatureModel()
             {
-                FeatureTranslations = new Collection<FeatureTranslation>()
+                FeatureTranslations = new Collection<FeatureTranslationModel>()
             };
 
             for (var i = 0; i < _cultures.Count; i++)
             {
-                feature.FeatureTranslations.Add(new FeatureTranslation
+                feature.FeatureTranslations.Add(new FeatureTranslationModel
                 {
                     Name = model.Name[i],
                     Description = model.Description[i],
@@ -199,7 +199,7 @@ namespace hitsWebsite.Services
         {
             if (projectBlockName != default)
             {
-                NameOfPageBlock block = default;
+                NameOfPageBlockModel block = default;
 
                 JsonSerializer serializer = new JsonSerializer();
                 using FileStream fileStreamer = File.Open("NameOfPageBlock.json", FileMode.Open);
@@ -211,7 +211,7 @@ namespace hitsWebsite.Services
                         // deserialize only when there's "[" character in the stream
                         if (jsonReader.TokenType == JsonToken.StartArray)
                         {
-                            block = serializer.Deserialize<List<NameOfPageBlock>>(jsonReader)
+                            block = serializer.Deserialize<List<NameOfPageBlockModel>>(jsonReader)
                                 .Where(x => x.ProjectName == projectBlockName)
                                 .SingleOrDefault();
                         }
@@ -249,12 +249,12 @@ namespace hitsWebsite.Services
         }
 
         #region HiddenLogic
-        private async Task<NameOfPageBlock> createDefaultBlockName(String projectBlockName, NameOfPageBlock oldBlock)
+        private async Task<NameOfPageBlockModel> createDefaultBlockName(String projectBlockName, NameOfPageBlockModel oldBlock)
         {
             var blockNames = getBlockNames();  // to reserialize all of them
 
 
-            var defaultBlock = new NameOfPageBlock()
+            var defaultBlock = new NameOfPageBlockModel()
             {
                 ProjectName = projectBlockName,
                 Translations = new Dictionary<string, string>()
@@ -292,9 +292,9 @@ namespace hitsWebsite.Services
             return defaultBlock;
         }
 
-        private List<NameOfPageBlock> getBlockNames()
+        private List<NameOfPageBlockModel> getBlockNames()
         {
-            List<NameOfPageBlock> blocks = new List<NameOfPageBlock>();
+            List<NameOfPageBlockModel> blocks = new List<NameOfPageBlockModel>();
 
             JsonSerializer serializer = new JsonSerializer();
             using FileStream fileStreamer = File.Open("NameOfPageBlock.json", FileMode.Open);
@@ -306,7 +306,7 @@ namespace hitsWebsite.Services
                 // deserialize only when there's "[" character in the stream
                 if (jsonReader.TokenType == JsonToken.StartArray)
                 {
-                    blocks = serializer.Deserialize<List<NameOfPageBlock>>(jsonReader);
+                    blocks = serializer.Deserialize<List<NameOfPageBlockModel>>(jsonReader);
                 }
             }
 

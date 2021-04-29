@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace hitsWebsite.Controllers
 {
+    [Authorize(Roles = ApplicationRoles.Administrators)]
     public class ProfessionsController : Controller
     {
         private readonly IDataProviderService _dataProviderService;
@@ -23,7 +24,7 @@ namespace hitsWebsite.Controllers
             _userManager = userManager;
         }
 
-        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
@@ -31,7 +32,6 @@ namespace hitsWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = ApplicationRoles.Administrators)]
         public async Task<IActionResult> EditDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model)
         {
             if (ModelState.IsValid && !String.IsNullOrEmpty(projectNameOfPage))
@@ -44,26 +44,11 @@ namespace hitsWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = ApplicationRoles.Administrators)]
         public async Task<IActionResult> AddProfession(ProfessionEditModel model)
         {
             if (ModelState.IsValid)
             {
                 await _dataProviderService.CreateProfession(model);
-            }
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = ApplicationRoles.Administrators)]
-        public IActionResult EditBlockName(String projectBlockName, MainPageBlockEditModel model)
-        {
-            
-            if (ModelState.IsValid && !String.IsNullOrEmpty(projectBlockName))
-            {
-                _dataProviderService.ChangeBlockName(projectBlockName, model);
             }
 
             return RedirectToAction("Index");

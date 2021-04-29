@@ -9,8 +9,7 @@
     var professionPage = await DataProviderService.GetDynamicPageInfo("Professions");
     //var admissionPage = await DataProviderService.GetDynamicPageInfo("Admission");
     //var livePage = await DataProviderService.GetDynamicPageInfo("Live");
-    //var aboutPage = await DataProviderService.GetDynamicPageInfo("About");
-    //var contactsPage = await DataProviderService.GetDynamicPageInfo("Contacts");
+    var aboutPage = await DataProviderService.GetDynamicPageInfo("About");
 }
 
 <!DOCTYPE html>
@@ -18,7 +17,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - hitsWebsite</title>
+    <title>@ViewData["Title"]</title>
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet" />
@@ -76,7 +75,7 @@
                                 <a class="nav-link" asp-controller="Live" asp-action="Index">Жизнь в Томске</a>
                             </li>
                             <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
-                                <a class="nav-link" asp-controller="About" asp-action="Index">О Высшей IT школе</a>
+                                <a class="nav-link" asp-controller="About" asp-action="Index">@aboutPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</a>
                             </li>
                             <li class="nav-item dropdown ml-lg-auto">
                                 <partial name="_Culture" model="@new LanguageEditModel()">

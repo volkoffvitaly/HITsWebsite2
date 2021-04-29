@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace hitsWebsite.Models
 {
-    public class DynamicPageTranslation
+    public class DynamicPageTranslationModel
     {
         public Guid Id { get; set; }
 
@@ -21,7 +21,7 @@ namespace hitsWebsite.Models
         public String Description { get; set; }
 
 
-        public DynamicPage DynamicPage { get; set; }
+        public DynamicPageModel DynamicPage { get; set; }
         public Guid DynamicPageId { get; set; }
     }
 }

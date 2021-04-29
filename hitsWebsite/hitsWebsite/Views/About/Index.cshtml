@@ -1,4 +1,5 @@
 ﻿@using hitsWebsite.Services
+@using hitsWebsite.Models.ViewModels
 @inject IDataProviderService DataProviderService
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
 @inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
@@ -17,312 +18,252 @@
     const string ACHIEVEMENTS_PROJECT_BLOCK_NAME = "AchievementsBlock";
 
     // DB entities
-    var dynamicPage = await DataProviderService.GetDynamicPageInfo(ViewData["Title"] as String);
     var features = await DataProviderService.GetFeatures();
-
-    // JSON entities
-    var featuresBlock = await DataProviderService.GetBlockName(FEATURES_PROJECT_BLOCK_NAME);
-    var ourPeopleBlock = await DataProviderService.GetBlockName(OURPEOPLE_PROJECT_BLOCK_NAME);
-    var achievementsBlock = await DataProviderService.GetBlockName(ACHIEVEMENTS_PROJECT_BLOCK_NAME);
-
-    // Vars for displaying to any user
-    var dynamicPage_CurCulture = dynamicPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
-    var featuresBlock_CurCulture = featuresBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value;
-    var ourPeopleBlock_CurCulture = ourPeopleBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value;
-    var achievementsBlock_CurCulture = achievementsBlock.FirstOrDefault(x => x.Key == culture.RequestCulture.UICulture.Name).Value;
 }
 
-<div class="row mb-5">
-    <div class="d-none d-lg-block col-3">
-    </div>
-    <div class="col-lg-9 title-page">
-        <span class="purple-highlight">&lt;title&gt;</span>
-        <h1>@dynamicPage_CurCulture.Name</h1>
-        <div class="row mt-5 align-items-center">
-            <div class="col-md-8">
-                <p>
-                    @dynamicPage_CurCulture.Description
-                </p>
-            </div>
-            <div class="col-md-4 mt-4 mt-md-0">
-                <button type="button" class="big-btn">Узнать подробнее</button>
-            </div>
-        </div>
-    </div>
-</div>
+<partial name="_DynamicPageInfo" model="@ViewData["Title"]">
 
-<div class="row pt-4">
+    <div class="row pt-4">
 
-    <div id="side-navbar-container" class="col-3 d-none d-lg-block">
-        <div id="side-navbar" class="default">
-            <ul>
-            </ul>
-        </div>
-    </div>
+        @*  Left Bar  *@
+        <partial name="_LeftNavigationBar" />
 
-    <div id="blocks-container" class="col col-lg-9">
+        <div id="blocks-container" class="col col-lg-9">
 
-        <div class="row info-block">
-            <div class="col-12 title-block">
-                <h2 class="d-flex w-100 justify-content-between align-items-center">
-                    <text>@featuresBlock_CurCulture</text>
-                    <input type="button" class="edit-block-name" />
-                </h2>
-                <form class="hidden w-100">
-                    <input class="entry-field" type="text" name="name" value="" placeholder="Название блока" autocomplete="off" />
-                    <div class="mt-3 d-flex justify-content-end">
-                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
-                        <button type="submit" class="btn btn-outline-primary">Применить</button>
+            <div class="row info-block">
+                <partial name="_BlockName" model='new _BlockNameViewModel() {
+                    CurrentControllerName = ViewData["Title"].ToString(),
+                    ProjectBlockName = FEATURES_PROJECT_BLOCK_NAME
+                }' />
+
+                @foreach (var feature in features) // List ordered by Name
+                {
+                    <div class="col-12 mt-3">
+                        <div class="box">
+                            @if (User.IsInRole(ApplicationRoles.Administrators))
+                            {
+                                <form class="card-btns-container">
+                                    <button class="btn-edit"></button>
+                                    <button class="btn-delete"></button>
+                                </form>
+                            }
+                            <h4>@feature.Name</h4>
+                            <p class="pt-3">
+                                @feature.Description
+                            </p>
+                        </div>
                     </div>
-                </form>
+                }
+
+
+                @*<div class="col-12 mt-3">
+                        <div class="box">
+                            <h4>Learning by Doing</h4>
+                            <p class="pt-3">
+                                Программист обучается тогда, когда что-то делает, а не тогда, когда он прослушал и пересказал лекцию на нужную тему
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <div class="box">
+                            <h4>Постоянное развитие предметов и преподавателей</h4>
+                            <p class="pt-3">
+                                После каждого проведённого года, в дисциплины вносятся изменения (потенциально, улучшения), как на уровне содержания, так и на уровне правил прохождения предмета
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-4">
+                        <div class="box">
+                            <h4>Интересно → сложно</h4>
+                            <p class="pt-3">
+                                По своей структуре предметы и их компоновка готовят студентов к разным ситуациям, которые могут встречаться в профессиональной деятельности.
+                            </p>
+                        </div>
+                    </div>*@
+
+                @if (User.IsInRole(ApplicationRoles.Administrators))
+                {
+                    <div class="col-12 mt-4 specialty-container">
+                        <div class="specialty box adding-card">
+
+                            <div class="btn-add-container">
+                                <input type="button" class="add-btn" />
+                            </div>
+
+                            <form asp-action="AddFeature" method="post" class="hidden">
+                                @for (var i = 0; i < supportedCultures.Count; i++)
+                                {
+                                    <h5>@supportedCultures[i].Name</h5>
+                                    <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                    <input class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required />
+                                    <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                                }
+                                <button type="button" class="cancel-adding btn btn-outline-danger mt-3">@localizer["ButtonCancel"]</button>
+                                <button type="submit" class="btn btn-primary mt-3">@localizer["ButtonSave"]</button>
+                            </form>
+
+                        </div>
+                    </div>
+                }
+
             </div>
 
-            @foreach (var feature in features) // List ordered by Name
-            {
+            <div class="row info-block mt-5">
+                <partial name="_BlockName" model='new _BlockNameViewModel() {
+                    CurrentControllerName = ViewData["Title"].ToString(),
+                    ProjectBlockName = OURPEOPLE_PROJECT_BLOCK_NAME
+                }' />
+
+                <div class="col-12 mt-3" id="our-people">
+
+                    <input type="radio" name="our-people" id="students-btn" checked><label for="students-btn">Студенты</label>
+
+                    <input type="radio" name="our-people" id="teachers-btn"><label for="teachers-btn">Преподаватели</label>
+
+                    <input type="radio" name="our-people" id="graduates-btn"><label for="graduates-btn">Выпускники</label>
+
+                    <div class="clearfix"></div>
+
+                    <div class="box mt-3">
+
+                        <div id="students-geographic">
+                            <h4 class="mt-2">География студентов</h4>
+                            <img class="mt-4" src="~/svg/map-students.svg">
+                        </div>
+
+                        <div id="teachers">
+                            <div class="row">
+                                <div class="col-4 p-2">
+                                    <div class="img-wrapper">
+                                        <img src="~/img/Lidia.png">
+                                    </div>
+                                    <h4 align="center" class="mt-3">Иванова Лидия Сергеевна</h4>
+                                    <p class="mt-3">Тренер чемпионов WOrldSkills и DigitalSkills, амбассадор Mail.ru</p>
+                                </div>
+
+                                <div class="col-4 p-2">
+                                    <div class="img-wrapper">
+                                        <img src="~/img/Zmeev.png">
+                                    </div>
+                                    <h4 align="center" class="mt-3">Змеев Олег Алексеевич</h4>
+                                    <p class="mt-3">Проректор по цифровой трансформации. Доктор физико-математических наук, профессор</p>
+                                </div>
+
+                                <div class="col-4 p-2">
+                                    <div class="img-wrapper">
+                                        <img src="~/img/Sokov.png">
+                                    </div>
+                                    <h4 align="center" class="mt-3">Соколов Данила Александрович</h4>
+                                    <p class="mt-3">Тренер чемпионов WOrldSkills и DigitalSkills, амбассадор Mail.ru</p>
+                                </div>
+                            </div>
+
+                            <p class="mt-4">Со всей командой наших преподавателей вы можете ознакомиться <a href="http://hits.tsu.ru/ru/teachers">здесь</a></p>
+                        </div>
+
+                        <div id="graduates">
+                            <div class="row">
+
+                                <div class="col-4 p-2">
+                                    <div class="img-wrapper">
+                                        <img src="~/img/Lidia.png">
+                                    </div>
+                                    <h4 align="center" class="mt-3">Дмитрий Биматов</h4>
+                                    <p class="mt-3">
+                                        Разработчик программного обеспечения в Microsoft
+                                    </p>
+                                </div>
+
+                                <div class="col-4 p-2">
+                                    <div class="img-wrapper">
+                                        <img src="~/img/Zmeev.png">
+                                    </div>
+                                    <h4 align="center" class="mt-3">Роман Чаднов</h4>
+                                    <p class="mt-3">
+                                        Инженер-программист в Facebook
+                                    </p>
+                                </div>
+
+                                <div class="col-4 p-2">
+                                    <div class="img-wrapper">
+                                        <img src="~/img/Sokov.png">
+                                    </div>
+                                    <h4 align="center" class="mt-3">Евгений Агафонов</h4>
+                                    <p class="mt-3">Инженер-разработчик программного обеспечения в Microsoft</p>
+                                </div>
+
+                                <div class="col-4 p-2">
+                                    <div class="img-wrapper">
+                                        <img src="~/img/Lidia.png">
+                                    </div>
+                                    <h4 align="center" class="mt-3">Роман Малахов</h4>
+                                    <p class="mt-3">
+                                        Генеральный директор и основатель в bombsquare и ZOOM
+                                    </p>
+                                </div>
+
+                                <div class="col-4 p-2">
+                                    <div class="img-wrapper">
+                                        <img src="~/img/Zmeev.png">
+                                    </div>
+                                    <h4 align="center" class="mt-3">Сергей Кондратьев</h4>
+                                    <p class="mt-3">Инженер по надежности сайта в Google</p>
+                                </div>
+
+                                <div class="col-4 p-2">
+                                    <div class="img-wrapper">
+                                        <img src="~/img/Sokov.png">
+                                    </div>
+                                    <h4 align="center" class="mt-3">Рената Пожидаева</h4>
+                                    <p class="mt-3">
+                                        Ведущий разработчик в RevenueWell
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <p class="mt-4">Со всей командой наших преподавателей вы можете ознакомиться <a href="http://hits.tsu.ru/ru/teachers">здесь</a></p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row info-block mt-5" id="achievements">
+
+                <<partial name="_BlockName" model='new _BlockNameViewModel() {
+                    CurrentControllerName = ViewData["Title"].ToString(),
+                    ProjectBlockName = ACHIEVEMENTS_PROJECT_BLOCK_NAME
+                }' />
+
                 <div class="col-12 mt-3">
                     <div class="box">
-                        @if (User.IsInRole(ApplicationRoles.Administrators))
-                        {
-                            <form class="card-btns-container">
-                                <button class="btn-edit"></button>
-                                <button class="btn-delete"></button>
-                            </form>
-                        }
-                        <h4>@feature.Name</h4>
-                        <p class="pt-3">
-                            @feature.Description
-                        </p>
-                    </div>
-                </div>
-            }
+                        <div class="row justify-content-around">
 
+                            <div class="col-7">
+                                <text>
+                                    Мы гордимся нашими студентами, среди их достижений первые и вторые места во всевозможных чемпионатах и хакатонах.
+                                    <br>С полным списком достижений вы можете ознакомиться <a href="#">здесь</a>
+                                </text>
+                            </div>
 
-            <div class="col-12 mt-3">
-                <div class="box">
-                    <h4>Learning by Doing</h4>
-                    <p class="pt-3">
-                        Программист обучается тогда, когда что-то делает, а не тогда, когда он прослушал и пересказал лекцию на нужную тему
-                    </p>
-                </div>
-            </div>
+                            <div class="col-5">
+                                <div class="row">
+                                    <div class="col-6 mt-0 company-container"><img src="/img/achievements/worldskills_logo.jpg" alt="worldskills" /></div>
+                                    <div class="col-6 mt-0 company-container"><img src="/img/achievements/yandex_logo.png" alt="worldskills" /></div>
+                                    <div class="col-6 mt-4 company-container"><img src="/img/achievements/digital_logo.png" alt="worldskills" /></div>
+                                </div>
+                            </div>
 
-            <div class="col-12 mt-4">
-                <div class="box">
-                    <h4>Постоянное развитие предметов и преподавателей</h4>
-                    <p class="pt-3">
-                        После каждого проведённого года, в дисциплины вносятся изменения (потенциально, улучшения), как на уровне содержания, так и на уровне правил прохождения предмета
-                    </p>
-                </div>
-            </div>
-
-            <div class="col-12 mt-4">
-                <div class="box">
-                    <h4>Интересно → сложно</h4>
-                    <p class="pt-3">
-                        По своей структуре предметы и их компоновка готовят студентов к разным ситуациям, которые могут встречаться в профессиональной деятельности.
-                    </p>
-                </div>
-            </div>
-
-            @if (User.IsInRole(ApplicationRoles.Administrators))
-            {
-                <div class="col-12 mt-4 specialty-container">
-                    <div class="specialty box adding-card">
-
-                        <div class="btn-add-container">
-                            <input type="button" class="add-btn" />
                         </div>
-
-                        <form asp-action="AddFeature" method="post" class="hidden">
-                            @for (var i = 0; i < supportedCultures.Count; i++)
-                            {
-                                <h5>@supportedCultures[i].Name</h5>
-                                <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
-                                <input class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required />
-                                <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
-                            }
-                            <button type="button" class="cancel-adding btn btn-outline-danger mt-3">@localizer["ButtonCancel"]</button>
-                            <button type="submit" class="btn btn-primary mt-3">@localizer["ButtonSave"]</button>
-                        </form>
-
                     </div>
                 </div>
-            }
+
+            </div>
+
 
         </div>
-
-        <div class="row info-block mt-5">
-            <div class="col-12 title-block">
-                <h2 class="d-flex w-100 justify-content-between align-items-center">
-                    <text>@ourPeopleBlock_CurCulture</text>
-                    <input type="button" class="edit-block-name" />
-                </h2>
-                <form class="hidden w-100">
-                    <input class="entry-field" type="text" name="name" value="" placeholder="Название блока" autocomplete="off" />
-                    <div class="mt-3 d-flex justify-content-end">
-                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
-                        <button type="submit" class="btn btn-outline-primary">Применить</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="col-12 mt-3" id="our-people">
-
-                <input type="radio" name="our-people" id="students-btn" checked><label for="students-btn">Студенты</label>
-
-                <input type="radio" name="our-people" id="teachers-btn"><label for="teachers-btn">Преподаватели</label>
-
-                <input type="radio" name="our-people" id="graduates-btn"><label for="graduates-btn">Выпускники</label>
-
-                <div class="clearfix"></div>
-
-                <div class="box mt-3">
-
-                    <div id="students-geographic">
-                        <h4 class="mt-2">География студентов</h4>
-                        <img class="mt-4" src="~/svg/map-students.svg">
-                    </div>
-
-                    <div id="teachers">
-                        <div class="row">
-                            <div class="col-4 p-2">
-                                <div class="img-wrapper">
-                                    <img src="~/img/Lidia.png">
-                                </div>
-                                <h4 align="center" class="mt-3">Иванова Лидия Сергеевна</h4>
-                                <p class="mt-3">Тренер чемпионов WOrldSkills и DigitalSkills, амбассадор Mail.ru</p>
-                            </div>
-
-                            <div class="col-4 p-2">
-                                <div class="img-wrapper">
-                                    <img src="~/img/Zmeev.png">
-                                </div>
-                                <h4 align="center" class="mt-3">Змеев Олег Алексеевич</h4>
-                                <p class="mt-3">Проректор по цифровой трансформации. Доктор физико-математических наук, профессор</p>
-                            </div>
-
-                            <div class="col-4 p-2">
-                                <div class="img-wrapper">
-                                    <img src="~/img/Sokov.png">
-                                </div>
-                                <h4 align="center" class="mt-3">Соколов Данила Александрович</h4>
-                                <p class="mt-3">Тренер чемпионов WOrldSkills и DigitalSkills, амбассадор Mail.ru</p>
-                            </div>
-                        </div>
-
-                        <p class="mt-4">Со всей командой наших преподавателей вы можете ознакомиться <a href="http://hits.tsu.ru/ru/teachers">здесь</a></p>
-                    </div>
-
-                    <div id="graduates">
-                        <div class="row">
-
-                            <div class="col-4 p-2">
-                                <div class="img-wrapper">
-                                    <img src="~/img/Lidia.png">
-                                </div>
-                                <h4 align="center" class="mt-3">Дмитрий Биматов</h4>
-                                <p class="mt-3">
-                                    Разработчик программного обеспечения в Microsoft
-                                </p>
-                            </div>
-
-                            <div class="col-4 p-2">
-                                <div class="img-wrapper">
-                                    <img src="~/img/Zmeev.png">
-                                </div>
-                                <h4 align="center" class="mt-3">Роман Чаднов</h4>
-                                <p class="mt-3">
-                                    Инженер-программист в Facebook
-                                </p>
-                            </div>
-
-                            <div class="col-4 p-2">
-                                <div class="img-wrapper">
-                                    <img src="~/img/Sokov.png">
-                                </div>
-                                <h4 align="center" class="mt-3">Евгений Агафонов</h4>
-                                <p class="mt-3">Инженер-разработчик программного обеспечения в Microsoft</p>
-                            </div>
-
-                            <div class="col-4 p-2">
-                                <div class="img-wrapper">
-                                    <img src="~/img/Lidia.png">
-                                </div>
-                                <h4 align="center" class="mt-3">Роман Малахов</h4>
-                                <p class="mt-3">
-                                    Генеральный директор и основатель в bombsquare и ZOOM
-                                </p>
-                            </div>
-
-                            <div class="col-4 p-2">
-                                <div class="img-wrapper">
-                                    <img src="~/img/Zmeev.png">
-                                </div>
-                                <h4 align="center" class="mt-3">Сергей Кондратьев</h4>
-                                <p class="mt-3">Инженер по надежности сайта в Google</p>
-                            </div>
-
-                            <div class="col-4 p-2">
-                                <div class="img-wrapper">
-                                    <img src="~/img/Sokov.png">
-                                </div>
-                                <h4 align="center" class="mt-3">Рената Пожидаева</h4>
-                                <p class="mt-3">
-                                    Ведущий разработчик в RevenueWell
-                                </p>
-                            </div>
-
-                        </div>
-
-                        <p class="mt-4">Со всей командой наших преподавателей вы можете ознакомиться <a href="http://hits.tsu.ru/ru/teachers">здесь</a></p>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-
-        <div class="row info-block mt-5" id="achievements">
-
-            <div class="col-12 title-block">
-                <h2 class="d-flex w-100 justify-content-between align-items-center">
-                    <text>@achievementsBlock_CurCulture</text>
-                    <input type="button" class="edit-block-name" />
-                </h2>
-                <form class="hidden w-100">
-                    <input class="entry-field" type="text" name="name" value="" placeholder="Название блока" autocomplete="off" />
-                    <div class="mt-3 d-flex justify-content-end">
-                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
-                        <button type="submit" class="btn btn-outline-primary">Применить</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="col-12 mt-3">
-                <div class="box">
-                    <div class="row justify-content-around">
-
-                        <div class="col-7">
-                            <text>
-                                Мы гордимя нашими студентами, среди их достижений первые и вторые места во всевозможных чемпионатах и хакатонах.
-                                <br>С полным списком достижений вы можете ознакомиться <a href="#">здесь</a>
-                            </text>
-                        </div>
-
-                        <div class="col-5">
-                            <div class="row">
-                                <div class="col-6 mt-0 company-container"><img src="/img/achievements/worldskills_logo.jpg" alt="worldskills" /></div>
-                                <div class="col-6 mt-0 company-container"><img src="/img/achievements/yandex_logo.png" alt="worldskills" /></div>
-                                <div class="col-6 mt-4 company-container"><img src="/img/achievements/digital_logo.png" alt="worldskills" /></div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-
     </div>
-</div>

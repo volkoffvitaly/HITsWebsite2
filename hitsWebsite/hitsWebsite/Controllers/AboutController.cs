@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace hitsWebsite.Controllers
 {
+    [Authorize(Roles = ApplicationRoles.Administrators)]
     public class AboutController : Controller
     {
         private readonly IDataProviderService _dataProviderService;
@@ -22,7 +23,7 @@ namespace hitsWebsite.Controllers
             _userManager = userManager;
         }
 
-
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
@@ -30,7 +31,6 @@ namespace hitsWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = ApplicationRoles.Administrators)]
         public async Task<IActionResult> AddFeature(FeatureEditModel model)
         {
             if (ModelState.IsValid)
