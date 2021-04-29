@@ -171,6 +171,28 @@
                                 <p class="mt-3">Тренер чемпионов WOrldSkills и DigitalSkills, амбассадор Mail.ru</p>
                             </div>
 
+
+                            @if (User.IsInRole(ApplicationRoles.Administrators))
+                            {
+                                <div class="col card-container">
+                                    <div class="card box adding-card">
+                                        <input type="button" class="open-popup add-btn" rel="add-teacher" />
+                                    </div>
+                                </div>
+                                <partial name="_PopupOpen" model='"add-teacher"' />
+                                <form asp-action="AddProfession" method="post">
+                                    <h5>RU</h5>
+                                    <input class="entry-field" type="text" placeholder="Имя" autocomplete="off" required />
+                                    <textarea class="entry-field mt-3" type="text" placeholder="Описание" autocomplete="off" required></textarea>
+                                    <hr>
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">Отмена</button>
+                                        <button type="submit" class="btn btn-outline-primary">Добавить</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
+                            }
+
                         </div>
 
                         <p class="mt-4">Со всей командой наших преподавателей вы можете ознакомиться <a href="http://hits.tsu.ru/ru/teachers">здесь</a></p>
@@ -282,6 +304,27 @@
                                     Ведущий разработчик в RevenueWell
                                 </p>
                             </div>
+
+                            @if (User.IsInRole(ApplicationRoles.Administrators))
+                            {
+                                <div class="col card-container">
+                                    <div class="card box adding-card">
+                                        <input type="button" class="open-popup add-btn" rel="add-graduate" />
+                                    </div>
+                                </div>
+                                <partial name="_PopupOpen" model='"add-graduate"' />
+                                <form asp-action="AddProfession" method="post">
+                                    <h5>RU</h5>
+                                    <input class="entry-field" type="text" placeholder="Имя" autocomplete="off" required />
+                                    <textarea class="entry-field mt-3" type="text" placeholder="Описание" autocomplete="off" required></textarea>
+                                    <hr>
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">Отмена</button>
+                                        <button type="submit" class="btn btn-outline-primary">Добавить</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
+                            }
 
                         </div>
 
