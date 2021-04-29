@@ -38,11 +38,11 @@
     <div class="col-lg-9 title-page">
         <span class="purple-highlight">&lt;title&gt;</span>
         @*  Page info  *@
-        <h1>@dynamicPage_CurCulture.Name</h1>
+        <h1>@*@dynamicPage_CurCulture.Name*@---</h1>
         <div class="row mt-5 align-items-center">
             <div class="col-md-8">
                 <p>
-                    @dynamicPage_CurCulture.Description
+                    @*@dynamicPage_CurCulture.Description*@---
                 </p>
             </div>
 
@@ -51,31 +51,30 @@
                 @*  Edit page info  *@
                 @if (User.IsInRole(ApplicationRoles.Administrators))
                 {
-                    <button type="button" class="edit-page-title big-btn mb-3">Редактировать</button>
-                    <div class="popup-container">
-                        <div class="popup-content">
-                            <form asp-action="EditDynamicPageInfo" asp-route-projectNameOfPage="@ViewData["Title"].ToString()" method="post">
-                                @for (var i = 0; i < supportedCultures.Count; i++)
-                                {
-                                    <h5>@supportedCultures[i].Name</h5>
+                    <button type="button" class="open-popup big-btn mb-3">Редактировать</button>
+                    <div class="popup-bg"></div>
+                    <div class="popup">
+                        <form asp-action="EditDynamicPageInfo" asp-route-projectNameOfPage="@ViewData["Title"].ToString()" method="post">
+                            @for (var i = 0; i < supportedCultures.Count; i++)
+                            {
+                                <h5>@supportedCultures[i].Name</h5>
 
-                                    <input class="entry-field" type="text" name="@("Name[" + i + "]")"
-                                           value="@dynamicPage.DynamicPageTranslations.Where(x => x.Language == supportedCultures[i].Name).SingleOrDefault().Name"
-                                           placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                <input class="entry-field" type="text" name="@("Name[" + i + "]")"
+                                       @*value="@dynamicPage.DynamicPageTranslations.Where(x => x.Language == supportedCultures[i].Name).SingleOrDefault().Name"*@
+                                       placeholder="@localizer["InputName"]" autocomplete="off" required />
 
-                                    // textarea shouldn't has any extra spaces between openning and closing tags
-                                    <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off" 
-                                              required>@dynamicPage.DynamicPageTranslations.Where(x => x.Language == supportedCultures[i].Name).SingleOrDefault().Description</textarea>
+                                // textarea shouldn't has any extra spaces between openning and closing tags
+                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                          required>@*@dynamicPage.DynamicPageTranslations.Where(x => x.Language == supportedCultures[i].Name).SingleOrDefault().Description*@</textarea>
 
-                                    <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
-                                    <hr>
-                                }
-                                <div class="mt-3 d-flex justify-content-end">
-                                    <button type="button" class="cancel-editing btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                                    <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
-                                </div>
-                            </form>
-                        </div>
+                                <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                                <hr>
+                            }
+                            <div class="mt-3 d-flex justify-content-end">
+                                <button type="button" class="cancel-editing btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                            </div>
+                        </form>
                     </div>
                 }
 

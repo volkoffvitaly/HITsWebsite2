@@ -891,7 +891,7 @@ h6 {
     .card-btns-container .btn-edit:hover {
       background-color: #209bf5; }
 
-.popup-container {
+.popup-bg {
   display: none;
   width: 100vw;
   min-height: 100vh;
@@ -901,26 +901,29 @@ h6 {
   top: 0;
   left: 0;
   z-index: 100; }
-  .popup-container .popup-content {
-    overflow: auto;
-    max-height: 80%;
-    width: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 1.6rem;
+
+.popup {
+  position: fixed;
+  display: none;
+  overflow: auto;
+  max-height: 85%;
+  width: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1.6rem;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 0.925rem;
+  z-index: 101; }
+  .popup::-webkit-scrollbar {
+    width: 1.85rem; }
+  .popup::-webkit-scrollbar-track {
     background: #FFFFFF;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 0.925rem; }
-    .popup-container .popup-content::-webkit-scrollbar {
-      width: 1.85rem; }
-    .popup-container .popup-content::-webkit-scrollbar-track {
-      background: #FFFFFF;
-      border-radius: 0 0.925rem 0.925rem 0; }
-    .popup-container .popup-content::-webkit-scrollbar-thumb {
-      border: 0.8rem solid #FFFFFF;
-      background-clip: padding-box;
-      border-radius: 0.925rem;
-      background-color: rgba(0, 0, 0, 0.15);
-      -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05); }
+    border-radius: 0 0.925rem 0.925rem 0; }
+  .popup::-webkit-scrollbar-thumb {
+    border: 0.8rem solid #FFFFFF;
+    background-clip: padding-box;
+    border-radius: 0.925rem;
+    background-color: rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05); }

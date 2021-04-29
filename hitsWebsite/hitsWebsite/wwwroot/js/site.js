@@ -192,33 +192,45 @@ $titleBlocks.each(function () {
     })
 })
 
-var $popupContainer = $('.popup-container');
-$popupContainer.each(function () {
-    let container = $(this)
+var $popupBg = $('.popup-bg');
+$popupBg.each(function () {
+    let bg = $(this)
+
+    bg.click(function () {
+        hide()
+    })
+
+    function hide() {
+        $('.popup').slideUp(300)
+        $(bg).fadeOut(300)
+    }
+})
+
+var $popup = $('.popup');
+$popup.each(function () {
+    let popup = $(this)
     let cancelBtn = $(this).find('.cancel-editing').first()
-    let popup = $(this).find('.popup-content').first()
 
     cancelBtn.click(function () {
         hide()
     })
 
-    container.click(function () {
-        hide()
-    })
     function hide() {
         $(popup).slideUp(300)
-        $(container).fadeOut(300)
+        $popupBg.fadeOut(300)
     }
-    popup.click(function (e) {
-        e.stopPropagation()
-    })
 })
 
-var $editPageTitle = $('.edit-page-title');
-$editPageTitle.each(function () {    
+
+var $openPopupBtn = $('.open-popup');
+$openPopupBtn.each(function () {
     $(this).click(function () {
-        $(this).next('.popup-container').show('slow')
-        $(this).next('.popup-container').find('.popup-content').slideDown()
+        //$(this).next('.popup-container').show('slow')
+        //$(this).next('.popup-content').slideDown()
+
+        $(this).parent().find('.popup').slideDown('slow')
+
+        $(this).parent().find('.popup-bg').fadeIn('slow')
     })
 })
 
