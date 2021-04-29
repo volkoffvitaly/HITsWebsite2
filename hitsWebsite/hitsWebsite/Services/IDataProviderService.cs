@@ -10,11 +10,13 @@ namespace hitsWebsite.Services
 {
     public interface IDataProviderService
     {
-        public Task<DynamicPageModel> GetDynamicPageInfo(String name);
+        public Task<DynamicPage> GetDynamicPageInfo(String name);
         public Task ChangeDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model);
-        public Task<List<ProfessionTranslationModel>> GetProfessions();
-        public Task<List<FeatureTranslationModel>> GetFeatures();
+        public Task<List<Profession>> GetProfessions();
+        public Task<List<ProfessionTranslation>> GetProfessions_CurrentCulture();
+        public Task<List<FeatureTranslation>> GetFeatures();
         public Task CreateProfession(ProfessionEditModel model);
+        public Task EditProfessionInfo(String professionId, ProfessionEditModel model);
         public Task CreateFeature(FeatureEditModel model);
 
 

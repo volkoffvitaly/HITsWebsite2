@@ -18,6 +18,7 @@
 
     // DB entities
     var professions = await DataProviderService.GetProfessions();
+    //professions[j].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault();
 }
 
 
@@ -48,7 +49,7 @@
                     }
                     else
                     {
-                        @for (int i = 0; i < professions.Count(); i++) // List ordered by Name
+                        @for (var i = 0; i < professions.Count; i++) // List ordered by Name
                         {
                             <div class="col-sm-6 col-md-4 card-container">
                                 <div class="card box">
@@ -59,33 +60,46 @@
                                             <button class="open-popup btn-delete" rel="profession-delete-@i"></button>
                                         </div>
                                     }
-                                    <h4>@professions[i].Name</h4>
+                                    <h4>@professions[i].ProfessionTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h4>
                                     <p class="pt-3">
-                                        @professions[i].Description
+                                        @professions[i].ProfessionTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
                                     </p>
                                 </div>
                             </div>
+
                             @if (User.IsInRole(ApplicationRoles.Administrators))
                             {
                                 var idEdit = $"profession-edit-{i}";
                                 var idDelete = $"profession-delete-{i}";
-                                <partial name="_PopupOpen" model="@idEdit" />
-                                <form>
-                                    <h5>描述</h5>
-                                    <input class="entry-field" type="text" value="" placeholder="Название" autocomplete="off" required />
-                                    <textarea class="entry-field mt-3" type="text" value="" placeholder="Описание" autocomplete="off" required></textarea>
-                                    <hr>
 
+                                <partial name="_PopupOpen" model="@idEdit" />
+                                <form asp-action="ChangeProfessionInfo" asp-controller="Professions" asp-route-professionId="@professions[i].Id">
+                                    @for (var j = 0; j < supportedCultures.Count; j++)
+                                    {
+                                        <h5>@supportedCultures[j].Name</h5>
+
+                                        <input class="entry-field" type="text" name="@("Name[" + j + "]")"
+                                               value="@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name"
+                                               placeholder="@localizer["InputName"]" autocomplete="off" required />
+
+                                        // textarea shouldn't has any extra spaces between openning and closing tags
+                                        <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off" 
+                                                  required>@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+                                        <hr>
+
+                                        <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                                    }
                                     <div class="mt-3 d-flex justify-content-end">
-                                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
-                                        <button type="submit" class="btn btn-outline-primary">Применить</button>
+                                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                        <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
                                     </div>
                                 </form>
                                 <partial name="_PopupClose" />
+
                                 <partial name="_PopupOpen" model="@idDelete" />
                                 <form>
                                     <h5>Элемент будет удален. Продолжить?</h5>
-                                    
+
                                     <div class="mt-3 d-flex justify-content-end">
                                         <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
                                         <button type="submit" class="btn btn-outline-primary">Применить</button>

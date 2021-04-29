@@ -15,14 +15,14 @@ namespace hitsWebsite.Data
         }
 
 
-        public DbSet<ProfessionModel> Professions { get; set; }
-        public DbSet<ProfessionTranslationModel> ProfessionTranslations { get; set; }
+        public DbSet<Profession> Professions { get; set; }
+        public DbSet<ProfessionTranslation> ProfessionTranslations { get; set; }
 
-        public DbSet<FeatureModel> Features { get; set; }
-        public DbSet<FeatureTranslationModel> FeatureTranslations { get; set; }
+        public DbSet<Feature> Features { get; set; }
+        public DbSet<FeatureTranslation> FeatureTranslations { get; set; }
 
-        public DbSet<DynamicPageModel> DynamicPages { get; set; }
-        public DbSet<DynamicPageTranslationModel> DynamicPageTranslations { get; set; }
+        public DbSet<DynamicPage> DynamicPages { get; set; }
+        public DbSet<DynamicPageTranslation> DynamicPageTranslations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

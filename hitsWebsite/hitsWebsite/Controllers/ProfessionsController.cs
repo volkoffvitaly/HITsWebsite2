@@ -34,7 +34,7 @@ namespace hitsWebsite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model)
         {
-            if (ModelState.IsValid && !String.IsNullOrEmpty(projectNameOfPage))
+            if (ModelState.IsValid && projectNameOfPage != null)
             {
                 await _dataProviderService.ChangeDynamicPageInfo(projectNameOfPage, model);
             }
@@ -50,6 +50,21 @@ namespace hitsWebsite.Controllers
             {
                 await _dataProviderService.CreateProfession(model);
             }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeProfessionInfo(String professionId, ProfessionEditModel model)
+        {
+            if (!ModelState.IsValid && professionId == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            await _dataProviderService.EditProfessionInfo(professionId, model);
+
 
             return RedirectToAction("Index");
         }

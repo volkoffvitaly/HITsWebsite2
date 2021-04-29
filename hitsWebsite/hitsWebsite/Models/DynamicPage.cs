@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Identity;
 
 namespace hitsWebsite.Models
 {
-    public class DynamicPageModel
+    public class DynamicPage
     {
         public Guid Id { get; set; }
 
         [Required]
         public String ProjectName { get; set; }
 
-        public ICollection<DynamicPageTranslationModel> DynamicPageTranslations { get; set; } = new Collection<DynamicPageTranslationModel>();
+        public ICollection<DynamicPageTranslation> DynamicPageTranslations { get; set; } = new Collection<DynamicPageTranslation>();
     }
 }

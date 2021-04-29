@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Identity;
 
 namespace hitsWebsite.Models
 {
-    public class ProfessionModel
+    public class Feature
     {
         public Guid Id { get; set; }
-        public ICollection<ProfessionTranslationModel> ProfessionTranslations { get; set; }
+        public ICollection<FeatureTranslation> FeatureTranslations { get; set; }
     }
 }
