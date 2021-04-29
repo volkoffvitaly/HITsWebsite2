@@ -13,8 +13,8 @@
     var supportedCultures = localizationOptions.Value.SupportedUICultures;  // Supported cultures in app
 
     // projectNameOfBlocks for partial
-    const string PROFESSIONS_PROJECT_BLOCK_NAME = "ProfessionsBlock";
-    const string HITS_TEST_PROJECT_BLOCK_NAME = "HitsTestBlock";
+    const string ProfessionsName = "ProfessionsBlock";
+    const string HitsTestName = "HitsTestBlock";
 
     // DB entities
     var professions = await DataProviderService.GetProfessions();
@@ -34,7 +34,7 @@
             @* Name of professions block *@
             <partial name="_BlockName" model='new _BlockNameViewModel() {
                     CurrentControllerName = ViewData["Title"].ToString(),
-                    ProjectBlockName = PROFESSIONS_PROJECT_BLOCK_NAME
+                    ProjectBlockName = ProfessionsName
             }' />
 
             @* Cards of professions *@
@@ -101,8 +101,8 @@
         <div class="row info-block mt-5">
             <partial name="_BlockName" model='new _BlockNameViewModel() {
                     CurrentControllerName = ViewData["Title"].ToString(),
-                    ProjectBlockName = HITS_TEST_PROJECT_BLOCK_NAME
-            }' />
+                    ProjectBlockName = HitsTestName
+                 }' />
             <div class="col-12 mt-3 test-hits">
 
                 <div class="row">

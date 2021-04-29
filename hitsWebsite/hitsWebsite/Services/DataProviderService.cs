@@ -91,71 +91,31 @@ namespace hitsWebsite.Services
                         });
                     }
                 }
-
-
-                if (!isTracked)
-                {
-                    await _context.DynamicPages.AddAsync(dynamicPage);
-                }
-
-                await _context.SaveChangesAsync();
             }
+
+
+            if (!isTracked)
+            {
+                await _context.DynamicPages.AddAsync(dynamicPage);
+            }
+
+            await _context.SaveChangesAsync();
 
             return dynamicPage;
         }
 
-        public async Task ChangeDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model)
+
+    public async Task ChangeDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model)
+    {
+        var dynamicPage = await _context.DynamicPages.Where(x => x.ProjectName == projectNameOfPage).Include(x => x.DynamicPageTranslations).SingleOrDefaultAsync();
+
+        if (dynamicPage != null)
         {
-            var dynamicPage = await _context.DynamicPages.Where(x => x.ProjectName == projectNameOfPage).Include(x => x.DynamicPageTranslations).SingleOrDefaultAsync();
-
-            if (dynamicPage != null)
-            {
-                dynamicPage.DynamicPageTranslations.Clear();
-
-                for (var i = 0; i < _cultures.Count; i++)
-                {
-                    dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslationModel()
-                    {
-                        Name = model.Name[i],
-                        Description = model.Description[i],
-                        Language = model.Language[i]
-                    });
-                }
-
-                await _context.SaveChangesAsync();
-            }
-
-            return;
-        }
-
-        #endregion
-
-        #region GetLists
-
-        public async Task<List<ProfessionTranslationModel>> GetProfessions()
-        {
-            return await _context.ProfessionTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
-        }
-
-        public async Task<List<FeatureTranslationModel>> GetFeatures()
-        {
-            return await _context.FeatureTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
-        }
-
-        #endregion
-
-        #region CreateListElement
-
-        public async Task CreateProfession(ProfessionEditModel model)
-        {
-            var profession = new ProfessionModel()
-            {
-                ProfessionTranslations = new Collection<ProfessionTranslationModel>()
-            };
+            dynamicPage.DynamicPageTranslations.Clear();
 
             for (var i = 0; i < _cultures.Count; i++)
             {
-                profession.ProfessionTranslations.Add(new ProfessionTranslationModel
+                dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslationModel()
                 {
                     Name = model.Name[i],
                     Description = model.Description[i],
@@ -163,157 +123,198 @@ namespace hitsWebsite.Services
                 });
             }
 
-            await _context.Professions.AddAsync(profession);
             await _context.SaveChangesAsync();
-            return;
         }
 
-        public async Task CreateFeature(FeatureEditModel model)
+        return;
+    }
+
+    #endregion
+
+    #region GetLists
+
+    public async Task<List<ProfessionTranslationModel>> GetProfessions()
+    {
+        return await _context.ProfessionTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
+    }
+
+    public async Task<List<FeatureTranslationModel>> GetFeatures()
+    {
+        return await _context.FeatureTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
+    }
+
+    #endregion
+
+    #region CreateListElement
+
+    public async Task CreateProfession(ProfessionEditModel model)
+    {
+        var profession = new ProfessionModel()
         {
-            var feature = new FeatureModel()
-            {
-                FeatureTranslations = new Collection<FeatureTranslationModel>()
-            };
+            ProfessionTranslations = new Collection<ProfessionTranslationModel>()
+        };
 
-            for (var i = 0; i < _cultures.Count; i++)
+        for (var i = 0; i < _cultures.Count; i++)
+        {
+            profession.ProfessionTranslations.Add(new ProfessionTranslationModel
             {
-                feature.FeatureTranslations.Add(new FeatureTranslationModel
-                {
-                    Name = model.Name[i],
-                    Description = model.Description[i],
-                    Language = model.Language[i]
-                });
-            }
-
-            await _context.Features.AddAsync(feature);
-            await _context.SaveChangesAsync();
-            return;
+                Name = model.Name[i],
+                Description = model.Description[i],
+                Language = model.Language[i]
+            });
         }
 
-        #endregion
+        await _context.Professions.AddAsync(profession);
+        await _context.SaveChangesAsync();
+        return;
+    }
 
-        #endregion
-
-        #region JSON
-        public async Task<Dictionary<String, String>> GetBlockName(String projectBlockName = default)
+    public async Task CreateFeature(FeatureEditModel model)
+    {
+        var feature = new FeatureModel()
         {
-            if (projectBlockName != default)
+            FeatureTranslations = new Collection<FeatureTranslationModel>()
+        };
+
+        for (var i = 0; i < _cultures.Count; i++)
+        {
+            feature.FeatureTranslations.Add(new FeatureTranslationModel
             {
-                NameOfPageBlockModel block = default;
-
-                JsonSerializer serializer = new JsonSerializer();
-                using FileStream fileStreamer = File.Open("NameOfPageBlock.json", FileMode.Open);
-                using StreamReader streamReader = new StreamReader(fileStreamer);
-                using (JsonReader jsonReader = new JsonTextReader(streamReader))
-                {
-                    while (jsonReader.Read())
-                    {
-                        // deserialize only when there's "[" character in the stream
-                        if (jsonReader.TokenType == JsonToken.StartArray)
-                        {
-                            block = serializer.Deserialize<List<NameOfPageBlockModel>>(jsonReader)
-                                .Where(x => x.ProjectName == projectBlockName)
-                                .SingleOrDefault();
-                        }
-                    }
-                }
-
-                if (block == default || block.Translations.Count < _cultures.Count)
-                {
-                    block = await createDefaultBlockName(projectBlockName, block);
-                }
-
-                return block.Translations;
-            }
-
-            return default;
+                Name = model.Name[i],
+                Description = model.Description[i],
+                Language = model.Language[i]
+            });
         }
 
-        public async void ChangeBlockName(String projectBlockName, MainPageBlockEditModel model)
+        await _context.Features.AddAsync(feature);
+        await _context.SaveChangesAsync();
+        return;
+    }
+
+    #endregion
+
+    #endregion
+
+    #region JSON
+    public async Task<Dictionary<String, String>> GetBlockName(String projectBlockName = default)
+    {
+        if (projectBlockName != default)
         {
-            var blockNames = getBlockNames();  // to reserialize all of them
-
-            if (blockNames.Count > 0)  // can't change any name if no one block exists
-            {
-                var newBlockName = blockNames.Where(x => x.ProjectName == projectBlockName).FirstOrDefault();
-
-                newBlockName.Translations.Clear();
-                for (var i = 0; i < _cultures.Count; i++)
-                {
-                    newBlockName.Translations.Add(model.Language[i], model.NewBlockName[i]);
-                }
-
-                using FileStream fileStreamer = new FileStream("NameOfPageBlock.json", FileMode.Create);
-                await System.Text.Json.JsonSerializer.SerializeAsync(fileStreamer, blockNames);
-            }
-        }
-
-        #region HiddenLogic
-        private async Task<NameOfPageBlockModel> createDefaultBlockName(String projectBlockName, NameOfPageBlockModel oldBlock)
-        {
-            var blockNames = getBlockNames();  // to reserialize all of them
-
-
-            var defaultBlock = new NameOfPageBlockModel()
-            {
-                ProjectName = projectBlockName,
-                Translations = new Dictionary<string, string>()
-            };
-
-            if (oldBlock != default)  // If some translations was into oldBlock early
-            {
-                blockNames.Remove(blockNames.Where(x => x.ProjectName == oldBlock.ProjectName).SingleOrDefault()); // .Remove(oldBlock) is don't work... Idk, why?
-                foreach (var oldTranslation in oldBlock.Translations)
-                {
-                    defaultBlock.Translations.Add(oldTranslation.Key, oldTranslation.Value);
-                }
-            }
-
-            foreach (var culture in _cultures)
-            {
-                if (!defaultBlock.Translations.TryGetValue(culture.Name, out var smthVar))
-                {
-                    try
-                    {
-                        defaultBlock.Translations.Add(culture.Name.ToString(), _resourceManager.GetString("DefaultBlockName", culture));
-                    }
-                    catch // if we need to implement a new language but .resx file wasn't updated yet.
-                    {
-                        defaultBlock.Translations.Add(culture.Name.ToString(), _localizer.GetString("DefaultBlockName"));
-                    }
-                }
-            }
-
-            blockNames.Add(defaultBlock);
-
-            using FileStream fileStreamer = new FileStream("NameOfPageBlock.json", FileMode.Create);
-            await System.Text.Json.JsonSerializer.SerializeAsync(fileStreamer, blockNames);
-
-            return defaultBlock;
-        }
-
-        private List<NameOfPageBlockModel> getBlockNames()
-        {
-            List<NameOfPageBlockModel> blocks = new List<NameOfPageBlockModel>();
+            NameOfPageBlockModel block = default;
 
             JsonSerializer serializer = new JsonSerializer();
             using FileStream fileStreamer = File.Open("NameOfPageBlock.json", FileMode.Open);
             using StreamReader streamReader = new StreamReader(fileStreamer);
-            using JsonReader jsonReader = new JsonTextReader(streamReader);
-
-            while (jsonReader.Read())
+            using (JsonReader jsonReader = new JsonTextReader(streamReader))
             {
-                // deserialize only when there's "[" character in the stream
-                if (jsonReader.TokenType == JsonToken.StartArray)
+                while (jsonReader.Read())
                 {
-                    blocks = serializer.Deserialize<List<NameOfPageBlockModel>>(jsonReader);
+                    // deserialize only when there's "[" character in the stream
+                    if (jsonReader.TokenType == JsonToken.StartArray)
+                    {
+                        block = serializer.Deserialize<List<NameOfPageBlockModel>>(jsonReader)
+                            .Where(x => x.ProjectName == projectBlockName)
+                            .SingleOrDefault();
+                    }
                 }
             }
 
-            return blocks;
-        }
-        #endregion
+            if (block == default || block.Translations.Count < _cultures.Count)
+            {
+                block = await createDefaultBlockName(projectBlockName, block);
+            }
 
-        #endregion
+            return block.Translations;
+        }
+
+        return default;
     }
+
+    public async void ChangeBlockName(String projectBlockName, MainPageBlockEditModel model)
+    {
+        var blockNames = getBlockNames();  // to reserialize all of them
+
+        if (blockNames.Count > 0)  // can't change any name if no one block exists
+        {
+            var newBlockName = blockNames.Where(x => x.ProjectName == projectBlockName).FirstOrDefault();
+
+            newBlockName.Translations.Clear();
+            for (var i = 0; i < _cultures.Count; i++)
+            {
+                newBlockName.Translations.Add(model.Language[i], model.NewBlockName[i]);
+            }
+
+            using FileStream fileStreamer = new FileStream("NameOfPageBlock.json", FileMode.Create);
+            await System.Text.Json.JsonSerializer.SerializeAsync(fileStreamer, blockNames);
+        }
+    }
+
+    #region HiddenLogic
+    private async Task<NameOfPageBlockModel> createDefaultBlockName(String projectBlockName, NameOfPageBlockModel oldBlock)
+    {
+        var blockNames = getBlockNames();  // to reserialize all of them
+
+
+        var defaultBlock = new NameOfPageBlockModel()
+        {
+            ProjectName = projectBlockName,
+            Translations = new Dictionary<string, string>()
+        };
+
+        if (oldBlock != default)  // If some translations was into oldBlock early
+        {
+            blockNames.Remove(blockNames.Where(x => x.ProjectName == oldBlock.ProjectName).SingleOrDefault()); // .Remove(oldBlock) is don't work... Idk, why?
+            foreach (var oldTranslation in oldBlock.Translations)
+            {
+                defaultBlock.Translations.Add(oldTranslation.Key, oldTranslation.Value);
+            }
+        }
+
+        foreach (var culture in _cultures)
+        {
+            if (!defaultBlock.Translations.TryGetValue(culture.Name, out var smthVar))
+            {
+                try
+                {
+                    defaultBlock.Translations.Add(culture.Name.ToString(), _resourceManager.GetString("DefaultBlockName", culture));
+                }
+                catch // if we need to implement a new language but .resx file wasn't updated yet.
+                {
+                    defaultBlock.Translations.Add(culture.Name.ToString(), _localizer.GetString("DefaultBlockName"));
+                }
+            }
+        }
+
+        blockNames.Add(defaultBlock);
+
+        using FileStream fileStreamer = new FileStream("NameOfPageBlock.json", FileMode.Create);
+        await System.Text.Json.JsonSerializer.SerializeAsync(fileStreamer, blockNames);
+
+        return defaultBlock;
+    }
+
+    private List<NameOfPageBlockModel> getBlockNames()
+    {
+        List<NameOfPageBlockModel> blocks = new List<NameOfPageBlockModel>();
+
+        JsonSerializer serializer = new JsonSerializer();
+        using FileStream fileStreamer = File.Open("NameOfPageBlock.json", FileMode.Open);
+        using StreamReader streamReader = new StreamReader(fileStreamer);
+        using JsonReader jsonReader = new JsonTextReader(streamReader);
+
+        while (jsonReader.Read())
+        {
+            // deserialize only when there's "[" character in the stream
+            if (jsonReader.TokenType == JsonToken.StartArray)
+            {
+                blocks = serializer.Deserialize<List<NameOfPageBlockModel>>(jsonReader);
+            }
+        }
+
+        return blocks;
+    }
+    #endregion
+
+    #endregion
+}
 }

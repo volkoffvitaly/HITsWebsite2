@@ -7,9 +7,14 @@
 @{var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();
 
     var professionPage = await DataProviderService.GetDynamicPageInfo("Professions");
-    //var admissionPage = await DataProviderService.GetDynamicPageInfo("Admission");
-    //var livePage = await DataProviderService.GetDynamicPageInfo("Live");
+    var admissionPage = await DataProviderService.GetDynamicPageInfo("Admission");
+    var livePage = await DataProviderService.GetDynamicPageInfo("Live");
     var aboutPage = await DataProviderService.GetDynamicPageInfo("About");
+
+    var dynamicPageProfession_CurrentCulture = professionPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
+    var dynamicPageAdmission_CurrentCulture = admissionPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
+    var dynamicPageLive_CurrentCulture = livePage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
+    var dynamicPageAbout_CurrentCulture = aboutPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
 }
 
 <!DOCTYPE html>
@@ -55,8 +60,6 @@
                     <img class="mr-3" src="~/svg/logo.svg">
                     <div class="align-self-center header-logo-name">
                         @localizer["SchoolName"]
-                        @*<p>Высшая<p>
-                          <p>IT Школа<p>*@
                     </div>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,16 +69,16 @@
                     <div class="w-100">
                         <ul class="navbar-nav d-flex align-items-sm-center">
                             <li class="nav-item active header-left-margin text-nowrap mr-xl-4 mr-lg-3">
-                                <a class="nav-link" asp-controller="Professions" asp-action="Index">@professionPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</a>
+                                <a class="nav-link" asp-controller="Professions" asp-action="Index">@dynamicPageProfession_CurrentCulture.Name</a>
                             </li>
                             <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
-                                <a class="nav-link" asp-controller="Admission" asp-action="Index">Поступление</a>
+                                <a class="nav-link" asp-controller="Admission" asp-action="Index">@dynamicPageAdmission_CurrentCulture.Name</a>
                             </li>
                             <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
-                                <a class="nav-link" asp-controller="Live" asp-action="Index">Жизнь в Томске</a>
+                                <a class="nav-link" asp-controller="Live" asp-action="Index">@dynamicPageLive_CurrentCulture.Name</a>
                             </li>
                             <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
-                                <a class="nav-link" asp-controller="About" asp-action="Index">@aboutPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</a>
+                                <a class="nav-link" asp-controller="About" asp-action="Index">@dynamicPageAbout_CurrentCulture.Name</a>
                             </li>
                             <li class="nav-item dropdown ml-lg-auto">
                                 <partial name="_Culture" model="@new LanguageEditModel()">

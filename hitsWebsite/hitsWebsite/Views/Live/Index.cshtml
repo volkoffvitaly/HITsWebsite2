@@ -1,11 +1,45 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using hitsWebsite.Services
+@using hitsWebsite.Models.ViewModels
+@inject IDataProviderService DataProviderService
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+@inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
+
+@{
+    // projectNameOfPage
+    ViewData["Title"] = "Live";
+
+    // Cultures info
+    var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();  // Current culture request
+    var supportedCultures = localizationOptions.Value.SupportedUICultures;  // Supported cultures in app
+
+    // projectNameOfBlocks
+    const string AboutCityName = "AboutCityBlock";
+    const string DormitoriesName = "DormitoriesBlock";
 }
 
-<div class="text-center">
-    @if (User.IsInRole(ApplicationRoles.Administrators))
-    {
-        <h1 class="display-4">@User.Identity.Name</h1>
-    }
-    <h4 class="display-4">this is Live.cshtml</h4>
+<partial name="_DynamicPageInfo" model="@ViewData["Title"]" />
+
+<div class="row pt-4">
+
+    @*  Left Bar  *@
+    <partial name="_LeftNavigationBar" />
+
+    <div id="blocks-container" class="col col-lg-9">
+
+        <div class="row info-block">
+            <partial name="_BlockName" model='new _BlockNameViewModel() {
+                    CurrentControllerName = ViewData["Title"].ToString(),
+                    ProjectBlockName = AboutCityName
+                }' />
+
+        </div>
+
+        <div class="row info-block mt-5">
+            <partial name="_BlockName" model='new _BlockNameViewModel() {
+                    CurrentControllerName = ViewData["Title"].ToString(),
+                    ProjectBlockName = DormitoriesName
+                }' />
+        </div>
+
+    </div>
 </div>

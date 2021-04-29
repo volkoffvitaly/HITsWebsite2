@@ -1,26 +1,25 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using hitsWebsite.Models.ViewModels
+@using hitsWebsite.Services
+@inject IDataProviderService DataProviderService
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+@inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
+
+@{
+    // projectNameOfPage
+    ViewData["Title"] = "Admission";
+
+    // Cultures info
+    var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();  // Current culture request
+    var supportedCultures = localizationOptions.Value.SupportedUICultures;  // Supported cultures in app
+
+    // projectNameOfBlocks
+    const string AcademicSubjectsName = "AcademicSubjectsBlock";
+    const string ProbabilityOfAdmissionName = "ProbabilityOfAdmissionsBlock";
+    const string AdmissionСonditionsName = "AdmissionСonditionsBlock";
+    const string RequiredDocumentsName = "RequiredDocumentsBlock";
 }
 
-<div class="row mb-5">
-    <div class="d-none d-lg-block col-3">
-    </div>
-    <div class="col-lg-9 title-page">
-        <span class="purple-highlight">&lt;title&gt;</span>
-        <h1>Поступление</h1>
-        <div class="row mt-5 align-items-center">
-            <div class="col-md-8">
-                <p>
-                    Программа является международной — здесь учатся студенты с разных стран и континентов, а студенты
-                    и преподаватели представляют собой настоящее профессиональное сообщество.
-                </p>
-            </div>
-            <div class="col-md-4 mt-4 mt-md-0">
-                <button type="button" class="big-btn">Узнать подробнее</button>
-            </div>
-        </div>
-    </div>
-</div>
+<partial name="_DynamicPageInfo" model="@ViewData["Title"]" />
 
 <div class="row pt-4">
 
@@ -34,19 +33,10 @@
     <div id="blocks-container" class="col col-lg-9">
 
         <div class="row info-block">
-            <div class="col-12 title-block">
-                <h2 class="d-flex w-100 justify-content-between align-items-center">
-                    <text>Предметы ЕГЭ и баллы</text>
-                    <input type="button" class="edit-block-name" />
-                </h2>
-                <form class="hidden w-100">
-                    <input class="entry-field" type="text" name="name" value="" placeholder="Название блока" autocomplete="off" />
-                    <div class="mt-3 d-flex justify-content-end">
-                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
-                        <button type="submit" class="btn btn-outline-primary">Применить</button>
-                    </div>
-                </form>
-            </div>
+            <partial name="_BlockName" model='new _BlockNameViewModel() {
+                    CurrentControllerName = ViewData["Title"].ToString(),
+                    ProjectBlockName = AcademicSubjectsName
+                }' />
             <div class="col-12 mt-3">
                 <div class="row">
 
@@ -80,10 +70,10 @@
                 </div>
 
                 <div class="row">
-
-                    <div class="col-12 w-100">
-                        <h3>Вероятность поступления <span class="purple-highlight">*</span></h3>
-                    </div>
+                    <partial name="_BlockName" model='new _BlockNameViewModel() {
+                            CurrentControllerName = ViewData["Title"].ToString(),
+                            ProjectBlockName = ProbabilityOfAdmissionName
+                        }' />
 
                     <div class="col-12 mt-3">
                         <div class="box">
@@ -132,19 +122,10 @@
         </div>
 
         <div class="row info-block mt-5">
-            <div class="col-12 title-block">
-                <h2 class="d-flex w-100 justify-content-between align-items-center">
-                    <text>Условия поступления</text>
-                    <input type="button" class="edit-block-name" />
-                </h2>
-                <form class="hidden w-100">
-                    <input class="entry-field" type="text" name="name" value="" placeholder="Название блока" autocomplete="off" />
-                    <div class="mt-3 d-flex justify-content-end">
-                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
-                        <button type="submit" class="btn btn-outline-primary">Применить</button>
-                    </div>
-                </form>
-            </div>
+            <partial name="_BlockName" model='new _BlockNameViewModel() {
+                    CurrentControllerName = ViewData["Title"].ToString(),
+                    ProjectBlockName = AdmissionСonditionsName
+                }' />
             <div class="col-12 mt-3">
 
                 <div class="box large-text">
@@ -193,19 +174,10 @@
         </div>
 
         <div class="row info-block  mt-5">
-            <div class="col-12 title-block">
-                <h2 class="d-flex w-100 justify-content-between align-items-center">
-                    <text>Необходимые документы</text>
-                    <input type="button" class="edit-block-name" />
-                </h2>
-                <form class="hidden w-100">
-                    <input class="entry-field" type="text" name="name" value="" placeholder="Название блока" autocomplete="off" />
-                    <div class="mt-3 d-flex justify-content-end">
-                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
-                        <button type="submit" class="btn btn-outline-primary">Применить</button>
-                    </div>
-                </form>
-            </div>
+            <partial name="_BlockName" model='new _BlockNameViewModel() {
+                    CurrentControllerName = ViewData["Title"].ToString(),
+                    ProjectBlockName = RequiredDocumentsName
+                }' />
             <div class="col-12 mt-3">
 
                 <div class="box large-text">
