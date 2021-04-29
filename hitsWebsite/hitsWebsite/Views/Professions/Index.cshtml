@@ -123,26 +123,27 @@
                     {
                         <div class="col-sm-6 col-md-4 card-container">
                             <div class="card box adding-card">
-
-                                <div class="btn-add-container">
-                                    <input type="button" class="add-btn" />
-                                </div>
-
-                                <form asp-action="CreateProfession" method="post" class="hidden">
-                                    @localizer["AddAction"]
-                                    @for (var i = 0; i < supportedCultures.Count; i++)
-                                    {
-                                        <h5>@supportedCultures[i].Name</h5>
-                                        <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
-                                        <input class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required />
-                                        <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
-                                    }
-                                    <button type="button" class="cancel-adding btn btn-outline-danger mt-3">@localizer["ButtonCancel"]</button>
-                                    <button type="submit" class="btn btn-primary mt-3">@localizer["ButtonSave"]</button>
-                                </form>
-
+                                <input type="button" class="open-popup add-btn" rel="add-profession" />
                             </div>
                         </div>
+
+                        <partial name="_PopupOpen" model='"add-profession"' />
+                        <form asp-action="CreateProfession" method="post">
+                            <h4>@localizer["AddAction"]</h4>
+                            @for (var i = 0; i < supportedCultures.Count; i++)
+                            {
+                                <h5>@supportedCultures[i].Name</h5>
+                                <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
+                                <hr>
+                                <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                            }
+                            <div class="mt-3 d-flex justify-content-end">
+                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                <button type="submit" class="btn btn-primary">@localizer["ButtonSave"]</button>
+                            </div>
+                        </form>
+                        <partial name="_PopupClose" />
                     }
                 </div>
             </div>
