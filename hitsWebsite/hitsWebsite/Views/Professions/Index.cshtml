@@ -48,36 +48,64 @@
                     }
                     else
                     {
-                        @foreach (var profession in professions) // List ordered by Name
+                        @for (int i = 0; i < professions.Count(); i++) // List ordered by Name
                         {
-                            <div class="col-sm-6 col-md-4 specialty-container">
-                                <div class="specialty box">
+                            <div class="col-sm-6 col-md-4 card-container">
+                                <div class="card box">
                                     @if (User.IsInRole(ApplicationRoles.Administrators))
                                     {
-                                        <form class="card-btns-container">
-                                            <button class="btn-edit"></button>
-                                            <button class="btn-delete"></button>
-                                        </form>
+                                        <div class="card-btns-container">
+                                            <button class="open-popup btn-edit" rel="profession-edit-@i"></button>
+                                            <button class="open-popup btn-delete" rel="profession-delete-@i"></button>
+                                        </div>
                                     }
-                                    <h4>@profession.Name</h4>
+                                    <h4>@professions[i].Name</h4>
                                     <p class="pt-3">
-                                        @profession.Description
+                                        @professions[i].Description
                                     </p>
                                 </div>
                             </div>
+                            @if (User.IsInRole(ApplicationRoles.Administrators))
+                            {
+                                var idEdit = $"profession-edit-{i}";
+                                var idDelete = $"profession-delete-{i}";
+                                <partial name="_PopupOpen" model="@idEdit" />
+                                <form>
+                                    <h5>描述</h5>
+                                    <input class="entry-field" type="text" value="" placeholder="Название" autocomplete="off" required />
+                                    <textarea class="entry-field mt-3" type="text" value="" placeholder="Описание" autocomplete="off" required></textarea>
+                                    <hr>
+
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
+                                        <button type="submit" class="btn btn-outline-primary">Применить</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
+                                <partial name="_PopupOpen" model="@idDelete" />
+                                <form>
+                                    <h5>Элемент будет удален. Продолжить?</h5>
+                                    
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
+                                        <button type="submit" class="btn btn-outline-primary">Применить</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
+                            }
                         }
                     }
 
                     @if (User.IsInRole(ApplicationRoles.Administrators))
                     {
-                        <div class="col-sm-6 col-md-4 specialty-container">
-                            <div class="specialty box adding-card">
+                        <div class="col-sm-6 col-md-4 card-container">
+                            <div class="card box adding-card">
 
                                 <div class="btn-add-container">
                                     <input type="button" class="add-btn" />
                                 </div>
 
-                                <form asp-action="AddFeature" method="post" class="hidden">
+                                <form asp-action="AddProfession" method="post" class="hidden">
                                     @for (var i = 0; i < supportedCultures.Count; i++)
                                     {
                                         <h5>@supportedCultures[i].Name</h5>

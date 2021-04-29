@@ -192,34 +192,32 @@ $titleBlocks.each(function () {
     })
 })
 
-var $popupContainer = $('.popup-container');
-$popupContainer.each(function () {
-    let container = $(this)
+
+
+$('.popup-bg').click(function () {
+    $('.popup').slideUp(300)
+    $(this).fadeOut(300)
+})
+
+var $popup = $('.popup');
+$popup.each(function () {
+    let popup = $(this)
     let cancelBtn = $(this).find('.cancel-editing').first()
-    let popup = $(this).find('.popup-content').first()
 
     cancelBtn.click(function () {
         hide()
     })
 
-    container.click(function () {
-        hide()
-    })
     function hide() {
         $(popup).slideUp(300)
-        $(container).fadeOut(300)
+        $('.popup-bg').fadeOut(300)
     }
-    popup.click(function (e) {
-        e.stopPropagation()
-    })
 })
 
-var $editPageTitle = $('.edit-page-title');
-$editPageTitle.each(function () {    
-    $(this).click(function () {
-        $(this).next('.popup-container').show('slow')
-        $(this).next('.popup-container').find('.popup-content').slideDown()
-    })
+$('.open-popup').click(function () {
+    let popup_id = $('#' + $(this).attr("rel")); // Связываем rel и popup_id
+    $(popup_id).slideDown('slow'); // Открываем окно
+    $('.popup-bg').fadeIn('slow'); // Открываем блок заднего фона
 })
 
 

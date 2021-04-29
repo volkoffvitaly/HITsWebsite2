@@ -17,6 +17,8 @@
     var dynamicPage_CurrentCulture = dynamicPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
 }
 
+<div class="popup-bg"></div>
+
 <div class="row mb-5">
     <div class="d-none d-lg-block col-3">
     </div>
@@ -34,8 +36,10 @@
                 @*  Edit page info  *@
                 @if (User.IsInRole(ApplicationRoles.Administrators))
                 {
-                    <button type="button" class="edit-page-title big-btn mb-3">Редактировать</button>
-                    <partial name="_PopupOpen" />
+                    <button type="button" class="open-popup big-btn mb-3" rel="edit-page-info">Редактировать</button>
+
+                    var id = "edit-page-info";
+                    <partial name="_PopupOpen" model="@id"/>
                     <form asp-action="EditDynamicPageInfo" asp-controller="Home" asp-route-projectNameOfPage="@ViewData["Title"].ToString()" asp-route-currentControllerName="@ViewData["Title"].ToString()" method="post">
                         @for (var i = 0; i < supportedCultures.Count; i++)
                         {
