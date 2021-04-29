@@ -855,6 +855,7 @@ h6 {
     /*font-weight: bold;*/ }
 
 .card-btns-container {
+  z-index: 20;
   position: absolute;
   display: inline-flex;
   right: 0;
@@ -923,3 +924,7 @@ h6 {
     border-radius: 0.925rem;
     background-color: rgba(0, 0, 0, 0.15);
     -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05); }
+
+.person-container {
+  position: relative;
+  word-wrap: break-word; }

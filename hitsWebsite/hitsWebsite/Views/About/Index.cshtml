@@ -107,13 +107,53 @@
 
                     <div id="teachers">
                         <div class="row">
-                            <div class="col-4 p-2">
+                            @*Начало элемента*@
+                            <div class="col-4 p-2 person-container">
+                                @if (User.IsInRole(ApplicationRoles.Administrators))
+                                {
+                                    <div class="card-btns-container">
+                                        <button class="open-popup btn-edit" rel="teacher-edit"></button>
+                                        <button class="open-popup btn-delete" rel="teacher-delete"></button>
+                                    </div>
+                                }
                                 <div class="img-wrapper">
                                     <img src="~/img/Lidia.png">
                                 </div>
                                 <h4 align="center" class="mt-3">Иванова Лидия Сергеевна</h4>
                                 <p class="mt-3">Тренер чемпионов WOrldSkills и DigitalSkills, амбассадор Mail.ru</p>
                             </div>
+
+                            @*Как брать id можно посмотреть на странице Профессии*@
+                            @if (User.IsInRole(ApplicationRoles.Administrators))
+                            {
+                                <partial name="_PopupOpen" model='"teacher-edit"' />
+                                <form>
+                                    <h5>RU</h5>
+
+                                    <input class="entry-field" type="text" value="Лидия" placeholder="Имя" autocomplete="off" required />
+
+                                    <textarea class="entry-field mt-3" placeholder="Описание" type="text" autocomplete="off"
+                                              required>Тут типа описание текущее</textarea>
+                                    <hr>
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                        <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
+                                <partial name="_PopupOpen" model='"teacher-delete"' />
+                                <form>
+                                    <h5>Элемент будет удален. Продолжить?</h5>
+
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">Отмена</button>
+                                        <button type="submit" class="btn btn-outline-primary">Применить</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
+                            }
+                            @*Конец элемента*@
+
 
                             <div class="col-4 p-2">
                                 <div class="img-wrapper">
@@ -130,6 +170,7 @@
                                 <h4 align="center" class="mt-3">Соколов Данила Александрович</h4>
                                 <p class="mt-3">Тренер чемпионов WOrldSkills и DigitalSkills, амбассадор Mail.ru</p>
                             </div>
+
                         </div>
 
                         <p class="mt-4">Со всей командой наших преподавателей вы можете ознакомиться <a href="http://hits.tsu.ru/ru/teachers">здесь</a></p>
@@ -137,6 +178,54 @@
 
                     <div id="graduates">
                         <div class="row">
+
+
+                            @*Начало элемента*@
+                            <div class="col-4 p-2 person-container">
+                                @if (User.IsInRole(ApplicationRoles.Administrators))
+                                {
+                                    <div class="card-btns-container">
+                                        <button class="open-popup btn-edit" rel="graduate-edit"></button>
+                                        <button class="open-popup btn-delete" rel="graduate-delete"></button>
+                                    </div>
+                                }
+                                <div class="img-wrapper">
+                                    <img src="~/img/Lidia.png">
+                                </div>
+                                <h4 align="center" class="mt-3">Иванова Лидия Сергеевна</h4>
+                                <p class="mt-3">Тренер чемпионов WOrldSkills и DigitalSkills, амбассадор Mail.ru</p>
+                            </div>
+
+                            @*Как брать id можно посмотреть на странице Профессии*@
+                            @if (User.IsInRole(ApplicationRoles.Administrators))
+                            {
+                                <partial name="_PopupOpen" model='"graduate-edit"' />
+                                <form>
+                                    <h5>RU</h5>
+
+                                    <input class="entry-field" type="text" value="Лидия" placeholder="Имя" autocomplete="off" required />
+
+                                    <textarea class="entry-field mt-3" placeholder="Описание" type="text" autocomplete="off"
+                                              required>Тут типа описание текущее</textarea>
+                                    <hr>
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                        <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
+                                <partial name="_PopupOpen" model='"graduate-delete"' />
+                                <form>
+                                    <h5>Элемент будет удален. Продолжить?</h5>
+
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">Отмена</button>
+                                        <button type="submit" class="btn btn-outline-primary">Применить</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
+                            }
+                            @*Конец элемента*@
 
                             <div class="col-4 p-2">
                                 <div class="img-wrapper">
