@@ -170,27 +170,27 @@ $(document).ready(function () {
 //})
 
 
-var $titleBlocks = $('.title-block');
-$titleBlocks.each(function () {
-    let container = $(this).find('h2').first()
-    let editBtn = $(container).find('.edit-block-name').first()
-    let form = $(this).find('form').first()
-    let cancelBtn = $(this).find('.cancel-editing').first()
+//var $titleBlocks = $('.title-block');
+//$titleBlocks.each(function () {
+//    let container = $(this).find('h2').first()
+//    let editBtn = $(container).find('.edit-block-name').first()
+//    let form = $(this).find('form').first()
+//    let cancelBtn = $(this).find('.cancel-editing').first()
 
-    editBtn.click(function () {
-        $(form).removeClass('hidden')
-        $(container).addClass('hidden')
+//    editBtn.click(function () {
+//        $(form).removeClass('hidden')
+//        $(container).addClass('hidden')
 
-        HandlePageResizing($(window).scrollTop())
-    })
+//        HandlePageResizing($(window).scrollTop())
+//    })
 
-    cancelBtn.click(function () {
-        $(container).removeClass('hidden')
-        $(form).addClass('hidden')
+//    cancelBtn.click(function () {
+//        $(container).removeClass('hidden')
+//        $(form).addClass('hidden')
 
-        HandlePageResizing($(window).scrollTop())
-    })
-})
+//        HandlePageResizing($(window).scrollTop())
+//    })
+//})
 
 
 

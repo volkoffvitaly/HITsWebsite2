@@ -17,25 +17,21 @@
 }
 
 
+@{var id = Block.SingleOrDefault(x => x.Key == "en").Value.Replace(" ", ""); }
+
 <div class="col-12 title-block">
-    <h2 class="d-flex w-100 justify-content-between align-items-center">
-        @if (Block_CurrentCulture != null)
-        {
-            @Block_CurrentCulture
-        }
-        else
-        {
-            @localizer["EmptyBlockName"]
-        }
+    <h2 class="w-100">
+        @Block_CurrentCulture
 
         @if (User.IsInRole(ApplicationRoles.Administrators))
         {
-            <input type="button" class="edit-block-name" />
+            <input type="button" class="open-popup edit-block-name" rel="@id" />
         }
     </h2>
     @if (User.IsInRole(ApplicationRoles.Administrators))
     {
-        <form asp-action="EditBlockName" asp-controller="Home" asp-route-projectBlockName="@Model.ProjectBlockName" asp-route-currentControllerName="@Model.CurrentControllerName" method="post" class="hidden w-100">
+        <partial name="_PopupOpen" model='@id' />
+        <form asp-action="EditBlockName" asp-controller="Home" asp-route-projectBlockName="@Model.ProjectBlockName" asp-route-currentControllerName="@Model.CurrentControllerName" method="post">
             @for (var i = 0; i < supportedCultures.Count; i++)
             {
                 <h5>@supportedCultures[i].Name</h5>
@@ -44,9 +40,10 @@
                 <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
             }
             <div class="mt-3 d-flex justify-content-end">
-                <button type="button" class="cancel-editing btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
                 <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
             </div>
         </form>
+        <partial name="_PopupClose" />
     }
 </div>

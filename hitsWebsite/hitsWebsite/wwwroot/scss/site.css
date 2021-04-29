@@ -17,6 +17,7 @@
     .module-border-wrap {
       padding: 0.625rem; } }
   .module-border-wrap .module {
+    word-wrap: break-word;
     position: relative;
     width: 100%;
     border-radius: 5px;
@@ -830,29 +831,29 @@ h6 {
   line-height: 33px; }
 
 .title-block {
-  display: flex; }
-  .title-block text {
-    float: left; }
-  .title-block .edit-block-name {
-    visibility: hidden;
-    cursor: pointer;
-    background-image: url(/img/pencil.png);
-    background-position: bottom;
-    background-size: 0.8em;
-    background-repeat: no-repeat;
-    background-color: inherit;
-    border: none;
-    outline: none;
-    height: 1em;
-    width: 1em; }
-  .title-block:hover .edit-block-name {
-    visibility: visible; }
+  display: inline; }
   .title-block .entry-field {
     font-size: 3rem;
     line-height: 3.7rem;
     font-family: Montserrat;
     font-style: normal;
     /*font-weight: bold;*/ }
+
+.edit-block-name {
+  border-radius: .925rem;
+  cursor: pointer;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  outline: none;
+  height: 1em;
+  width: 1em;
+  background-size: 50%;
+  background-image: url(/img/pencil2.png);
+  background-color: #3faeff;
+  background-position-y: 40%; }
+  .edit-block-name:hover {
+    background-color: #209bf5; }
 
 .card-btns-container {
   z-index: 20;

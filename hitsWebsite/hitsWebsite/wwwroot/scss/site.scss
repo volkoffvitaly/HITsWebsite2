@@ -30,6 +30,7 @@ $border-size-lg: 0.625rem; // 10px/16
     }
 
     .module {
+        word-wrap: break-word;
         position: relative;
         width: 100%;
         border-radius: 5px;
@@ -1222,31 +1223,9 @@ h6 {
 }
 
 .title-block {
-    display: flex;
+    display: inline;
 
-    text {
-        float: left;
-    }
-
-    .edit-block-name {
-        visibility: hidden;
-        cursor: pointer;
-        background-image: url(/img/pencil.png);
-        background-position: bottom;
-        background-size: 0.8em;
-        background-repeat: no-repeat;
-        background-color: inherit;
-        border: none;
-        outline: none;
-        height: 1em;
-        width: 1em;
-    }
-
-    &:hover {
-        .edit-block-name {
-            visibility: visible;
-        }
-    }
+    
 
     .entry-field {
         font-size: 3rem;
@@ -1257,7 +1236,24 @@ h6 {
     }
 }
 
+.edit-block-name {
+    border-radius: .925rem;
+    cursor: pointer;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    outline: none;
+    height: 1em;
+    width: 1em;
+    background-size: 50%;
+    background-image: url(/img/pencil2.png);
+    background-color: #3faeff;
+    background-position-y: 40%;
 
+    &:hover {
+        background-color: #209bf5;
+    }
+}
 
 .card-btns-container {
     z-index: 20;
