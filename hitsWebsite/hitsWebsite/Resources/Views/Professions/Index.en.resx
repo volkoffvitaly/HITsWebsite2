@@ -117,14 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddAction" xml:space="preserve">
+    <value>Adding a new item</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>Answer</value>
+  </data>
+  <data name="Answer1" xml:space="preserve">
+    <value>Answer 1</value>
+  </data>
+  <data name="Answer2" xml:space="preserve">
+    <value>Answer 2</value>
+  </data>
+  <data name="Answer3" xml:space="preserve">
+    <value>Answer 3</value>
+  </data>
   <data name="ButtonCancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
   <data name="ButtonSave" xml:space="preserve">
-    <value>Save</value>
+    <value>Confirm</value>
   </data>
-  <data name="EmptyBlockName" xml:space="preserve">
-    <value>New block</value>
+  <data name="DeleteAction" xml:space="preserve">
+    <value>The item will be removed. Proceed?</value>
+  </data>
+  <data name="EditAction" xml:space="preserve">
+    <value>Editing an item</value>
   </data>
   <data name="EmptyCards" xml:space="preserve">
     <value>Oh, it's empty here so far...</value>
@@ -135,7 +153,16 @@
   <data name="InputName" xml:space="preserve">
     <value>Name</value>
   </data>
-  <data name="LearnMore" xml:space="preserve">
-    <value>Learn more</value>
+  <data name="JokeQuestion1" xml:space="preserve">
+    <value>Joke question 1</value>
+  </data>
+  <data name="JokeQuestion2" xml:space="preserve">
+    <value>Joke question 2</value>
+  </data>
+  <data name="JokeQuestion3" xml:space="preserve">
+    <value>Joke question 3</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>Find out the result</value>
   </data>
 </root>

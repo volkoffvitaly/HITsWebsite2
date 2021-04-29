@@ -38,6 +38,8 @@ namespace hitsWebsite.Services
 
         #region DB
 
+
+
         #region DynamicPage
 
         public async Task<DynamicPage> GetDynamicPageInfo(String projectNameOfPage = null)
@@ -103,8 +105,6 @@ namespace hitsWebsite.Services
 
             return dynamicPage;
         }
-
-
         public async Task ChangeDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model)
         {
             var dynamicPage = await _context.DynamicPages.Where(x => x.ProjectName == projectNameOfPage).Include(x => x.DynamicPageTranslations).SingleOrDefaultAsync();
@@ -131,7 +131,8 @@ namespace hitsWebsite.Services
 
         #endregion
 
-        #region GetLists
+
+        #region GetListElements
 
         public async Task<List<Profession>> GetProfessions()
         {
@@ -141,14 +142,13 @@ namespace hitsWebsite.Services
         {
             return await _context.ProfessionTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
         }
-
-
         public async Task<List<FeatureTranslation>> GetFeatures()
         {
             return await _context.FeatureTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
         }
 
         #endregion
+
 
         #region CreateListElement
 
@@ -173,7 +173,6 @@ namespace hitsWebsite.Services
             await _context.SaveChangesAsync();
             return;
         }
-
         public async Task CreateFeature(FeatureEditModel model)
         {
             var feature = new Feature()
@@ -198,11 +197,12 @@ namespace hitsWebsite.Services
 
         #endregion
 
+
         #region EditListElement
 
-        public async Task EditProfessionInfo(String professionId, ProfessionEditModel model)
+        public async Task EditProfession(String id, ProfessionEditModel model)
         {
-            var profession = await _context.Professions.Where(x => x.Id.ToString() == professionId).Include(x => x.ProfessionTranslations).SingleOrDefaultAsync();
+            var profession = await _context.Professions.Where(x => x.Id.ToString() == id).Include(x => x.ProfessionTranslations).SingleOrDefaultAsync();
 
             if (profession == null)
             {
@@ -228,7 +228,24 @@ namespace hitsWebsite.Services
 
         #endregion
 
+
+        #region DeleteListElement
+
+        public async Task DeleteProfession(String id)
+        {
+            var profession = await _context.Professions.Where(x => x.Id.ToString() == id).Include(x => x.ProfessionTranslations).SingleOrDefaultAsync();
+            this._context.Professions.Remove(profession);
+            await this._context.SaveChangesAsync();
+        }
+
         #endregion
+
+
+
+        #endregion
+
+
+
 
         #region JSON
         public async Task<Dictionary<String, String>> GetBlockName(String projectBlockName = default)

@@ -117,14 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddAction" xml:space="preserve">
+    <value>新增项目</value>
+  </data>
+  <data name="Answer" xml:space="preserve">
+    <value>回答</value>
+  </data>
+  <data name="Answer1" xml:space="preserve">
+    <value>回答 1</value>
+  </data>
+  <data name="Answer2" xml:space="preserve">
+    <value>回答 2</value>
+  </data>
+  <data name="Answer3" xml:space="preserve">
+    <value>回答 3</value>
+  </data>
   <data name="ButtonCancel" xml:space="preserve">
     <value>取消</value>
   </data>
   <data name="ButtonSave" xml:space="preserve">
     <value>保存</value>
   </data>
-  <data name="EmptyBlockName" xml:space="preserve">
-    <value>新块</value>
+  <data name="DeleteAction" xml:space="preserve">
+    <value>该项目将被删除。继续？</value>
+  </data>
+  <data name="EditAction" xml:space="preserve">
+    <value>编辑项目</value>
   </data>
   <data name="EmptyCards" xml:space="preserve">
     <value>糟糕，这里是空的</value>
@@ -135,7 +153,16 @@
   <data name="InputName" xml:space="preserve">
     <value>名称</value>
   </data>
-  <data name="LearnMore" xml:space="preserve">
-    <value>学到更多</value>
+  <data name="JokeQuestion1" xml:space="preserve">
+    <value>漫画问题 1</value>
+  </data>
+  <data name="JokeQuestion2" xml:space="preserve">
+    <value>漫画问题 2</value>
+  </data>
+  <data name="JokeQuestion3" xml:space="preserve">
+    <value>漫画问题 3</value>
+  </data>
+  <data name="Result" xml:space="preserve">
+    <value>找出结果</value>
   </data>
 </root>

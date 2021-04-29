@@ -16,7 +16,8 @@ namespace hitsWebsite.Services
         public Task<List<ProfessionTranslation>> GetProfessions_CurrentCulture();
         public Task<List<FeatureTranslation>> GetFeatures();
         public Task CreateProfession(ProfessionEditModel model);
-        public Task EditProfessionInfo(String professionId, ProfessionEditModel model);
+        public Task EditProfession(String id, ProfessionEditModel model);
+        public Task DeleteProfession(String id);
         public Task CreateFeature(FeatureEditModel model);
 
 

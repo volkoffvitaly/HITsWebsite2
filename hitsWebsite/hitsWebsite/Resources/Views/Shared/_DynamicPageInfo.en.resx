@@ -117,52 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddAction" xml:space="preserve">
-    <value>Добавление нового элемента</value>
-  </data>
-  <data name="Answer" xml:space="preserve">
-    <value>Ответ</value>
-  </data>
-  <data name="Answer1" xml:space="preserve">
-    <value>Ответ 1</value>
-  </data>
-  <data name="Answer2" xml:space="preserve">
-    <value>Ответ 2</value>
-  </data>
-  <data name="Answer3" xml:space="preserve">
-    <value>Ответ 3</value>
-  </data>
   <data name="ButtonCancel" xml:space="preserve">
-    <value>Отменить</value>
+    <value>Cancel</value>
   </data>
   <data name="ButtonSave" xml:space="preserve">
-    <value>Подтвердить</value>
-  </data>
-  <data name="DeleteAction" xml:space="preserve">
-    <value>Элемент будет удален. Продолжить?</value>
+    <value>Confirm</value>
   </data>
   <data name="EditAction" xml:space="preserve">
-    <value>Редактирование элемента</value>
-  </data>
-  <data name="EmptyCards" xml:space="preserve">
-    <value>Упс, здесь пока пусто...</value>
+    <value>Editing the page header</value>
   </data>
   <data name="InputDescription" xml:space="preserve">
-    <value>Описание</value>
+    <value>Description</value>
   </data>
   <data name="InputName" xml:space="preserve">
-    <value>Название</value>
+    <value>Name</value>
   </data>
-  <data name="JokeQuestion1" xml:space="preserve">
-    <value>Шуточный вопрос 1</value>
-  </data>
-  <data name="JokeQuestion2" xml:space="preserve">
-    <value>Шуточный вопрос 2</value>
-  </data>
-  <data name="JokeQuestion3" xml:space="preserve">
-    <value>Шуточный вопрос 3</value>
-  </data>
-  <data name="Result" xml:space="preserve">
-    <value>Узнать результат</value>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Learn more</value>
   </data>
 </root>

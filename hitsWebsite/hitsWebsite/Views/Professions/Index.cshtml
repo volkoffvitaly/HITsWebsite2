@@ -18,7 +18,6 @@
 
     // DB entities
     var professions = await DataProviderService.GetProfessions();
-    //professions[j].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault();
 }
 
 
@@ -27,11 +26,11 @@
 @*  All content under page info  *@
 <div class="row pt-4">
 
-    @*  Left Bar  *@
     <partial name="_LeftNavigationBar" />
 
     <div id="blocks-container" class="col col-lg-9">
         <div class="row info-block">
+
             @* Name of professions block *@
             <partial name="_BlockName" model='new _BlockNameViewModel() {
                     CurrentControllerName = ViewData["Title"].ToString(),
@@ -73,7 +72,8 @@
                                 var idDelete = $"profession-delete-{i}";
 
                                 <partial name="_PopupOpen" model="@idEdit" />
-                                <form asp-action="ChangeProfessionInfo" asp-controller="Professions" asp-route-professionId="@professions[i].Id">
+                                <form asp-action="EditProfession" asp-controller="Professions" asp-route-id="@professions[i].Id">
+                                    <h4>@localizer["EditAction"]</h4>
                                     @for (var j = 0; j < supportedCultures.Count; j++)
                                     {
                                         <h5>@supportedCultures[j].Name</h5>
@@ -83,7 +83,7 @@
                                                placeholder="@localizer["InputName"]" autocomplete="off" required />
 
                                         // textarea shouldn't has any extra spaces between openning and closing tags
-                                        <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off" 
+                                        <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
                                                   required>@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
                                         <hr>
 
@@ -97,12 +97,21 @@
                                 <partial name="_PopupClose" />
 
                                 <partial name="_PopupOpen" model="@idDelete" />
-                                <form>
-                                    <h5>Элемент будет удален. Продолжить?</h5>
+                                <form asp-action="DeleteProfession" asp-controller="Professions" asp-route-id="@professions[i].Id">
+                                    <h4>@localizer["DeleteAction"]</h4>
 
+                                    @for (var j = 0; j < supportedCultures.Count; j++)
+                                    {
+                                        <h5>@supportedCultures[j].Name</h5>
+                                        <div>
+                                            @localizer["InputName"]: @professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
+                                            @localizer["InputDescription"]: @professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
+                                        </div>
+                                        <hr>
+                                    }
                                     <div class="mt-3 d-flex justify-content-end">
-                                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">Отмена</button>
-                                        <button type="submit" class="btn btn-outline-primary">Применить</button>
+                                        <button type="button" class="cancel-editing btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                        <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
                                     </div>
                                 </form>
                                 <partial name="_PopupClose" />
@@ -119,7 +128,8 @@
                                     <input type="button" class="add-btn" />
                                 </div>
 
-                                <form asp-action="AddProfession" method="post" class="hidden">
+                                <form asp-action="CreateProfession" method="post" class="hidden">
+                                    @localizer["AddAction"]
                                     @for (var i = 0; i < supportedCultures.Count; i++)
                                     {
                                         <h5>@supportedCultures[i].Name</h5>
@@ -141,10 +151,13 @@
 
         @*  HITs Test  *@
         <div class="row info-block mt-5">
+
+            @* Name of HITs test block *@
             <partial name="_BlockName" model='new _BlockNameViewModel() {
                     CurrentControllerName = ViewData["Title"].ToString(),
                     ProjectBlockName = HitsTestName
                  }' />
+
             <div class="col-12 mt-3 test-hits">
 
                 <div class="row">
@@ -152,10 +165,10 @@
 
                         <div class="row mb-4">
                             <div class="col-12">
-                                <h6>Шуточный вопрос</h6>
+                                <h6>@localizer["JokeQuestion1"]</h6>
                             </div>
                             <div class="col-11 col-lg-6 col-xl-5">
-                                <input class="entry-field" type="text" placeholder="Ответ" />
+                                <input class="entry-field" type="text" placeholder="@localizer["Answer"]" />
                             </div>
                         </div>
 
@@ -164,13 +177,13 @@
 
                         <div class="row mb-4">
                             <div class="col-12">
-                                <h6>Шуточный вопрос</h6>
+                                <h6>@localizer["JokeQuestion2"]</h6>
                             </div>
                             <div class="col-11 col-lg-6 col-xl-5">
                                 <div class="row pt-2">
-                                    <div class="col-3"><button class="answer">Ответ 1</button></div>
-                                    <div class="col-3"><button class="answer">Ответ 2</button></div>
-                                    <div class="col-3"><button class="answer">Ответ 3</button></div>
+                                    <div class="col-3"><button class="answer">@localizer["Answer1"]</button></div>
+                                    <div class="col-3"><button class="answer">@localizer["Answer2"]</button></div>
+                                    <div class="col-3"><button class="answer">@localizer["Answer3"]</button></div>
                                 </div>
                             </div>
                         </div>
@@ -180,10 +193,10 @@
 
                         <div class="row mb-4">
                             <div class="col-12">
-                                <h6>Шуточный вопрос</h6>
+                                <h6>@localizer["JokeQuestion3"]</h6>
                             </div>
                             <div class="col-11 col-lg-6 col-xl-5">
-                                <input class="entry-field" type="text" placeholder="Ответ" />
+                                <input class="entry-field" type="text" placeholder="@localizer["Answer"]" />
                             </div>
                         </div>
 
@@ -192,7 +205,7 @@
 
                         <div class="row mt-lg-4">
                             <div class="col-11 col-lg-5 col-xl-4">
-                                <button type="button" class="big-btn">Узнать результат</button>
+                                <button type="button" class="big-btn">@localizer["Result"]</button>
                             </div>
                         </div>
 

@@ -44,7 +44,7 @@ namespace hitsWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddProfession(ProfessionEditModel model)
+        public async Task<IActionResult> CreateProfession(ProfessionEditModel model)
         {
             if (ModelState.IsValid)
             {
@@ -56,16 +56,25 @@ namespace hitsWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangeProfessionInfo(String professionId, ProfessionEditModel model)
+        public async Task<IActionResult> EditProfession(String id, ProfessionEditModel model)
         {
-            if (!ModelState.IsValid && professionId == null)
+            if (ModelState.IsValid && id != null)
             {
-                return RedirectToAction("Index");
+                await _dataProviderService.EditProfession(id, model);
             }
 
-            await _dataProviderService.EditProfessionInfo(professionId, model);
-
-
+            return RedirectToAction("Index");
+        }
+       
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteProfession(String id)
+        {
+            if (id != null)
+            {
+                await _dataProviderService.DeleteProfession(id);
+            }
+ 
             return RedirectToAction("Index");
         }
     }

@@ -41,6 +41,7 @@
                     var id = "edit-page-info";
                     <partial name="_PopupOpen" model="@id"/>
                     <form asp-action="EditDynamicPageInfo" asp-controller="Home" asp-route-projectNameOfPage="@ViewData["Title"].ToString()" asp-route-currentControllerName="@ViewData["Title"].ToString()" method="post">
+                        <h4>@localizer["EditAction"]</h4>
                         @for (var i = 0; i < supportedCultures.Count; i++)
                         {
                             var dynamicPageTranslation = dynamicPage.DynamicPageTranslations.Where(x => x.Language == supportedCultures[i].Name).SingleOrDefault();
