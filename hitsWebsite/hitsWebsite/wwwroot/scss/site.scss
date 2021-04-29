@@ -1174,29 +1174,23 @@ h6 {
     text-align: right;
     position: relative;
 
-    .btn-add-container {
+    .add-btn {
         position: absolute;
         left: 0;
         right: 0;
         top: 0;
         bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        .add-btn {
-            cursor: pointer;
-            background-image: url(/img/plus--v2.png);
-            background-position: center;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-color: inherit;
-            border: none;
-            outline: none;
-            opacity: 0.2;
-            height: 100%;
-            width: 100%;
-        }
+        cursor: pointer;
+        background-image: url(/img/plus--v2.png);
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-color: inherit;
+        border: none;
+        outline: none;
+        opacity: 0.2;
+        height: 100%;
+        width: 100%;
     }
 
     &:hover {
@@ -1325,7 +1319,7 @@ h6 {
     position: fixed;
     display: none;
     overflow: auto;
-    max-height: 80%;
+    max-height: 85%;
     width: 50%;
     top: 50%;
     left: 50%;

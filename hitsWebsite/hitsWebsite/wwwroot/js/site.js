@@ -146,28 +146,28 @@ $(document).ready(function () {
 
 
 
-var $addCards = $('.adding-card')
+//var $addCards = $('.adding-card')
 
-$addCards.each(function () {
-    let container = $(this).find('.btn-add-container').first()
-    let addBtn = $(container).find('.add-btn').first()
-    let form = $(this).find('form').first()
-    let cancelBtn = $(this).find('.cancel-adding').first()
+//$addCards.each(function () {
+//    let container = $(this).find('.btn-add-container').first()
+//    let addBtn = $(container).find('.add-btn').first()
+//    let form = $(this).find('form').first()
+//    let cancelBtn = $(this).find('.cancel-adding').first()
 
-    addBtn.click(function () {
-        $(form).removeClass('hidden')
-        $(container).addClass('hidden')
+//    addBtn.click(function () {
+//        $(form).removeClass('hidden')
+//        $(container).addClass('hidden')
 
-        HandlePageResizing($(window).scrollTop())
-    })
+//        HandlePageResizing($(window).scrollTop())
+//    })
 
-    cancelBtn.click(function () {
-        $(container).removeClass('hidden')
-        $(form).addClass('hidden')
+//    cancelBtn.click(function () {
+//        $(container).removeClass('hidden')
+//        $(form).addClass('hidden')
 
-        HandlePageResizing($(window).scrollTop())
-    })
-})
+//        HandlePageResizing($(window).scrollTop())
+//    })
+//})
 
 
 var $titleBlocks = $('.title-block');
@@ -202,9 +202,9 @@ $('.popup-bg').click(function () {
 var $popup = $('.popup');
 $popup.each(function () {
     let popup = $(this)
-    let cancelBtn = $(this).find('.cancel-editing').first()
+    let closeBtn = $(this).find('.close-popup').first()
 
-    cancelBtn.click(function () {
+    closeBtn.click(function () {
         hide()
     })
 
@@ -219,7 +219,6 @@ $('.open-popup').click(function () {
     $(popup_id).slideDown('slow'); // Открываем окно
     $('.popup-bg').fadeIn('slow'); // Открываем блок заднего фона
 })
-
 
 
 
