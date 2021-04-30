@@ -147,6 +147,9 @@
   <data name="EmptyCards" xml:space="preserve">
     <value>糟糕，这里是空的</value>
   </data>
+  <data name="HitsTest" xml:space="preserve">
+    <value>HITs快速测试</value>
+  </data>
   <data name="InputDescription" xml:space="preserve">
     <value>描述</value>
   </data>

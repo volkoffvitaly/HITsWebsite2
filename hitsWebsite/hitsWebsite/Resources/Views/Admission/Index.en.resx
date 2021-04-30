@@ -120,17 +120,8 @@
   <data name="AddAction" xml:space="preserve">
     <value>Adding a new item</value>
   </data>
-  <data name="Answer" xml:space="preserve">
-    <value>Answer</value>
-  </data>
-  <data name="Answer1" xml:space="preserve">
-    <value>Answer 1</value>
-  </data>
-  <data name="Answer2" xml:space="preserve">
-    <value>Answer 2</value>
-  </data>
-  <data name="Answer3" xml:space="preserve">
-    <value>Answer 3</value>
+  <data name="AdmissionData" xml:space="preserve">
+    <value>These calculations are based on historical statistics and are not a guarantee of receipt</value>
   </data>
   <data name="ButtonCancel" xml:space="preserve">
     <value>Cancel</value>
@@ -147,8 +138,8 @@
   <data name="EmptyCards" xml:space="preserve">
     <value>Oh, it's empty here so far...</value>
   </data>
-  <data name="HitsTest" xml:space="preserve">
-    <value>HITs express test</value>
+  <data name="FreeTuition" xml:space="preserve">
+    <value>Free Tuition</value>
   </data>
   <data name="InputDescription" xml:space="preserve">
     <value>Description</value>
@@ -156,16 +147,10 @@
   <data name="InputName" xml:space="preserve">
     <value>Name</value>
   </data>
-  <data name="JokeQuestion1" xml:space="preserve">
-    <value>Joke question 1</value>
+  <data name="PaidTuition" xml:space="preserve">
+    <value>Paid Tuition</value>
   </data>
-  <data name="JokeQuestion2" xml:space="preserve">
-    <value>Joke question 2</value>
-  </data>
-  <data name="JokeQuestion3" xml:space="preserve">
-    <value>Joke question 3</value>
-  </data>
-  <data name="Result" xml:space="preserve">
-    <value>Find out the result</value>
+  <data name="ProbabilityOfAdmission" xml:space="preserve">
+    <value>Probability of admission</value>
   </data>
 </root>

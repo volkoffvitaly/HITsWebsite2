@@ -151,11 +151,9 @@
         @*  HITs Test  *@
         <div class="row info-block mt-5">
 
-            @* Name of HITs test block *@
-            <partial name="_BlockName" model='new _BlockNameViewModel() {
-                    CurrentControllerName = ViewData["Title"].ToString(),
-                    ProjectBlockName = HitsTestName
-                 }' />
+            <div class="col-12">
+                <h2 style="color:dodgerblue;">@localizer["HitsTest"]</h2>
+            </div>
 
             <div class="col-12 mt-3 test-hits">
 

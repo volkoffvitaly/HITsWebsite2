@@ -118,54 +118,39 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AddAction" xml:space="preserve">
-    <value>Adding a new item</value>
+    <value>Добавление нового элемента</value>
   </data>
-  <data name="Answer" xml:space="preserve">
-    <value>Answer</value>
-  </data>
-  <data name="Answer1" xml:space="preserve">
-    <value>Answer 1</value>
-  </data>
-  <data name="Answer2" xml:space="preserve">
-    <value>Answer 2</value>
-  </data>
-  <data name="Answer3" xml:space="preserve">
-    <value>Answer 3</value>
+  <data name="AdmissionData" xml:space="preserve">
+    <value>Данные расчеты основываются на статистике прошлых лет и не являются гарантией поступления</value>
   </data>
   <data name="ButtonCancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Отменить</value>
   </data>
   <data name="ButtonSave" xml:space="preserve">
-    <value>Confirm</value>
+    <value>Подтвердить</value>
   </data>
   <data name="DeleteAction" xml:space="preserve">
-    <value>The item will be removed. Proceed?</value>
+    <value>Элемент будет удален. Продолжить?</value>
   </data>
   <data name="EditAction" xml:space="preserve">
-    <value>Editing an item</value>
+    <value>Редактирование элемента</value>
   </data>
   <data name="EmptyCards" xml:space="preserve">
-    <value>Oh, it's empty here so far...</value>
+    <value>Упс, здесь пока пусто...</value>
   </data>
-  <data name="HitsTest" xml:space="preserve">
-    <value>HITs express test</value>
+  <data name="FreeTuition" xml:space="preserve">
+    <value>Бюджет</value>
   </data>
   <data name="InputDescription" xml:space="preserve">
-    <value>Description</value>
+    <value>Описание</value>
   </data>
   <data name="InputName" xml:space="preserve">
-    <value>Name</value>
+    <value>Название</value>
   </data>
-  <data name="JokeQuestion1" xml:space="preserve">
-    <value>Joke question 1</value>
+  <data name="PaidTuition" xml:space="preserve">
+    <value>Платно</value>
   </data>
-  <data name="JokeQuestion2" xml:space="preserve">
-    <value>Joke question 2</value>
-  </data>
-  <data name="JokeQuestion3" xml:space="preserve">
-    <value>Joke question 3</value>
-  </data>
-  <data name="Result" xml:space="preserve">
-    <value>Find out the result</value>
+  <data name="ProbabilityOfAdmission" xml:space="preserve">
+    <value>Вероятноть поступления</value>
   </data>
 </root>

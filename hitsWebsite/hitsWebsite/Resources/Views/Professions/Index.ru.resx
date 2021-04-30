@@ -147,6 +147,9 @@
   <data name="EmptyCards" xml:space="preserve">
     <value>Упс, здесь пока пусто...</value>
   </data>
+  <data name="HitsTest" xml:space="preserve">
+    <value>Тест на "HITsовость"</value>
+  </data>
   <data name="InputDescription" xml:space="preserve">
     <value>Описание</value>
   </data>
