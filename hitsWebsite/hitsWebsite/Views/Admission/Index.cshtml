@@ -40,16 +40,71 @@
             <div class="col-12 mt-3">
                 <div class="row">
 
-                    <div class="col-sm-6 col-md-4 specialty-card">
+                    <div class="col-sm-6 col-md-4 card-container">
                         <div class="card box">
+                            @if (User.IsInRole(ApplicationRoles.Administrators))
+                            {
+                                <div class="card-btns-container">
+                                    <button class="open-popup btn-edit" rel="subject-edit-1"></button>
+                                    <button class="open-popup btn-delete" rel="subject-delete-1"></button>
+                                </div>
+                            }
                             <h4>Информатика</h4>
                             <p class="pt-3">
                                 Количество баллов
                             </p>
                         </div>
                     </div>
+                    @if (User.IsInRole(ApplicationRoles.Administrators))
+                    {
+                        var idEdit = $"subject-edit-{1}";
+                        var idDelete = $"subject-delete-{1}";
 
-                    <div class="col-sm-6 col-md-4 specialty-card">
+                        <partial name="_PopupOpen" model="@idEdit" />
+                        <form>
+                            <h4>@localizer["EditAction"]</h4>
+                            @for (var j = 0; j < supportedCultures.Count; j++)
+                            {
+                                <h5>@supportedCultures[j].Name</h5>
+
+                                <input class="entry-field" type="text" name="@("Name[" + j + "]")"                                       
+                                       placeholder="Название" autocomplete="off" required />
+
+                                // textarea shouldn't has any extra spaces between openning and closing tags
+                                <input class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="Кол-во баллов" autocomplete="off" required />
+                                <hr>
+
+                                <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                            }
+                            <div class="mt-3 d-flex justify-content-end">
+                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                            </div>
+                        </form>
+                        <partial name="_PopupClose" />
+
+                        <partial name="_PopupOpen" model="@idDelete" />
+                        <form>
+                            <h4>@localizer["DeleteAction"]</h4>
+
+                            @for (var j = 0; j < supportedCultures.Count; j++)
+                            {
+                                <h5>@supportedCultures[j].Name</h5>
+                                <div>
+                                    @localizer["InputName"]: Матеша@*@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name*@ <br>
+                                    @localizer["InputDescription"]: 65 баллов@*@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description*@
+                                </div>
+                                <hr>
+                            }
+                            <div class="mt-3 d-flex justify-content-end">
+                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                            </div>
+                        </form>
+                        <partial name="_PopupClose" />
+                    }
+
+                    <div class="col-sm-6 col-md-4 card-container">
                         <div class="card box">
                             <h4>Математика</h4>
                             <p class="pt-3">
@@ -58,7 +113,7 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-6 col-md-4 specialty-card">
+                    <div class="col-sm-6 col-md-4 card-container">
                         <div class="card box">
                             <h4>Русский язык</h4>
                             <p class="pt-3">
