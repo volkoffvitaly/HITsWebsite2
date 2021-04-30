@@ -47,9 +47,9 @@
                                 <button class="open-popup btn-delete" rel="feature-delete-@i"></button>
                             </div>
                         }
-                        <h4>@features[i].Name</h4>
+                        <h4>@features[i].FeatureTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h4>
                         <p class="pt-3">
-                            @features[i].Description
+                            @features[i].FeatureTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
                         </p>
                     </div>
                 </div>
@@ -59,19 +59,19 @@
                     var idDelete = $"feature-delete-{i}";
 
                     <partial name="_PopupOpen" model="@idEdit" />
-                    <form asp-action="EditProfession" asp-controller="Professions" asp-route-id="@features[i].Id">
+                    <form asp-action="EditFeature" asp-route-id="@features[i].Id">
                         <h4>@localizer["EditAction"]</h4>
                         @for (var j = 0; j < supportedCultures.Count; j++)
                         {
                             <h5>@supportedCultures[j].Name</h5>
 
                             <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                   value="@*@features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name*@"
+                                   value="@features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name"
                                    placeholder="@localizer["InputName"]" autocomplete="off" required />
 
                             // textarea shouldn't has any extra spaces between openning and closing tags
                             <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
-                                      required>@*@features[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description*@</textarea>
+                                      required>@features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
                             <hr>
 
                             <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
@@ -84,15 +84,15 @@
                     <partial name="_PopupClose" />
 
                     <partial name="_PopupOpen" model="@idDelete" />
-                    <form asp-action="DeleteProfession" asp-controller="Professions" asp-route-id="@features[i].Id">
+                    <form asp-action="DeleteFeature" asp-route-id="@features[i].Id">
                         <h4>@localizer["DeleteAction"]</h4>
 
                         @for (var j = 0; j < supportedCultures.Count; j++)
                         {
                             <h5>@supportedCultures[j].Name</h5>
                             <div>
-                                @localizer["InputName"]: @*@features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name*@ <br>
-                                @localizer["InputDescription"]: @*@features[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description*@
+                                @localizer["InputName"]: @features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
+                                @localizer["InputDescription"]: @features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
                             </div>
                             <hr>
                         }
@@ -113,7 +113,7 @@
                     </div>
                 </div>
                 <partial name="_PopupOpen" model='"add-feature"' />
-                <form asp-action="AddFeature" method="post">
+                <form asp-action="CreateFeature" method="post">
                     @for (var i = 0; i < supportedCultures.Count; i++)
                     {
                         <h5>@supportedCultures[i].Name</h5>

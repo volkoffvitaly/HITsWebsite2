@@ -138,13 +138,9 @@ namespace hitsWebsite.Services
         {
             return await _context.Professions.Include(x => x.ProfessionTranslations).AsNoTracking().ToListAsync();
         }
-        public async Task<List<ProfessionTranslation>> GetProfessions_CurrentCulture()
+        public async Task<List<Feature>> GetFeatures()
         {
-            return await _context.ProfessionTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
-        }
-        public async Task<List<FeatureTranslation>> GetFeatures()
-        {
-            return await _context.FeatureTranslations.Where(x => x.Language == CultureInfo.CurrentUICulture.Name).OrderBy(x => x.Name).AsNoTracking().ToListAsync();
+            return await _context.Features.Include(x => x.FeatureTranslations).AsNoTracking().ToListAsync();
         }
 
         #endregion
@@ -226,6 +222,32 @@ namespace hitsWebsite.Services
             return;
         }
 
+        public async Task EditFeature(String id, FeatureEditModel model)
+        {
+            var feature = await _context.Features.Where(x => x.Id.ToString() == id).Include(x => x.FeatureTranslations).SingleOrDefaultAsync();
+
+            if (feature == null)
+            {
+                return;
+            }
+
+            feature.FeatureTranslations.Clear();
+
+            for (var i = 0; i < model.Language.Count; i++)
+            {
+                feature.FeatureTranslations.Add(new FeatureTranslation()
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            await _context.SaveChangesAsync();
+
+            return;
+        }
+
         #endregion
 
 
@@ -235,6 +257,13 @@ namespace hitsWebsite.Services
         {
             var profession = await _context.Professions.Where(x => x.Id.ToString() == id).Include(x => x.ProfessionTranslations).SingleOrDefaultAsync();
             this._context.Professions.Remove(profession);
+            await this._context.SaveChangesAsync();
+        }
+
+        public async Task DeleteFeature(String id)
+        {
+            var feature = await _context.Features.Where(x => x.Id.ToString() == id).Include(x => x.FeatureTranslations).SingleOrDefaultAsync();
+            this._context.Features.Remove(feature);
             await this._context.SaveChangesAsync();
         }
 

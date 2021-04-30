@@ -13,11 +13,12 @@ namespace hitsWebsite.Services
         public Task<DynamicPage> GetDynamicPageInfo(String name);
         public Task ChangeDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model);
         public Task<List<Profession>> GetProfessions();
-        public Task<List<ProfessionTranslation>> GetProfessions_CurrentCulture();
-        public Task<List<FeatureTranslation>> GetFeatures();
+        public Task<List<Feature>> GetFeatures();
         public Task CreateProfession(ProfessionEditModel model);
         public Task EditProfession(String id, ProfessionEditModel model);
+        public Task EditFeature(String id, FeatureEditModel model);
         public Task DeleteProfession(String id);
+        public Task DeleteFeature(String id);
         public Task CreateFeature(FeatureEditModel model);
 
 

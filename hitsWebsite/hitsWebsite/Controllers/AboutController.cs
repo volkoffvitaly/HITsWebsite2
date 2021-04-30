@@ -31,7 +31,7 @@ namespace hitsWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddFeature(FeatureEditModel model)
+        public async Task<IActionResult> CreateFeature(FeatureEditModel model)
         {
             if (ModelState.IsValid)
             {
@@ -41,5 +41,28 @@ namespace hitsWebsite.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditFeature(String id, FeatureEditModel model)
+        {
+            if (ModelState.IsValid && id != null)
+            {
+                await _dataProviderService.EditFeature(id, model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteFeature(String id)
+        {
+            if (id != null)
+            {
+                await _dataProviderService.DeleteFeature(id);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

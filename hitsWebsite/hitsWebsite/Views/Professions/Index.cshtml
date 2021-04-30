@@ -72,7 +72,7 @@
                                 var idDelete = $"profession-delete-{i}";
 
                                 <partial name="_PopupOpen" model="@idEdit" />
-                                <form asp-action="EditProfession" asp-controller="Professions" asp-route-id="@professions[i].Id">
+                                <form asp-action="EditProfession" asp-route-id="@professions[i].Id">
                                     <h4>@localizer["EditAction"]</h4>
                                     @for (var j = 0; j < supportedCultures.Count; j++)
                                     {
@@ -97,7 +97,7 @@
                                 <partial name="_PopupClose" />
 
                                 <partial name="_PopupOpen" model="@idDelete" />
-                                <form asp-action="DeleteProfession" asp-controller="Professions" asp-route-id="@professions[i].Id">
+                                <form asp-action="DeleteProfession" asp-route-id="@professions[i].Id">
                                     <h4>@localizer["DeleteAction"]</h4>
 
                                     @for (var j = 0; j < supportedCultures.Count; j++)
@@ -128,7 +128,7 @@
                         </div>
 
                         <partial name="_PopupOpen" model='"add-profession"' />
-                        <form asp-action="CreateProfession" method="post">
+                        <form asp-action="CreateFeature" method="post">
                             <h4>@localizer["AddAction"]</h4>
                             @for (var i = 0; i < supportedCultures.Count; i++)
                             {
