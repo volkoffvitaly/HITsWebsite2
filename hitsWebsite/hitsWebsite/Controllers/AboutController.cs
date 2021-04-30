@@ -67,7 +67,7 @@ namespace hitsWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateHuman(HumanEditModel model)
+        public async Task<IActionResult> CreateHuman(HumanCreateModel model)
         {
             if (ModelState.IsValid)
             {

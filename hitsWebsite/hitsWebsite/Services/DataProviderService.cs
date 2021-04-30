@@ -20,6 +20,7 @@ using System.Resources;
 using System.Reflection;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace hitsWebsite.Services
 {
@@ -227,7 +228,7 @@ namespace hitsWebsite.Services
             await _context.SaveChangesAsync();
             return;
         }
-        public async Task CreateHuman(HumanEditModel model)
+        public async Task CreateHuman(HumanCreateModel model)
         {
             var human = new Human()
             {
@@ -245,7 +246,7 @@ namespace hitsWebsite.Services
                 });
             }
 
-            human.Picture = await createPicture(model);
+            human.Picture = await createPicture(model.Picture);
             human.PictureId = human.Picture.Id;
 
             await _context.Humans.AddAsync(human);
@@ -342,13 +343,16 @@ namespace hitsWebsite.Services
                 return;
             }
 
-            human.Post = model.Post;  
-
-            human.Picture = await createPicture(model);
-            human.PictureId = human.Picture.Id;
+            if (model.Picture != null)
+            {
+                var oldPicture = human.Picture; // Track to delete it after changing, cause human.picture cannot be null in db
+                human.Picture = await createPicture(model.Picture); // getting new picture from model
+                var pictureLocalPath = Path.Combine(_hostingEnvironment.WebRootPath, "images/teachers", oldPicture.Id.ToString("N") + Path.GetExtension(oldPicture.Path));
+                File.Delete(pictureLocalPath); // Deleting local file
+                _context.Pictures.Remove(oldPicture); // Deleting tracked old picture
+            }
 
             human.HumanTranslations.Clear();
-
             for (var i = 0; i < model.Language.Count; i++)
             {
                 human.HumanTranslations.Add(new HumanTranslation()
@@ -358,9 +362,8 @@ namespace hitsWebsite.Services
                     Language = model.Language[i]
                 });
             }
-
+            
             await _context.SaveChangesAsync();
-
             return;
         }
 
@@ -390,26 +393,27 @@ namespace hitsWebsite.Services
 
         #endregion
 
-        private async Task<Picture> createPicture(HumanEditModel model)
+        private async Task<Picture> createPicture(IFormFile modelPicture)
         {
-            Picture picture = new Picture()
+            Picture newPicture = new Picture()
             {
                 Id = Guid.NewGuid(),
                 Created = DateTime.UtcNow
             };
 
-            var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(model.Picture.ContentDisposition).FileName.Value.Trim('"'));
+            var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(modelPicture.ContentDisposition).FileName.Value.Trim('"'));
             var fileExt = Path.GetExtension(fileName);
 
-            var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, "images/teachers", picture.Id.ToString("N") + fileExt);
-            picture.Path = $"/images/teachers/{picture.Id:N}{fileExt}";
+            var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, "images/teachers", newPicture.Id.ToString("N") + fileExt);
+            newPicture.Path = $"/images/teachers/{newPicture.Id:N}{fileExt}";
 
             using (var fileStream = new FileStream(attachmentPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read))
             {
-                await model.Picture.CopyToAsync(fileStream);
+                await modelPicture.CopyToAsync(fileStream);
             }
 
-            return picture;
+            await _context.Pictures.AddAsync(newPicture);
+            return newPicture;
         }
 
         #endregion

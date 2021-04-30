@@ -16,7 +16,7 @@ namespace hitsWebsite.Services
         public Task<List<Feature>> GetFeatures();
         public Task<List<Human>> GetTeachers();
         public Task<List<Human>> GetGraduates();
-        public Task CreateHuman(HumanEditModel model);
+        public Task CreateHuman(HumanCreateModel model);
         public Task EditHuman(String id, HumanEditModel model);
         public Task<List<AcademicSubject>> GetAcademicSubjects();
         public Task CreateProfession(ProfessionEditModel model);
