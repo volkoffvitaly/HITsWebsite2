@@ -229,7 +229,10 @@ $('.open-popup').click(function () {
     $('.popup-bg').fadeIn('slow'); // Открываем блок заднего фона
 })
 
-
+$('.load-input').change(function () {
+    if ($(this).val() != '') $(this).prev().text($(this).val());
+    else $(this).prev().text('Выберите файлы');
+});
 
 //Функция для выставление позици в Яндекс Картах и удаления элементов меню
 function YandexReadyHandler() {
