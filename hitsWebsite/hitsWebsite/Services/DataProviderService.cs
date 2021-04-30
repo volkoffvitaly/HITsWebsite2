@@ -405,7 +405,7 @@ namespace hitsWebsite.Services
             var fileExt = Path.GetExtension(fileName);
 
             var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, "img/teachers", newPicture.Id.ToString("N") + fileExt);
-            newPicture.Path = $"/images/teachers/{newPicture.Id:N}{fileExt}";
+            newPicture.Path = $"/img/teachers/{newPicture.Id:N}{fileExt}";
 
             using (var fileStream = new FileStream(attachmentPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read))
             {
