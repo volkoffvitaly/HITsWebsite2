@@ -1,0 +1,131 @@
+﻿@model _HumanListViewModel
+@using hitsWebsite.Models.ViewModels
+@using hitsWebsite.Services
+@inject IDataProviderService DataProviderService
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+@inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
+
+@{
+    // Cultures info
+    var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();  // Current culture request
+    var supportedCultures = localizationOptions.Value.SupportedUICultures;  // Supported cultures in app
+}
+
+
+<div class="row">
+    @if (Model.Humans.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
+    {
+        <h6>@localizer["EmptyCards"]</h6>
+    }
+    else
+    {
+        @* RETRIVE *@
+        @for (int i = 0; i < Model.Humans.Count; i++) // List ordered by Name
+        {
+            var idEdit = $"{Model.Post}-edit-{i}";
+            var idDelete = $"{Model.Post}-delete-{i}";
+            <div class="col-4 p-2 person-container">
+                @if (User.IsInRole(ApplicationRoles.Administrators))
+                {
+                    <div class="card-btns-container">
+                        <button class="open-popup btn-edit" rel="@idEdit"></button>
+                        <button class="open-popup btn-delete" rel="@idDelete"></button>
+                    </div>
+                }
+                <div class="img-wrapper">
+                    <a href="@Model.Humans[i].Picture.Path" target="__blank">
+                        <img src="@Model.Humans[i].Picture.Path" />
+                    </a>
+                </div>
+                <h4 align="center" class="mt-3">@Model.Humans[i].HumanTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h4>
+                <p class="pt-3">
+                    @Model.Humans[i].HumanTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
+                </p>
+            </div>
+
+            @if (User.IsInRole(ApplicationRoles.Administrators))
+            {
+                @* EDIT *@
+                <partial name="_PopupOpen" model='@idEdit' />
+                <form asp-action="EditHuman" asp-route-id="@Model.Humans[i].Id" method="post" enctype="multipart/form-data">
+                    <h4>@localizer["EditAction"]</h4>
+                    @for (var j = 0; j < supportedCultures.Count; j++)
+                    {
+                        <h5>@supportedCultures[j].Name</h5>
+
+                        <input class="entry-field" type="text" name="@("Name[" + j + "]")"
+                               value="@Model.Humans[i].HumanTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name"
+                               placeholder="@localizer["InputName"]" autocomplete="off" required="required" />
+
+                        // textarea shouldn't has any extra spaces between openning and closing tags
+                        <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                  required>@Model.Humans[i].HumanTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+                        <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                        <hr>
+                    }
+
+                    <label for="load-@Model.Post-img-@i" class="load-labal">Выберите изображение</label>
+                    <input type="file" class="load-input form-control" id="load-@Model.Post-img-@i" name="@("Picture")" />
+                    <div class="mt-3 d-flex justify-content-end">
+                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                        <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                    </div>
+                </form>
+                <partial name="_PopupClose" />
+
+
+                @* DELETE *@
+                <partial name="_PopupOpen" model='@idDelete' />
+                <form asp-action="DeleteHuman" asp-route-id="@Model.Humans[i].Id" method="post">
+                    <h4>@localizer["DeleteAction"]</h4>
+                    @for (var j = 0; j < supportedCultures.Count; j++)
+                    {
+                        <h5>@supportedCultures[j].Name</h5>
+                        <div>
+                            @localizer["InputName"]: @Model.Humans[i].HumanTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
+                            @localizer["InputDescription"]: @Model.Humans[i].HumanTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
+                        </div>
+                        <hr>
+                    }
+                    <div class="mt-3 d-flex justify-content-end">
+                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                        <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                    </div>
+                </form>
+                <partial name="_PopupClose" />
+            }
+        }
+    }
+
+    @* CREATE *@
+    @if (User.IsInRole(ApplicationRoles.Administrators))
+    {
+        <div class="col card-container">
+            <div class="card box adding-card">
+                <input type="button" class="open-popup add-btn" rel="add-@Model.Post" />
+            </div>
+        </div>
+        <partial name="_PopupOpen" model='$"add-{Model.Post}"' />
+        <form asp-action="CreateHuman" method="post" enctype="multipart/form-data">
+            @for (var i = 0; i < supportedCultures.Count; i++)
+            {
+                <h5>@supportedCultures[i].Name</h5>
+                <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
+                <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
+                <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                <hr>
+            }
+
+            <label for="load-@Model.Post-img" class="load-labal">Выберите изображение</label>
+            <input type="file" class="load-input form-control" id="load-@Model.Post-img" name="@("Picture")" required />
+            <input type="hidden" name="@("Post")" value="@Model.Post" required />
+            <div class="mt-3 d-flex justify-content-end">
+                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                <button type="submit" class="btn btn-primary">@localizer["ButtonSave"]</button>
+            </div>
+        </form>
+        <partial name="_PopupClose" />
+    }
+
+</div>
+

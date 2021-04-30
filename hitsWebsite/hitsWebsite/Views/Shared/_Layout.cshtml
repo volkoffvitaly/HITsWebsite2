@@ -6,10 +6,10 @@
 
 @{var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();
 
-    var professionPage = await DataProviderService.GetDynamicPageInfo("Professions");
-    var admissionPage = await DataProviderService.GetDynamicPageInfo("Admission");
-    var livePage = await DataProviderService.GetDynamicPageInfo("Live");
-    var aboutPage = await DataProviderService.GetDynamicPageInfo("About");
+    var professionPage = await DataProviderService.GetDynamicPage("Professions");
+    var admissionPage = await DataProviderService.GetDynamicPage("Admission");
+    var livePage = await DataProviderService.GetDynamicPage("Live");
+    var aboutPage = await DataProviderService.GetDynamicPage("About");
 
     var dynamicPageProfession_CurrentCulture = professionPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
     var dynamicPageAdmission_CurrentCulture = admissionPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();

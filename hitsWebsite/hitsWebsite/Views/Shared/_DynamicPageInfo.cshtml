@@ -13,7 +13,7 @@
     var supportedCultures = localizationOptions.Value.SupportedUICultures;  // Supported cultures in app
 
     // Get required info about page
-    var dynamicPage = await DataProviderService.GetDynamicPageInfo(ViewData["Title"].ToString());
+    var dynamicPage = await DataProviderService.GetDynamicPage(ViewData["Title"].ToString());
     var dynamicPage_CurrentCulture = dynamicPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
 }
 

@@ -41,13 +41,9 @@ namespace hitsWebsite.Services
         }
 
 
-        #region DB
+        #region *RU* DynamicPage
 
-
-
-        #region DynamicPage
-
-        public async Task<DynamicPage> GetDynamicPageInfo(String projectNameOfPage = null)
+        public async Task<DynamicPage> GetDynamicPage(String projectNameOfPage = null)
         {
             DynamicPage dynamicPage = null;
             Boolean isTracked = true; // to separate new entity from a tracked
@@ -137,33 +133,11 @@ namespace hitsWebsite.Services
         #endregion
 
 
-        #region GetListElements
-
+        #region CRUD Professions
         public async Task<List<Profession>> GetProfessions()
         {
             return await _context.Professions.Include(x => x.ProfessionTranslations).AsNoTracking().ToListAsync();
         }
-        public async Task<List<Feature>> GetFeatures()
-        {
-            return await _context.Features.Include(x => x.FeatureTranslations).AsNoTracking().ToListAsync();
-        }
-        public async Task<List<AcademicSubject>> GetAcademicSubjects()
-        {
-            return await _context.AcademicSubjects.Include(x => x.AcademicSubjectTranslations).AsNoTracking().ToListAsync();
-        }
-        public async Task<List<Human>> GetTeachers()
-        {
-            return await _context.Humans.Where(x => x.Post == "Teacher").Include(x => x.HumanTranslations).Include(x => x.Picture).AsNoTracking().ToListAsync();
-        }
-        public async Task<List<Human>> GetGraduates()
-        {
-            return await _context.Humans.Where(x => x.Post == "Graduate").Include(x => x.HumanTranslations).Include(x => x.Picture).AsNoTracking().ToListAsync();
-        }
-
-        #endregion
-
-
-        #region CreateListElement
 
         public async Task CreateProfession(ProfessionEditModel model)
         {
@@ -186,78 +160,6 @@ namespace hitsWebsite.Services
             await _context.SaveChangesAsync();
             return;
         }
-        public async Task CreateFeature(FeatureEditModel model)
-        {
-            var feature = new Feature()
-            {
-                FeatureTranslations = new Collection<FeatureTranslation>()
-            };
-
-            for (var i = 0; i < _cultures.Count; i++)
-            {
-                feature.FeatureTranslations.Add(new FeatureTranslation
-                {
-                    Name = model.Name[i],
-                    Description = model.Description[i],
-                    Language = model.Language[i]
-                });
-            }
-
-            await _context.Features.AddAsync(feature);
-            await _context.SaveChangesAsync();
-            return;
-        }
-        public async Task CreateAcademicSubject(AcademicSubjectEditModel model)
-        {
-            var academicSubject = new AcademicSubject()
-            {
-                AcademicSubjectTranslations = new Collection<AcademicSubjectTranslation>()
-            };
-
-            for (var i = 0; i < _cultures.Count; i++)
-            {
-                academicSubject.AcademicSubjectTranslations.Add(new AcademicSubjectTranslation
-                {
-                    Name = model.Name[i],
-                    Description = model.Description[i],
-                    Language = model.Language[i]
-                });
-            }
-
-            await _context.AcademicSubjects.AddAsync(academicSubject);
-            await _context.SaveChangesAsync();
-            return;
-        }
-        public async Task CreateHuman(HumanCreateModel model)
-        {
-            var human = new Human()
-            {
-                Post = model.Post,
-                HumanTranslations = new Collection<HumanTranslation>()
-            };
-
-            for (var i = 0; i < _cultures.Count; i++)
-            {
-                human.HumanTranslations.Add(new HumanTranslation
-                {
-                    Name = model.Name[i],
-                    Description = model.Description[i],
-                    Language = model.Language[i]
-                });
-            }
-
-            human.Picture = await createPicture(model.Picture);
-            human.PictureId = human.Picture.Id;
-
-            await _context.Humans.AddAsync(human);
-            await _context.SaveChangesAsync();
-            return;
-        }
-
-        #endregion
-
-
-        #region EditListElement
 
         public async Task EditProfession(String id, ProfessionEditModel model)
         {
@@ -284,6 +186,44 @@ namespace hitsWebsite.Services
 
             return;
         }
+
+        public async Task DeleteProfession(String id)
+        {
+            var profession = await _context.Professions.Where(x => x.Id.ToString() == id).Include(x => x.ProfessionTranslations).SingleOrDefaultAsync();
+            _context.Professions.Remove(profession);
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+
+
+        #region CRUD Features
+        public async Task<List<Feature>> GetFeatures()
+        {
+            return await _context.Features.Include(x => x.FeatureTranslations).AsNoTracking().ToListAsync();
+        }
+
+        public async Task CreateFeature(FeatureEditModel model)
+        {
+            var feature = new Feature()
+            {
+                FeatureTranslations = new Collection<FeatureTranslation>()
+            };
+
+            for (var i = 0; i < _cultures.Count; i++)
+            {
+                feature.FeatureTranslations.Add(new FeatureTranslation
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            await _context.Features.AddAsync(feature);
+            await _context.SaveChangesAsync();
+            return;
+        }
+
         public async Task EditFeature(String id, FeatureEditModel model)
         {
             var feature = await _context.Features.Where(x => x.Id.ToString() == id).Include(x => x.FeatureTranslations).SingleOrDefaultAsync();
@@ -309,6 +249,44 @@ namespace hitsWebsite.Services
 
             return;
         }
+
+        public async Task DeleteFeature(String id)
+        {
+            var feature = await _context.Features.Where(x => x.Id.ToString() == id).Include(x => x.FeatureTranslations).SingleOrDefaultAsync();
+            _context.Features.Remove(feature);
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+
+
+        #region CRUD Academic Subjects
+        public async Task<List<AcademicSubject>> GetAcademicSubjects()
+        {
+            return await _context.AcademicSubjects.Include(x => x.AcademicSubjectTranslations).AsNoTracking().ToListAsync();
+        }
+
+        public async Task CreateAcademicSubject(AcademicSubjectEditModel model)
+        {
+            var academicSubject = new AcademicSubject()
+            {
+                AcademicSubjectTranslations = new Collection<AcademicSubjectTranslation>()
+            };
+
+            for (var i = 0; i < _cultures.Count; i++)
+            {
+                academicSubject.AcademicSubjectTranslations.Add(new AcademicSubjectTranslation
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            await _context.AcademicSubjects.AddAsync(academicSubject);
+            await _context.SaveChangesAsync();
+            return;
+        }
+
         public async Task EditAcademicSubject(String id, AcademicSubjectEditModel model)
         {
             var academicSubject = await _context.AcademicSubjects.Where(x => x.Id.ToString() == id).Include(x => x.AcademicSubjectTranslations).SingleOrDefaultAsync();
@@ -334,6 +312,53 @@ namespace hitsWebsite.Services
 
             return;
         }
+
+        public async Task DeleteAcademicSubject(String id)
+        {
+            var academicSubject = await _context.AcademicSubjects.Where(x => x.Id.ToString() == id).Include(x => x.AcademicSubjectTranslations).SingleOrDefaultAsync();
+            _context.AcademicSubjects.Remove(academicSubject);
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+
+
+        #region CRUD Humans
+        public async Task<List<Human>> GetTeachers()
+        {
+            return await _context.Humans.Where(x => x.Post == "Teacher").Include(x => x.HumanTranslations).Include(x => x.Picture).AsNoTracking().ToListAsync();
+        }
+
+        public async Task<List<Human>> GetGraduates()
+        {
+            return await _context.Humans.Where(x => x.Post == "Graduate").Include(x => x.HumanTranslations).Include(x => x.Picture).AsNoTracking().ToListAsync();
+        }
+
+        public async Task CreateHuman(HumanCreateModel model)
+        {
+            var human = new Human()
+            {
+                Post = model.Post,
+                HumanTranslations = new Collection<HumanTranslation>()
+            };
+
+            for (var i = 0; i < _cultures.Count; i++)
+            {
+                human.HumanTranslations.Add(new HumanTranslation
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            human.Picture = await createPicture(model.Picture);
+            human.PictureId = human.Picture.Id;
+
+            await _context.Humans.AddAsync(human);
+            await _context.SaveChangesAsync();
+            return;
+        }
+
         public async Task EditHuman(String id, HumanEditModel model)
         {
             var human = await _context.Humans.Where(x => x.Id.ToString() == id).Include(x => x.HumanTranslations).Include(x => x.Picture).SingleOrDefaultAsync();
@@ -365,31 +390,7 @@ namespace hitsWebsite.Services
             await _context.SaveChangesAsync();
             return;
         }
-
-        #endregion
-
-
-        #region DeleteListElement
-
-        public async Task DeleteProfession(String id)
-        {
-            var profession = await _context.Professions.Where(x => x.Id.ToString() == id).Include(x => x.ProfessionTranslations).SingleOrDefaultAsync();
-            _context.Professions.Remove(profession);
-            await _context.SaveChangesAsync();
-        }
-        public async Task DeleteFeature(String id)
-        {
-            var feature = await _context.Features.Where(x => x.Id.ToString() == id).Include(x => x.FeatureTranslations).SingleOrDefaultAsync();
-            _context.Features.Remove(feature);
-            await _context.SaveChangesAsync();
-        }
-        public async Task DeleteAcademicSubject(String id)
-        {
-            var academicSubject = await _context.AcademicSubjects.Where(x => x.Id.ToString() == id).Include(x => x.AcademicSubjectTranslations).SingleOrDefaultAsync();
-            _context.AcademicSubjects.Remove(academicSubject);
-            await _context.SaveChangesAsync();
-        }
-
+    
         public async Task DeleteHuman(String id)
         {
             var human = await _context.Humans.Where(x => x.Id.ToString() == id).Include(x => x.Picture).SingleOrDefaultAsync();
@@ -400,6 +401,8 @@ namespace hitsWebsite.Services
 
         #endregion
 
+
+        #region C**D Pictures
         private async Task<Picture> createPicture(IFormFile modelPicture)
         {
             Picture newPicture = new Picture()
@@ -429,8 +432,8 @@ namespace hitsWebsite.Services
             var dbInstance = await _context.Pictures.Where(x => x.Id == picture.Id).SingleOrDefaultAsync();
             _context.Pictures.Remove(dbInstance);
         }
-
         #endregion
+
 
 
 
