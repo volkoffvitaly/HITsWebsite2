@@ -347,7 +347,7 @@ namespace hitsWebsite.Services
             {
                 var oldPicture = human.Picture; // Track to delete it after changing, cause human.picture cannot be null in db
                 human.Picture = await createPicture(model.Picture); // getting new picture from model
-                var pictureLocalPath = Path.Combine(_hostingEnvironment.WebRootPath, "images/teachers", oldPicture.Id.ToString("N") + Path.GetExtension(oldPicture.Path));
+                var pictureLocalPath = Path.Combine(_hostingEnvironment.WebRootPath, "img/teachers", oldPicture.Id.ToString("N") + Path.GetExtension(oldPicture.Path));
                 File.Delete(pictureLocalPath); // Deleting local file
                 _context.Pictures.Remove(oldPicture); // Deleting tracked old picture
             }
@@ -404,7 +404,7 @@ namespace hitsWebsite.Services
             var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(modelPicture.ContentDisposition).FileName.Value.Trim('"'));
             var fileExt = Path.GetExtension(fileName);
 
-            var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, "images/teachers", newPicture.Id.ToString("N") + fileExt);
+            var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, "img/teachers", newPicture.Id.ToString("N") + fileExt);
             newPicture.Path = $"/images/teachers/{newPicture.Id:N}{fileExt}";
 
             using (var fileStream = new FileStream(attachmentPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read))
