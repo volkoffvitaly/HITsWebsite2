@@ -18,6 +18,8 @@ using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
 using System.Resources;
 using System.Reflection;
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Hosting;
 
 namespace hitsWebsite.Services
 {
@@ -25,13 +27,15 @@ namespace hitsWebsite.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IList<CultureInfo> _cultures;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IStringLocalizer<DataProviderService> _localizer;
         private readonly ResourceManager _resourceManager = new ResourceManager("hitsWebsite.Resources.Services.DataProviderService", Assembly.GetExecutingAssembly());
 
-        public DataProviderService(ApplicationDbContext context, IOptions<RequestLocalizationOptions> locOptions, IStringLocalizer<DataProviderService> localizer)
+        public DataProviderService(ApplicationDbContext context, IOptions<RequestLocalizationOptions> locOptions, IWebHostEnvironment hostingEnvironment, IStringLocalizer<DataProviderService> localizer)
         {
             _context = context;
             _cultures = locOptions.Value.SupportedUICultures;
+            _hostingEnvironment = hostingEnvironment;
             _localizer = localizer;
         }
 
@@ -146,6 +150,14 @@ namespace hitsWebsite.Services
         {
             return await _context.AcademicSubjects.Include(x => x.AcademicSubjectTranslations).AsNoTracking().ToListAsync();
         }
+        public async Task<List<Human>> GetTeachers()
+        {
+            return await _context.Humans.Where(x => x.Post == "Teacher").Include(x => x.HumanTranslations).Include(x => x.Picture).AsNoTracking().ToListAsync();
+        }
+        public async Task<List<Human>> GetGraduates()
+        {
+            return await _context.Humans.Where(x => x.Post == "Graduate").Include(x => x.HumanTranslations).Include(x => x.Picture).AsNoTracking().ToListAsync();
+        }
 
         #endregion
 
@@ -212,6 +224,31 @@ namespace hitsWebsite.Services
             }
 
             await _context.AcademicSubjects.AddAsync(academicSubject);
+            await _context.SaveChangesAsync();
+            return;
+        }
+        public async Task CreateHuman(HumanEditModel model)
+        {
+            var human = new Human()
+            {
+                Post = model.Post,
+                HumanTranslations = new Collection<HumanTranslation>()
+            };
+
+            for (var i = 0; i < _cultures.Count; i++)
+            {
+                human.HumanTranslations.Add(new HumanTranslation
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            human.Picture = await createPicture(model);
+            human.PictureId = human.Picture.Id;
+
+            await _context.Humans.AddAsync(human);
             await _context.SaveChangesAsync();
             return;
         }
@@ -296,6 +333,36 @@ namespace hitsWebsite.Services
 
             return;
         }
+        public async Task EditHuman(String id, HumanEditModel model)
+        {
+            var human = await _context.Humans.Where(x => x.Id.ToString() == id).Include(x => x.HumanTranslations).Include(x => x.Picture).SingleOrDefaultAsync();
+
+            if (human == null)
+            {
+                return;
+            }
+
+            human.Post = model.Post;  
+
+            human.Picture = await createPicture(model);
+            human.PictureId = human.Picture.Id;
+
+            human.HumanTranslations.Clear();
+
+            for (var i = 0; i < model.Language.Count; i++)
+            {
+                human.HumanTranslations.Add(new HumanTranslation()
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            await _context.SaveChangesAsync();
+
+            return;
+        }
 
         #endregion
 
@@ -305,28 +372,47 @@ namespace hitsWebsite.Services
         public async Task DeleteProfession(String id)
         {
             var profession = await _context.Professions.Where(x => x.Id.ToString() == id).Include(x => x.ProfessionTranslations).SingleOrDefaultAsync();
-            this._context.Professions.Remove(profession);
-            await this._context.SaveChangesAsync();
+            _context.Professions.Remove(profession);
+            await _context.SaveChangesAsync();
         }
         public async Task DeleteFeature(String id)
         {
             var feature = await _context.Features.Where(x => x.Id.ToString() == id).Include(x => x.FeatureTranslations).SingleOrDefaultAsync();
-            this._context.Features.Remove(feature);
-            await this._context.SaveChangesAsync();
+            _context.Features.Remove(feature);
+            await _context.SaveChangesAsync();
         }
         public async Task DeleteAcademicSubject(String id)
         {
             var academicSubject = await _context.AcademicSubjects.Where(x => x.Id.ToString() == id).Include(x => x.AcademicSubjectTranslations).SingleOrDefaultAsync();
-            this._context.AcademicSubjects.Remove(academicSubject);
-            await this._context.SaveChangesAsync();
+            _context.AcademicSubjects.Remove(academicSubject);
+            await _context.SaveChangesAsync();
         }
 
         #endregion
 
+        private async Task<Picture> createPicture(HumanEditModel model)
+        {
+            Picture picture = new Picture()
+            {
+                Id = Guid.NewGuid(),
+                Created = DateTime.UtcNow
+            };
 
+            var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(model.Picture.ContentDisposition).FileName.Value.Trim('"'));
+            var fileExt = Path.GetExtension(fileName);
+
+            var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, "images/teachers", picture.Id.ToString("N") + fileExt);
+            picture.Path = $"/images/teachers/{picture.Id:N}{fileExt}";
+
+            using (var fileStream = new FileStream(attachmentPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read))
+            {
+                await model.Picture.CopyToAsync(fileStream);
+            }
+
+            return picture;
+        }
 
         #endregion
-
 
 
 
@@ -364,7 +450,6 @@ namespace hitsWebsite.Services
 
             return default;
         }
-
         public async void ChangeBlockName(String projectBlockName, MainPageBlockEditModel model)
         {
             var blockNames = getBlockNames();  // to reserialize all of them
@@ -427,7 +512,6 @@ namespace hitsWebsite.Services
 
             return defaultBlock;
         }
-
         private List<NameOfPageBlockModel> getBlockNames()
         {
             List<NameOfPageBlockModel> blocks = new List<NameOfPageBlockModel>();

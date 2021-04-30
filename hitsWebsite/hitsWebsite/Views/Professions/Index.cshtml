@@ -14,7 +14,6 @@
 
     // projectNameOfBlocks for partial
     const string ProfessionsName = "ProfessionsBlock";
-    const string HitsTestName = "HitsTestBlock";
 
     // DB entities
     var professions = await DataProviderService.GetProfessions();
@@ -78,7 +77,7 @@
 
                                         <input class="entry-field" type="text" name="@("Name[" + j + "]")"
                                                value="@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name"
-                                               placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                               placeholder="@localizer["InputName"]" autocomplete="off" required="required"/>
 
                                         // textarea shouldn't has any extra spaces between openning and closing tags
                                         <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
@@ -126,7 +125,7 @@
                         </div>
 
                         <partial name="_PopupOpen" model='"add-profession"' />
-                        <form asp-action="CreateFeature" method="post">
+                        <form asp-action="CreateProfession" method="post">
                             <h4>@localizer["AddAction"]</h4>
                             @for (var i = 0; i < supportedCultures.Count; i++)
                             {

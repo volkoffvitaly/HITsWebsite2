@@ -12,6 +12,9 @@ namespace hitsWebsite.Models
         public Guid Id { get; set; }
 
         [Required]
+        public DateTime Created { get; set; }
+
+        [Required]
         public String Path { get; set; }
     }
 }

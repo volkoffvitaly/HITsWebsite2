@@ -13,6 +13,6 @@ namespace hitsWebsite.Models
         public ICollection<HumanTranslation> HumanTranslations { get; set; }
 
         public Picture Picture { get; set; }
-        public Guid PictruId { get; set; }
+        public Guid PictureId { get; set; }
     }
 }

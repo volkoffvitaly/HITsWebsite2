@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using hitsWebsite.Data;
 
 namespace hitsWebsite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210430171053_AttrInHumanWasEdited")]
+    partial class AttrInHumanWasEdited
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -350,8 +352,7 @@ namespace hitsWebsite.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PictureId")
-                        .IsUnique();
+                    b.HasIndex("PictureId");
 
                     b.ToTable("Humans");
                 });
@@ -528,9 +529,9 @@ namespace hitsWebsite.Data.Migrations
             modelBuilder.Entity("hitsWebsite.Models.Human", b =>
                 {
                     b.HasOne("hitsWebsite.Models.Picture", "Picture")
-                        .WithOne()
-                        .HasForeignKey("hitsWebsite.Models.Human", "PictureId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithMany()
+                        .HasForeignKey("PictureId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Picture");

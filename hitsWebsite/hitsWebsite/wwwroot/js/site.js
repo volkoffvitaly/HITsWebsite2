@@ -12,7 +12,16 @@ function AssignNavbarParameters() {
     //startPoint = $("#blocks-container .info-block:first").first().offset().top
     //finishPoint = $("#blocks-container").height() + $("#blocks-container").offset().top - $navbar.height() - topIndent
 }
+function InvalidMsg(textbox, message) {
+    if (textbox.value === '') {
+        textbox.setCustomValidity(message);
+    } 
+    else {
+        textbox.setCustomValidity('');
+    }
 
+    return true;
+}
 //function ChangeToFixed() {
 //    $navbar.css('top', `${topIndent}px`)
 //    $navbar.css('width', `${navbarWidth}px`)

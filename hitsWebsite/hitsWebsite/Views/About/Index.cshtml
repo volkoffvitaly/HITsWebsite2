@@ -19,6 +19,9 @@
 
     // DB entities
     var features = await DataProviderService.GetFeatures();
+
+    var teachers = await DataProviderService.GetTeachers();
+    var graduates = await DataProviderService.GetGraduates();
 }
 
 <partial name="_DynamicPageInfo" model="@ViewData["Title"]" />
@@ -163,70 +166,107 @@
 
                     <div id="teachers">
                         <div class="row">
-                            @*Начало элемента*@
-                            <div class="col-4 p-2 person-container">
-                                @if (User.IsInRole(ApplicationRoles.Administrators))
-                                {
-                                    <div class="card-btns-container">
-                                        <button class="open-popup btn-edit" rel="teacher-edit"></button>
-                                        <button class="open-popup btn-delete" rel="teacher-delete"></button>
-                                    </div>
-                                }
-                                <div class="img-wrapper">
-                                    <img src="~/img/Lidia.png">
-                                </div>
-                                <h4 align="center" class="mt-3">Иванова Лидия Сергеевна</h4>
-                                <p class="mt-3">Тренер чемпионов WOrldSkills и DigitalSkills, амбассадор Mail.ru</p>
-                            </div>
-
-                            @*Как брать id можно посмотреть на странице Профессии*@
-                            @if (User.IsInRole(ApplicationRoles.Administrators))
+                            @if (teachers.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
                             {
-                                <partial name="_PopupOpen" model='"teacher-edit"' />
-                                <form>
-                                    <h5>RU</h5>
-
-                                    <input class="entry-field" type="text" value="Лидия" placeholder="Имя" autocomplete="off" required />
-
-                                    <textarea class="entry-field mt-3" placeholder="Описание" type="text" autocomplete="off"
-                                              required>Тут типа описание текущее</textarea>
-                                    <hr>
-                                    <div class="mt-3 d-flex justify-content-end">
-                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                                        <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
-                                    </div>
-                                </form>
-                                <partial name="_PopupClose" />
-                                <partial name="_PopupOpen" model='"teacher-delete"' />
-                                <form>
-                                    <h5>Элемент будет удален. Продолжить?</h5>
-
-                                    <div class="mt-3 d-flex justify-content-end">
-                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">Отмена</button>
-                                        <button type="submit" class="btn btn-outline-primary">Применить</button>
-                                    </div>
-                                </form>
-                                <partial name="_PopupClose" />
+                                <h6>@localizer["EmptyCards"]</h6>
                             }
-                            @*Конец элемента*@
+                            else
+                            {
+                                @for (int i = 0; i < teachers.Count(); i++) // List ordered by Name
+                                {
+                                    <div class="col-4 p-2 person-container">
+                                        @if (User.IsInRole(ApplicationRoles.Administrators))
+                                        {
+                                            <div class="card-btns-container">
+                                                <button class="open-popup btn-edit" rel="teacher-edit-@i"></button>
+                                                <button class="open-popup btn-delete" rel="teacher-delete-@i"></button>
+                                            </div>
+                                        }
+                                        <div class="img-wrapper">
+                                            <a href="@teachers[i].Picture.Path" target="__blank">
+                                                <img src="@teachers[i].Picture.Path" />
+                                            </a>
+                                        </div>
+                                        <h4 align="center" class="mt-3">@teachers[i].HumanTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h4>
+                                        <p class="pt-3">
+                                            @teachers[i].HumanTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
+                                        </p>
+                                    </div>
+
+                                    @if (User.IsInRole(ApplicationRoles.Administrators))
+                                    {
+                                        var idEdit = $"teacher-edit-{i}";
+                                        var idDelete = $"teacher-edit-{i}";
+
+                                        <partial name="_PopupOpen" model='@idEdit' />
+                                        <form asp-action="EditHuman" asp-route-id="@teachers[i].Id" method="post" enctype="multipart/form-data">
+                                            <h4>@localizer["EditAction"]</h4>
+                                            @for (var j = 0; j < supportedCultures.Count; j++)
+                                            {
+                                                <h5>@supportedCultures[j].Name</h5>
+
+                                                <input class="entry-field" type="text" name="@("Name[" + j + "]")"
+                                                       value="@teachers[i].HumanTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name"
+                                                       placeholder="@localizer["InputName"]" autocomplete="off" required="required" />
+
+                                                // textarea shouldn't has any extra spaces between openning and closing tags
+                                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                                          required>@teachers[i].HumanTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+                                                <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                                                <hr>
+                                            }
+                                            <input type="file" name="@("Picture")" class="form-control" required />
+                                            <input type="hidden" name="@("Post")" value="@("Teacher")" required />
+                                            <div class="mt-3 d-flex justify-content-end">
+                                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                            </div>
+                                        </form>
+                                        <partial name="_PopupClose" />
+
+                                        @*var idEdit = $"profession-edit-{i}";
+                                            var idDelete = $"profession-delete-{i}";
+
+                                            <partial name="_PopupOpen" model="@idEdit" />
+                                            <form asp-action="EditProfession" asp-route-id="@professions[i].Id">
+                                                <h4>@localizer["EditAction"]</h4>
+                                                @for (var j = 0; j < supportedCultures.Count; j++)
+                                                {
+                                                    <h5>@supportedCultures[j].Name</h5>
+
+                                                    <input class="entry-field" type="text" name="@("Name[" + j + "]")"
+                                                           value="@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name"
+                                                           placeholder="@localizer["InputName"]" autocomplete="off" required="required" />
+
+                                                    // textarea shouldn't has any extra spaces between openning and closing tags
+                                                    <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                                              required>@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+                                                    <hr>
+
+                                                    <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                                                }
+                                                <div class="mt-3 d-flex justify-content-end">
+                                                    <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                                    <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                                </div>
+                                            </form>
+                                            <partial name="_PopupClose" />*@
 
 
-                            <div class="col-4 p-2">
-                                <div class="img-wrapper">
-                                    <img src="~/img/Zmeev.png">
-                                </div>
-                                <h4 align="center" class="mt-3">Змеев Олег Алексеевич</h4>
-                                <p class="mt-3">Проректор по цифровой трансформации. Доктор физико-математических наук, профессор</p>
-                            </div>
+                                        <partial name="_PopupOpen" model='"teacher-delete"' />
+                                        <form>
+                                            <h5>Элемент будет удален. Продолжить?</h5>
 
-                            <div class="col-4 p-2">
-                                <div class="img-wrapper">
-                                    <img src="~/img/Sokov.png">
-                                </div>
-                                <h4 align="center" class="mt-3">Соколов Данила Александрович</h4>
-                                <p class="mt-3">Тренер чемпионов WOrldSkills и DigitalSkills, амбассадор Mail.ru</p>
-                            </div>
-
+                                            <div class="mt-3 d-flex justify-content-end">
+                                                <button type="button" class="close-popup btn btn-outline-danger mr-2">Отмена</button>
+                                                <button type="submit" class="btn btn-outline-primary">Применить</button>
+                                            </div>
+                                        </form>
+                                        <partial name="_PopupClose" />
+                                    }
+                                    @*Конец элемента*@
+                                }
+                            }
 
                             @if (User.IsInRole(ApplicationRoles.Administrators))
                             {
@@ -236,14 +276,20 @@
                                     </div>
                                 </div>
                                 <partial name="_PopupOpen" model='"add-teacher"' />
-                                <form asp-action="AddProfession" method="post">
-                                    <h5>RU</h5>
-                                    <input class="entry-field" type="text" placeholder="Имя" autocomplete="off" required />
-                                    <textarea class="entry-field mt-3" type="text" placeholder="Описание" autocomplete="off" required></textarea>
-                                    <hr>
+                                <form asp-action="CreateHuman" method="post" enctype="multipart/form-data">
+                                    @for (var i = 0; i < supportedCultures.Count; i++)
+                                    {
+                                        <h5>@supportedCultures[i].Name</h5>
+                                        <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                        <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
+                                        <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                                        <hr>
+                                    }
+                                    <input type="file" name="@("Picture")" class="form-control" required />
+                                    <input type="hidden" name="@("Post")" value="@("Teacher")" required />
                                     <div class="mt-3 d-flex justify-content-end">
-                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">Отмена</button>
-                                        <button type="submit" class="btn btn-outline-primary">Добавить</button>
+                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                        <button type="submit" class="btn btn-primary">@localizer["ButtonSave"]</button>
                                     </div>
                                 </form>
                                 <partial name="_PopupClose" />

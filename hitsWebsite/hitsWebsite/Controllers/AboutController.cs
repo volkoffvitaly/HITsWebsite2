@@ -64,5 +64,29 @@ namespace hitsWebsite.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateHuman(HumanEditModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _dataProviderService.CreateHuman(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditHuman(String id, HumanEditModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _dataProviderService.EditHuman(id, model);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

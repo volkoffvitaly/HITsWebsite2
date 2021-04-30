@@ -27,9 +27,16 @@ namespace hitsWebsite.Data
         public DbSet<DynamicPage> DynamicPages { get; set; }
         public DbSet<DynamicPageTranslation> DynamicPageTranslations { get; set; }
 
+        public DbSet<Human> Humans { get; set; }
+        public DbSet<HumanTranslation> HumanTranslations { get; set; }
+
+        public DbSet<Picture> Pictures { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<Human>().HasOne(x => x.Picture).WithOne().OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
