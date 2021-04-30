@@ -17,110 +17,102 @@
     const string ProbabilityOfAdmissionName = "ProbabilityOfAdmissionsBlock";
     const string AdmissionСonditionsName = "AdmissionСonditionsBlock";
     const string RequiredDocumentsName = "RequiredDocumentsBlock";
+
+    // DB entities
+    var academicSubjects = await DataProviderService.GetAcademicSubjects();
 }
 
 <partial name="_DynamicPageInfo" model="@ViewData["Title"]" />
 
 <div class="row pt-4">
 
-    <div id="side-navbar-container" class="col-3 d-none d-lg-block">
-        <div id="side-navbar" class="default">
-            <ul>
-            </ul>
-        </div>
-    </div>
+    <partial name="_LeftNavigationBar" />
 
     <div id="blocks-container" class="col col-lg-9">
-
         <div class="row info-block">
+
             <partial name="_BlockName" model='new _BlockNameViewModel() {
                     CurrentControllerName = ViewData["Title"].ToString(),
                     ProjectBlockName = AcademicSubjectsName
                 }' />
+
             <div class="col-12 mt-3">
                 <div class="row">
-
-                    <div class="col-sm-6 col-md-4 card-container">
-                        <div class="card box">
+                    @if (academicSubjects.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
+                    {
+                        <h6>@localizer["EmptyCards"]</h6>
+                    }
+                    else
+                    {
+                        @for (var i = 0; i < academicSubjects.Count; i++) // List ordered by Name
+                        {
+                            <div class="col-sm-6 col-md-4 card-container">
+                                <div class="card box">
+                                    @if (User.IsInRole(ApplicationRoles.Administrators))
+                                    {
+                                        <div class="card-btns-container">
+                                            <button class="open-popup btn-edit" rel="subject-edit-@i"></button>
+                                            <button class="open-popup btn-delete" rel="subject-delete-@i"></button>
+                                        </div>
+                                    }
+                                    <h4>@academicSubjects[i].AcademicSubjectTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h4>
+                                    <p class="pt-3">
+                                        @academicSubjects[i].AcademicSubjectTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
+                                    </p>
+                                </div>
+                            </div>
                             @if (User.IsInRole(ApplicationRoles.Administrators))
                             {
-                                <div class="card-btns-container">
-                                    <button class="open-popup btn-edit" rel="subject-edit-1"></button>
-                                    <button class="open-popup btn-delete" rel="subject-delete-1"></button>
-                                </div>
+                                var idEdit = $"subject-edit-{i}";
+                                var idDelete = $"subject-delete-{i}";
+
+                                <partial name="_PopupOpen" model="@idEdit" />
+                                <form asp-action="EditAcademicSubject" asp-route-id="@academicSubjects[i].Id">
+                                    <h4>@localizer["EditAction"]</h4>
+                                    @for (var j = 0; j < supportedCultures.Count; j++)
+                                    {
+                                        <h5>@supportedCultures[j].Name</h5>
+
+                                        <input class="entry-field" type="text" name="@("Name[" + j + "]")"
+                                               value="@academicSubjects[i].AcademicSubjectTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name"
+                                               placeholder="@localizer["InputName"]" autocomplete="off" required />
+
+                                        // textarea shouldn't has any extra spaces between openning and closing tags
+                                        <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                                  required>@academicSubjects[i].AcademicSubjectTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+                                        <hr>
+
+                                        <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                                    }
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                        <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
+
+                                <partial name="_PopupOpen" model="@idDelete" />
+                                <form asp-action="DeleteAcademicSubject" asp-route-id="@academicSubjects[i].Id">
+                                    <h4>@localizer["DeleteAction"]</h4>
+
+                                    @for (var j = 0; j < supportedCultures.Count; j++)
+                                    {
+                                        <h5>@supportedCultures[j].Name</h5>
+                                        <div>
+                                            @localizer["InputName"]: @academicSubjects[i].AcademicSubjectTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
+                                            @localizer["InputDescription"]: @academicSubjects[i].AcademicSubjectTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
+                                        </div>
+                                        <hr>
+                                    }
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                        <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
                             }
-                            <h4>Информатика</h4>
-                            <p class="pt-3">
-                                Количество баллов
-                            </p>
-                        </div>
-                    </div>
-                    @if (User.IsInRole(ApplicationRoles.Administrators))
-                    {
-                        var idEdit = $"subject-edit-{1}";
-                        var idDelete = $"subject-delete-{1}";
-
-                        <partial name="_PopupOpen" model="@idEdit" />
-                        <form>
-                            <h4>@localizer["EditAction"]</h4>
-                            @for (var j = 0; j < supportedCultures.Count; j++)
-                            {
-                                <h5>@supportedCultures[j].Name</h5>
-
-                                <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                       placeholder="Название" autocomplete="off" required />
-
-                                // textarea shouldn't has any extra spaces between openning and closing tags
-                                <input class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="Кол-во баллов" autocomplete="off" required />
-                                <hr>
-
-                                <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
-                            }
-                            <div class="mt-3 d-flex justify-content-end">
-                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
-                            </div>
-                        </form>
-                        <partial name="_PopupClose" />
-
-                        <partial name="_PopupOpen" model="@idDelete" />
-                        <form>
-                            <h4>@localizer["DeleteAction"]</h4>
-
-                            @for (var j = 0; j < supportedCultures.Count; j++)
-                            {
-                                <h5>@supportedCultures[j].Name</h5>
-                                <div>
-                                    @localizer["InputName"]: Матеша@*@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name*@ <br>
-                                    @localizer["InputDescription"]: 65 баллов@*@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description*@
-                                </div>
-                                <hr>
-                            }
-                            <div class="mt-3 d-flex justify-content-end">
-                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
-                            </div>
-                        </form>
-                        <partial name="_PopupClose" />
+                        }
                     }
-
-                    <div class="col-sm-6 col-md-4 card-container">
-                        <div class="card box">
-                            <h4>Математика</h4>
-                            <p class="pt-3">
-                                Количество баллов
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 col-md-4 card-container">
-                        <div class="card box">
-                            <h4>Русский язык</h4>
-                            <p class="pt-3">
-                                Количество баллов
-                            </p>
-                        </div>
-                    </div>
 
                     @if (User.IsInRole(ApplicationRoles.Administrators))
                     {
@@ -131,13 +123,13 @@
                         </div>
 
                         <partial name="_PopupOpen" model='"add-subject"' />
-                        <form asp-action="CreateFeature" method="post">
+                        <form asp-action="CreateAcademicSubject" method="post">
                             <h4>@localizer["AddAction"]</h4>
                             @for (var i = 0; i < supportedCultures.Count; i++)
                             {
                                 <h5>@supportedCultures[i].Name</h5>
                                 <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
-                                <input class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="Кол-во баллов" autocomplete="off" required />
+                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
                                 <hr>
                                 <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
                             }

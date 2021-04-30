@@ -142,6 +142,10 @@ namespace hitsWebsite.Services
         {
             return await _context.Features.Include(x => x.FeatureTranslations).AsNoTracking().ToListAsync();
         }
+        public async Task<List<AcademicSubject>> GetAcademicSubjects()
+        {
+            return await _context.AcademicSubjects.Include(x => x.AcademicSubjectTranslations).AsNoTracking().ToListAsync();
+        }
 
         #endregion
 
@@ -190,6 +194,27 @@ namespace hitsWebsite.Services
             await _context.SaveChangesAsync();
             return;
         }
+        public async Task CreateAcademicSubject(AcademicSubjectEditModel model)
+        {
+            var academicSubject = new AcademicSubject()
+            {
+                AcademicSubjectTranslations = new Collection<AcademicSubjectTranslation>()
+            };
+
+            for (var i = 0; i < _cultures.Count; i++)
+            {
+                academicSubject.AcademicSubjectTranslations.Add(new AcademicSubjectTranslation
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            await _context.AcademicSubjects.AddAsync(academicSubject);
+            await _context.SaveChangesAsync();
+            return;
+        }
 
         #endregion
 
@@ -221,7 +246,6 @@ namespace hitsWebsite.Services
 
             return;
         }
-
         public async Task EditFeature(String id, FeatureEditModel model)
         {
             var feature = await _context.Features.Where(x => x.Id.ToString() == id).Include(x => x.FeatureTranslations).SingleOrDefaultAsync();
@@ -247,6 +271,31 @@ namespace hitsWebsite.Services
 
             return;
         }
+        public async Task EditAcademicSubject(String id, AcademicSubjectEditModel model)
+        {
+            var academicSubject = await _context.AcademicSubjects.Where(x => x.Id.ToString() == id).Include(x => x.AcademicSubjectTranslations).SingleOrDefaultAsync();
+
+            if (academicSubject == null)
+            {
+                return;
+            }
+
+            academicSubject.AcademicSubjectTranslations.Clear();
+
+            for (var i = 0; i < model.Language.Count; i++)
+            {
+                academicSubject.AcademicSubjectTranslations.Add(new AcademicSubjectTranslation()
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            await _context.SaveChangesAsync();
+
+            return;
+        }
 
         #endregion
 
@@ -259,11 +308,16 @@ namespace hitsWebsite.Services
             this._context.Professions.Remove(profession);
             await this._context.SaveChangesAsync();
         }
-
         public async Task DeleteFeature(String id)
         {
             var feature = await _context.Features.Where(x => x.Id.ToString() == id).Include(x => x.FeatureTranslations).SingleOrDefaultAsync();
             this._context.Features.Remove(feature);
+            await this._context.SaveChangesAsync();
+        }
+        public async Task DeleteAcademicSubject(String id)
+        {
+            var academicSubject = await _context.AcademicSubjects.Where(x => x.Id.ToString() == id).Include(x => x.AcademicSubjectTranslations).SingleOrDefaultAsync();
+            this._context.AcademicSubjects.Remove(academicSubject);
             await this._context.SaveChangesAsync();
         }
 

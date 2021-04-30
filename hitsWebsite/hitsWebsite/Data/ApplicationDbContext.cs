@@ -21,6 +21,9 @@ namespace hitsWebsite.Data
         public DbSet<Feature> Features { get; set; }
         public DbSet<FeatureTranslation> FeatureTranslations { get; set; }
 
+        public DbSet<AcademicSubject> AcademicSubjects { get; set; }
+        public DbSet<AcademicSubjectTranslation> AcademicSubjectTranslations { get; set; }
+
         public DbSet<DynamicPage> DynamicPages { get; set; }
         public DbSet<DynamicPageTranslation> DynamicPageTranslations { get; set; }
 

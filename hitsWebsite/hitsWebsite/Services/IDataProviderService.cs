@@ -14,12 +14,17 @@ namespace hitsWebsite.Services
         public Task ChangeDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model);
         public Task<List<Profession>> GetProfessions();
         public Task<List<Feature>> GetFeatures();
+        public Task<List<AcademicSubject>> GetAcademicSubjects();
         public Task CreateProfession(ProfessionEditModel model);
         public Task EditProfession(String id, ProfessionEditModel model);
         public Task EditFeature(String id, FeatureEditModel model);
         public Task DeleteProfession(String id);
         public Task DeleteFeature(String id);
         public Task CreateFeature(FeatureEditModel model);
+
+        public Task CreateAcademicSubject(AcademicSubjectEditModel model);
+        public Task EditAcademicSubject(String id, AcademicSubjectEditModel model);
+        public Task DeleteAcademicSubject(String id);
 
 
         public Task<Dictionary<String, String>> GetBlockName(String projectBlockName = default);
