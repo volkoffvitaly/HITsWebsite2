@@ -196,7 +196,7 @@
                                     @if (User.IsInRole(ApplicationRoles.Administrators))
                                     {
                                         var idEdit = $"teacher-edit-{i}";
-                                        var idDelete = $"teacher-edit-{i}";
+                                        var idDelete = $"teacher-delete-{i}";
 
                                         <partial name="_PopupOpen" model='@idEdit' />
                                         <form asp-action="EditHuman" asp-route-id="@teachers[i].Id" method="post" enctype="multipart/form-data">
@@ -215,7 +215,7 @@
                                                 <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
                                                 <hr>
                                             }
-                                            <input type="file" name="@("Picture")" class="form-control"/>
+                                            <input type="file" name="@("Picture")" class="form-control" />
                                             <div class="mt-3 d-flex justify-content-end">
                                                 <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
                                                 <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
@@ -223,42 +223,23 @@
                                         </form>
                                         <partial name="_PopupClose" />
 
-                                        @*var idEdit = $"profession-edit-{i}";
-                                            var idDelete = $"profession-delete-{i}";
 
-                                            <partial name="_PopupOpen" model="@idEdit" />
-                                            <form asp-action="EditProfession" asp-route-id="@professions[i].Id">
-                                                <h4>@localizer["EditAction"]</h4>
-                                                @for (var j = 0; j < supportedCultures.Count; j++)
-                                                {
-                                                    <h5>@supportedCultures[j].Name</h5>
 
-                                                    <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                                           value="@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name"
-                                                           placeholder="@localizer["InputName"]" autocomplete="off" required="required" />
-
-                                                    // textarea shouldn't has any extra spaces between openning and closing tags
-                                                    <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
-                                                              required>@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
-                                                    <hr>
-
-                                                    <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
-                                                }
-                                                <div class="mt-3 d-flex justify-content-end">
-                                                    <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                                                    <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                        <partial name="_PopupOpen" model='@idDelete' />
+                                        <form asp-action="DeleteHuman" asp-route-id="@teachers[i].Id" method="post">
+                                            <h4>@localizer["DeleteAction"]</h4>
+                                            @for (var j = 0; j < supportedCultures.Count; j++)
+                                            {
+                                                <h5>@supportedCultures[j].Name</h5>
+                                                <div>
+                                                    @localizer["InputName"]: @teachers[i].HumanTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
+                                                    @localizer["InputDescription"]: @teachers[i].HumanTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
                                                 </div>
-                                            </form>
-                                            <partial name="_PopupClose" />*@
-
-
-                                        <partial name="_PopupOpen" model='"teacher-delete"' />
-                                        <form>
-                                            <h5>Элемент будет удален. Продолжить?</h5>
-
+                                                <hr>
+                                            }
                                             <div class="mt-3 d-flex justify-content-end">
-                                                <button type="button" class="close-popup btn btn-outline-danger mr-2">Отмена</button>
-                                                <button type="submit" class="btn btn-outline-primary">Применить</button>
+                                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
                                             </div>
                                         </form>
                                         <partial name="_PopupClose" />

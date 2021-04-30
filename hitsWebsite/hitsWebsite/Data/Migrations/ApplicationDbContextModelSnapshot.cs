@@ -350,8 +350,7 @@ namespace hitsWebsite.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PictureId")
-                        .IsUnique();
+                    b.HasIndex("PictureId");
 
                     b.ToTable("Humans");
                 });
@@ -528,9 +527,9 @@ namespace hitsWebsite.Data.Migrations
             modelBuilder.Entity("hitsWebsite.Models.Human", b =>
                 {
                     b.HasOne("hitsWebsite.Models.Picture", "Picture")
-                        .WithOne()
-                        .HasForeignKey("hitsWebsite.Models.Human", "PictureId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .WithMany()
+                        .HasForeignKey("PictureId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Picture");

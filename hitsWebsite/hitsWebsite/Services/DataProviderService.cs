@@ -347,8 +347,7 @@ namespace hitsWebsite.Services
             {
                 var oldPicture = human.Picture; // Track to delete it after changing, cause human.picture cannot be null in db
                 human.Picture = await createPicture(model.Picture); // getting new picture from model
-                var pictureLocalPath = Path.Combine(_hostingEnvironment.WebRootPath, "img/teachers", oldPicture.Id.ToString("N") + Path.GetExtension(oldPicture.Path));
-                File.Delete(pictureLocalPath); // Deleting local file
+                await deletePictureAsync(oldPicture);
                 _context.Pictures.Remove(oldPicture); // Deleting tracked old picture
             }
 
@@ -391,6 +390,14 @@ namespace hitsWebsite.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeleteHuman(String id)
+        {
+            var human = await _context.Humans.Where(x => x.Id.ToString() == id).Include(x => x.Picture).SingleOrDefaultAsync();
+            _context.Humans.Remove(human);
+            await deletePictureAsync(human.Picture);
+            await _context.SaveChangesAsync();
+        }
+
         #endregion
 
         private async Task<Picture> createPicture(IFormFile modelPicture)
@@ -405,7 +412,7 @@ namespace hitsWebsite.Services
             var fileExt = Path.GetExtension(fileName);
 
             var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, "img/teachers", newPicture.Id.ToString("N") + fileExt);
-            newPicture.Path = $"/images/teachers/{newPicture.Id:N}{fileExt}";
+            newPicture.Path = $"/img/teachers/{newPicture.Id:N}{fileExt}";
 
             using (var fileStream = new FileStream(attachmentPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read))
             {
@@ -414,6 +421,13 @@ namespace hitsWebsite.Services
 
             await _context.Pictures.AddAsync(newPicture);
             return newPicture;
+        }
+
+        private async Task deletePictureAsync(Picture picture)
+        {
+            File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "img/teachers", picture.Id.ToString("N") + Path.GetExtension(picture.Path)));
+            var dbInstance = await _context.Pictures.Where(x => x.Id == picture.Id).SingleOrDefaultAsync();
+            _context.Pictures.Remove(dbInstance);
         }
 
         #endregion

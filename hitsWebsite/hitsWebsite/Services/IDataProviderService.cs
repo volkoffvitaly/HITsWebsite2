@@ -18,6 +18,7 @@ namespace hitsWebsite.Services
         public Task<List<Human>> GetGraduates();
         public Task CreateHuman(HumanCreateModel model);
         public Task EditHuman(String id, HumanEditModel model);
+        public Task DeleteHuman(String id);
         public Task<List<AcademicSubject>> GetAcademicSubjects();
         public Task CreateProfession(ProfessionEditModel model);
         public Task EditProfession(String id, ProfessionEditModel model);

@@ -36,7 +36,7 @@ namespace hitsWebsite.Data
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Human>().HasOne(x => x.Picture).WithOne().OnDelete(DeleteBehavior.Restrict);
+            //builder.Entity<Human>().HasOne(x => x.Picture).WithOne().OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

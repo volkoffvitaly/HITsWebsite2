@@ -29,6 +29,7 @@ namespace hitsWebsite.Controllers
             return View();
         }
 
+        #region C*UD Feature
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateFeature(FeatureEditModel model)
@@ -64,7 +65,10 @@ namespace hitsWebsite.Controllers
 
             return RedirectToAction("Index");
         }
+        #endregion
 
+
+        #region C*UD Human
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateHuman(HumanCreateModel model)
@@ -88,5 +92,18 @@ namespace hitsWebsite.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteHuman(String id)
+        {
+            if (id != null)
+            {
+                await _dataProviderService.DeleteHuman(id);
+            }
+
+            return RedirectToAction("Index");
+        }
+        #endregion
     }
 }
