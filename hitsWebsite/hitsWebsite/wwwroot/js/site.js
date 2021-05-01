@@ -105,6 +105,8 @@ window.onscroll = function () {
 
 $(window).resize(function () {
     HandlePageResizing($(this).scrollTop())
+
+    ChangePhotosWidth()
 });//resize
 
 buttons.forEach(btn => btn.click(function () {
@@ -150,9 +152,19 @@ $(document).ready(function () {
 
     //Выделяем в навбаре наблюдаемый блок
     SelectCurrentNavbarItem()
+
+
+    ChangePhotosWidth()
 });
 
 
+
+
+function ChangePhotosWidth() {
+    $('.photos-container').find('.photo').each(function () {
+        $(this).height($(this).width() * 0.65)
+    })
+}
 
 
 //var $addCards = $('.adding-card')
