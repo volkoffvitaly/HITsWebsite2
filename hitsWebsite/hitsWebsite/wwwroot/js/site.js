@@ -162,7 +162,7 @@ $(document).ready(function () {
 
 function ChangePhotosWidth() {
     $('.photos-container').find('.photo').each(function () {
-        $(this).height($(this).width() * 0.65)
+        $(this).height($(this).width() * 0.75)
     })
 }
 
