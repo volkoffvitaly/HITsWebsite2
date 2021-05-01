@@ -132,6 +132,86 @@
                 </div>
 
                 <div class="w-100 box">
+                    @if (User.IsInRole(ApplicationRoles.Administrators))
+                    {
+                        <div class="card-btns-container">
+                            <button class="open-popup btn-edit" rel="tomsk-edit"></button>
+                        </div>
+
+                        <partial name="_PopupOpen" model='"tomsk-edit"' />
+                        <form>
+                            <h4>@localizer["EditAction"]</h4>
+                            @for (var j = 0; j < supportedCultures.Count; j++)
+                            {
+                                <h5>@supportedCultures[j].Name</h5>
+
+                                <input class="entry-field" type="text" name="@("Name[" + j + "]")"
+                                       placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                <hr>
+
+                                <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                            }
+                            
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <div class="delete-photo">
+                                        <input class="custom-checkbox" type="checkbox" id="tomsk-1" name="tomsk-1" value="indigo">
+                                        <label for="tomsk-1">Удалить?</label>
+                                        <div>
+                                            <img src="/img/photos/tomsk1.jpg" />
+                                        </div>
+                                    </div>                                  
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="delete-photo">
+                                        <input class="custom-checkbox" type="checkbox" id="tomsk-2" name="tomsk-1" value="indigo">
+                                        <label for="tomsk-2">Удалить?</label>
+                                        <div>
+                                            <img src="/img/photos/tomsk2.jpg" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="delete-photo">
+                                        <input class="custom-checkbox" type="checkbox" id="tomsk-3" name="tomsk-1" value="indigo">
+                                        <label for="tomsk-3">Удалить?</label>
+                                        <div>
+                                            <img src="/img/photos/tomsk3.jpg" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="delete-photo">
+                                        <input class="custom-checkbox" type="checkbox" id="tomsk-4" name="tomsk-1" value="indigo">
+                                        <label for="tomsk-4">Удалить?</label>
+                                        <div>
+                                            <img src="/img/photos/tomsk4.jpg" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="delete-photo">
+                                        <input class="custom-checkbox" type="checkbox" id="tomsk-5" name="tomsk-1" value="indigo">
+                                        <label for="tomsk-5">Удалить?</label>
+                                        <div>
+                                            <img src="/img/photos/tomsk5.jpg" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <label for="load-tomsk-photos" class="load-labal">Добавить изображения</label>
+                            <input type="file" class="load-input form-control" id="load-tomsk-photos" name="@("Picture")" multiple="multiple" />
+
+                            <div class="mt-3 d-flex justify-content-end">
+                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                            </div>
+                        </form>
+                        <partial name="_PopupClose" />
+                    }
+
+
                     <h4>Томск в фото</h4>
 
                     <div class="photos-container mt-4">

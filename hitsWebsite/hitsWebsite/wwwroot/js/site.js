@@ -242,8 +242,18 @@ $('.open-popup').click(function () {
 })
 
 $('.load-input').change(function () {
-    if ($(this).val() != '') $(this).prev().text($(this).val());
-    else $(this).prev().text('Выберите файлы');
+
+    let mult = $(this).attr('multiple')
+
+    if (typeof mult !== typeof undefined && mult !== false) {
+        if ($(this).val() != '') $(this).prev().text('Loaded files: ' + $(this)[0].files.length);
+        else $(this).prev().text('Load files');        
+    } else {
+        if ($(this).val() != '') $(this).prev().text($(this).val());
+        else $(this).prev().text('Выберите файл');
+    }
+
+    
 });
 
 //Функция для выставление позици в Яндекс Картах и удаления элементов меню
