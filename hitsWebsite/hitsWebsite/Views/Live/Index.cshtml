@@ -168,7 +168,7 @@
                             <div class="row">
                                 <div class="col-6 mb-3">
                                     <div class="delete-photo">
-                                        <input class="custom-checkbox" type="checkbox" id="tomsk-1" name="tomsk-1" value="indigo">
+                                        <input class="custom-checkbox" type="checkbox" id="tomsk-1">
                                         <label for="tomsk-1">Удалить?</label>
                                         <div>
                                             <img src="/img/photos/tomsk1.jpg" />
@@ -177,7 +177,7 @@
                                 </div>
                                 <div class="col-6 mb-3">
                                     <div class="delete-photo">
-                                        <input class="custom-checkbox" type="checkbox" id="tomsk-2" name="tomsk-1" value="indigo">
+                                        <input class="custom-checkbox" type="checkbox" id="tomsk-2">
                                         <label for="tomsk-2">Удалить?</label>
                                         <div>
                                             <img src="/img/photos/tomsk2.jpg" />
@@ -186,7 +186,7 @@
                                 </div>
                                 <div class="col-6 mb-3">
                                     <div class="delete-photo">
-                                        <input class="custom-checkbox" type="checkbox" id="tomsk-3" name="tomsk-1" value="indigo">
+                                        <input class="custom-checkbox" type="checkbox" id="tomsk-3">
                                         <label for="tomsk-3">Удалить?</label>
                                         <div>
                                             <img src="/img/photos/tomsk3.jpg" />
@@ -195,7 +195,7 @@
                                 </div>
                                 <div class="col-6 mb-3">
                                     <div class="delete-photo">
-                                        <input class="custom-checkbox" type="checkbox" id="tomsk-4" name="tomsk-1" value="indigo">
+                                        <input class="custom-checkbox" type="checkbox" id="tomsk-4">
                                         <label for="tomsk-4">Удалить?</label>
                                         <div>
                                             <img src="/img/photos/tomsk4.jpg" />
@@ -204,7 +204,7 @@
                                 </div>
                                 <div class="col-6 mb-3">
                                     <div class="delete-photo">
-                                        <input class="custom-checkbox" type="checkbox" id="tomsk-5" name="tomsk-1" value="indigo">
+                                        <input class="custom-checkbox" type="checkbox" id="tomsk-5">
                                         <label for="tomsk-5">Удалить?</label>
                                         <div>
                                             <img src="/img/photos/tomsk5.jpg" />
@@ -326,6 +326,110 @@
             <div class="col-12 mt-3">
 
                 <div class="w-100 box">
+
+                    @if (User.IsInRole(ApplicationRoles.Administrators))
+                    {
+                        <div class="card-btns-container">
+                            <button class="open-popup btn-edit" rel="sail-edit"></button>
+                            <button class="open-popup btn-delete" rel="sail-delete"></button>
+                        </div>
+
+                        <partial name="_PopupOpen" model='"sail-edit"' />
+                        <form>
+                            <h4>@localizer["EditAction"]</h4>
+                            @for (var j = 0; j < supportedCultures.Count; j++)
+                            {
+                                <h5>@supportedCultures[j].Name</h5>
+
+                                <input class="entry-field" type="text" name="@("Name[" + j + "]")"
+                                       placeholder="@localizer["InputName"]" autocomplete="off" required />
+
+                                <textarea class="entry-field mt-3" type="text" placeholder="Описание общаги" autocomplete="off"
+                                          required>Вот тут текущее описание общаги и тд</textarea>
+
+                                <hr>
+
+                                <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                            }
+
+                            <div class="row">
+                                <div class="col-6 mb-3">
+                                    <div class="delete-photo">
+                                        <input class="custom-checkbox" type="checkbox" id="sail-1">
+                                        <label for="sail-1">Удалить?</label>
+                                        <div>
+                                            <img src="/img/photos/sail1.jpg" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="delete-photo">
+                                        <input class="custom-checkbox" type="checkbox" id="sail-2">
+                                        <label for="sail-2">Удалить?</label>
+                                        <div>
+                                            <img src="/img/photos/sail2.jpg" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="delete-photo">
+                                        <input class="custom-checkbox" type="checkbox" id="sail-3">
+                                        <label for="sail-3">Удалить?</label>
+                                        <div>
+                                            <img src="/img/photos/sail3.jpg" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="delete-photo">
+                                        <input class="custom-checkbox" type="checkbox" id="sail-4">
+                                        <label for="sail-4">Удалить?</label>
+                                        <div>
+                                            <img src="/img/photos/sail4.jpg" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6 mb-3">
+                                    <div class="delete-photo">
+                                        <input class="custom-checkbox" type="checkbox" id="sail-5">
+                                        <label for="sail-5">Удалить?</label>
+                                        <div>
+                                            <img src="/img/photos/sail5.jpg" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <label for="load-sail-photos" class="load-labal">Добавить изображения</label>
+                            <input type="file" class="load-input form-control" id="load-sail-photos" name="@("Picture")" multiple="multiple" />
+
+                            <div class="mt-3 d-flex justify-content-end">
+                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                            </div>
+                        </form>
+                        <partial name="_PopupClose" />
+
+                        <partial name="_PopupOpen" model='"sail-delete"' />
+                        <form>
+                            <h4>Элемент будет удален, продолжить?</h4>
+                            @*@for (var j = 0; j < supportedCultures.Count; j++)
+                    {
+                        <h5>@supportedCultures[j].Name</h5>
+                        <div>
+                            @localizer["InputName"]: @Model.Humans[i].HumanTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
+                            @localizer["InputDescription"]: @Model.Humans[i].HumanTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
+                        </div>
+                        <hr>
+                    }*@
+                            <div class="mt-3 d-flex justify-content-end">
+                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                            </div>
+                        </form>
+                        <partial name="_PopupClose" />
+                    }
+
                     <h4>Парус</h4>
 
                     <p class="mt-4">
@@ -510,6 +614,37 @@
                     </div>
 
                 </div>
+
+                @if (User.IsInRole(ApplicationRoles.Administrators))
+                {
+                    <div class="w-100 mt-4 card-container">
+                        <div class="card box adding-card">
+                            <input type="button" class="open-popup add-btn" rel="add-hostel" />
+                        </div>
+                    </div>
+                    <partial name="_PopupOpen" model='$"add-hostel"' />
+                    <form asp-action="CreateHuman" method="post" enctype="multipart/form-data">
+                        @for (var i = 0; i < supportedCultures.Count; i++)
+                        {
+                            <h5>@supportedCultures[i].Name</h5>
+                            <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
+                            <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
+                            <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                            <hr>
+                        }
+
+                        <label for="load-hostel-img" class="load-labal">Выберите изображения</label>
+                        <input type="file" class="load-input form-control" id="load-hostel-img" name="@("Picture")" required multiple="multiple"/>
+
+                        @*<input type="hidden" name="@("Post")" value="@Model.Post" required />*@
+
+                        <div class="mt-3 d-flex justify-content-end">
+                            <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                            <button type="submit" class="btn btn-primary">@localizer["ButtonSave"]</button>
+                        </div>
+                    </form>
+                    <partial name="_PopupClose" />
+                }
 
             </div>
         </div>
