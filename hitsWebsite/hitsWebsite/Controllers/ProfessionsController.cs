@@ -30,17 +30,17 @@ namespace hitsWebsite.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model)
-        {
-            if (ModelState.IsValid && projectNameOfPage != null)
-            {
-                await _dataProviderService.ChangeDynamicPageInfo(projectNameOfPage, model);
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> EditDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model)
+        //{
+        //    if (ModelState.IsValid && projectNameOfPage != null)
+        //    {
+        //        await _dataProviderService.ChangeDynamicPageInfo(projectNameOfPage, model);
+        //    }
 
-            return RedirectToAction("Index");
-        }
+        //    return RedirectToAction("Index");
+        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]

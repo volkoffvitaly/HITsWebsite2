@@ -434,6 +434,73 @@ namespace hitsWebsite.Services
         }
         #endregion
 
+        #region CRUD CityFeatures
+        public async Task<List<CityFeature>> GetCityFeatures()
+        {
+            return await _context.CityFeatures.Include(x => x.CityFeatureTranslations).Include(x => x.Pictures).Where(x => x.Pictures.Count == 0).AsNoTracking().ToListAsync();
+        }
+
+        public async Task<List<CityFeature>> GetCityFeaturesWithPhotos()
+        {
+            return await _context.CityFeatures.Include(x => x.CityFeatureTranslations).Include(x => x.Pictures).Where(x => x.Pictures.Count != 0).AsNoTracking().ToListAsync();
+        }
+
+        public async Task CreateCityFeature(CityFeatureEditModel model)
+        {
+            var cityFeature = new CityFeature()
+            {
+                CityFeatureTranslations = new Collection<CityFeatureTranslation>()
+            };
+
+            for (var i = 0; i < _cultures.Count; i++)
+            {
+                cityFeature.CityFeatureTranslations.Add(new CityFeatureTranslation
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            await _context.CityFeatures.AddAsync(cityFeature);
+            await _context.SaveChangesAsync();
+            return;
+        }
+
+        public async Task EditCityFeature(String id, CityFeatureEditModel model)
+        {
+            var cityFeature = await _context.CityFeatures.Where(x => x.Id.ToString() == id).Include(x => x.CityFeatureTranslations).SingleOrDefaultAsync();
+
+            if (cityFeature == null)
+            {
+                return;
+            }
+
+            cityFeature.CityFeatureTranslations.Clear();
+
+            for (var i = 0; i < model.Language.Count; i++)
+            {
+                cityFeature.CityFeatureTranslations.Add(new CityFeatureTranslation()
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            await _context.SaveChangesAsync();
+
+            return;
+        }
+
+        public async Task DeleteCityFeature(String id)
+        {
+            var cityFeature = await _context.CityFeatures.Where(x => x.Id.ToString() == id).Include(x => x.CityFeatureTranslations).SingleOrDefaultAsync();
+            _context.CityFeatures.Remove(cityFeature);
+            await _context.SaveChangesAsync();
+        }
+
+        #endregion
 
 
 

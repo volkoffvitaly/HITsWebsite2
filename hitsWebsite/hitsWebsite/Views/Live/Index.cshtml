@@ -15,6 +15,10 @@
     // projectNameOfBlocks
     const string AboutCityName = "AboutCityBlock";
     const string DormitoriesName = "DormitoriesBlock";
+
+    // DB entities
+    var cityFeatures = await DataProviderService.GetCityFeatures();
+    var cityFeaturesWithPhotos = await DataProviderService.GetCityFeaturesWithPhotos();
 }
 
 <partial name="_DynamicPageInfo" model="@ViewData["Title"]" />
@@ -35,71 +39,80 @@
 
             <div class="col-12 mt-3">
                 <div class="row">
-
-                    <div class="col-sm-6 col-md-4 card-container">
-                        <div class="card box">
+                    @if (cityFeatures.Count == 0 && cityFeaturesWithPhotos.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
+                    {
+                        <h6>@localizer["EmptyCards"]</h6>
+                    }
+                    else
+                    {
+                        @for (var i = 0; i < cityFeatures.Count; i++) // List ordered by Name
+                        {
+                            <div class="col-sm-6 col-md-4 card-container">
+                                <div class="card box">
+                                    @if (User.IsInRole(ApplicationRoles.Administrators))
+                                    {
+                                        <div class="card-btns-container">
+                                            <button class="open-popup btn-edit" rel="city-features-edit-@i"></button>
+                                            <button class="open-popup btn-delete" rel="city-features-delete-@i"></button>
+                                        </div>
+                                    }
+                                    <h4>@cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h4>
+                                    <p class="pt-3">
+                                        @cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
+                                    </p>
+                                </div>
+                            </div>
                             @if (User.IsInRole(ApplicationRoles.Administrators))
                             {
-                                <div class="card-btns-container">
-                                    <button class="open-popup btn-edit" rel="city-features-edit"></button>
-                                    <button class="open-popup btn-delete" rel="city-features-delete"></button>
-                                </div>
+                                var idCityFeatureEdit = $"city-features-edit-{i}";
+                                var idCityFeatureDelete = $"city-features-delete-{i}";
+
+                                <partial name="_PopupOpen" model="@idCityFeatureEdit" />
+                                <form asp-action="EditCityFeature" asp-route-id="@cityFeatures[i].Id">
+                                    <h4>@localizer["EditAction"]</h4>
+                                    @for (var j = 0; j < supportedCultures.Count; j++)
+                                    {
+                                        <h5>@supportedCultures[j].Name</h5>
+
+                                        <input class="entry-field" type="text" name="@("Name[" + j + "]")"
+                                               value="@cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name"
+                                               placeholder="@localizer["InputName"]" autocomplete="off" required />
+
+                                        // textarea shouldn't has any extra spaces between openning and closing tags
+                                        <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                                  required>@cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+                                        <hr>
+
+                                        <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                                    }
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                        <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
+
+                                <partial name="_PopupOpen" model="@idCityFeatureDelete" />
+                                <form asp-action="DeleteCityFeature" asp-route-id="@cityFeatures[i].Id">
+                                    <h4>@localizer["DeleteAction"]</h4>
+
+                                    @for (var j = 0; j < supportedCultures.Count; j++)
+                                    {
+                                        <h5>@supportedCultures[j].Name</h5>
+                                        <div>
+                                            @localizer["InputName"]: @cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
+                                            @localizer["InputDescription"]: @cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
+                                        </div>
+                                        <hr>
+                                    }
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                        <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
                             }
-                            <h4>3 город в России</h4>
-                            <p class="pt-3">
-                                Занимает 3 место в рейтинге студенческих городов России.
-                                73 место в мире по версии QS
-                            </p>
-                        </div>
-                    </div>
-                    @if (User.IsInRole(ApplicationRoles.Administrators))
-                    {
-                        var idEdit = $"city-features-edit";
-                        var idDelete = $"city-features-delete";
-
-                        <partial name="_PopupOpen" model="@idEdit" />
-                        <form>
-                            <h4>@localizer["EditAction"]</h4>
-                            @for (var j = 0; j < supportedCultures.Count; j++)
-                            {
-                                <h5>@supportedCultures[j].Name</h5>
-
-                                <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                       placeholder="@localizer["InputName"]" autocomplete="off" required />
-
-                                // textarea shouldn't has any extra spaces between openning and closing tags
-                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
-                                          required></textarea>
-                                <hr>
-
-                                <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
-                            }
-                            <div class="mt-3 d-flex justify-content-end">
-                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
-                            </div>
-                        </form>
-                        <partial name="_PopupClose" />
-
-                        <partial name="_PopupOpen" model="@idDelete" />
-                        <form>
-                            <h4>@localizer["DeleteAction"]</h4>
-
-                            @for (var j = 0; j < supportedCultures.Count; j++)
-                            {
-                                <h5>@supportedCultures[j].Name</h5>
-                                <div>
-                                    @localizer["InputName"]: Название пункта <br>
-                                    @localizer["InputDescription"]: Особенность
-                                </div>
-                                <hr>
-                            }
-                            <div class="mt-3 d-flex justify-content-end">
-                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
-                            </div>
-                        </form>
-                        <partial name="_PopupClose" />
+                        }
                     }
 
                     @if (User.IsInRole(ApplicationRoles.Administrators))
@@ -111,7 +124,7 @@
                         </div>
 
                         <partial name="_PopupOpen" model='"add-subject"' />
-                        <form>
+                        <form asp-action="CreateCityFeature" method="post">
                             <h4>@localizer["AddAction"]</h4>
                             @for (var i = 0; i < supportedCultures.Count; i++)
                             {
@@ -151,7 +164,7 @@
 
                                 <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
                             }
-                            
+
                             <div class="row">
                                 <div class="col-6 mb-3">
                                     <div class="delete-photo">
@@ -160,7 +173,7 @@
                                         <div>
                                             <img src="/img/photos/tomsk1.jpg" />
                                         </div>
-                                    </div>                                  
+                                    </div>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <div class="delete-photo">
