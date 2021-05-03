@@ -73,5 +73,17 @@ namespace hitsWebsite.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditDocuments(DocumentsEditModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _dataProviderService.EditDocument(model);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

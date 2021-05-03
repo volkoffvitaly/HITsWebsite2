@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using hitsWebsite.Data;
 
 namespace hitsWebsite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210503183646_DocumentWasModeled")]
+    partial class DocumentWasModeled
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,41 +189,6 @@ namespace hitsWebsite.Data.Migrations
                     b.HasIndex("AcademicSubjectId");
 
                     b.ToTable("AcademicSubjectTranslations");
-                });
-
-            modelBuilder.Entity("hitsWebsite.Models.Achievement", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Achievements");
-                });
-
-            modelBuilder.Entity("hitsWebsite.Models.AchievementTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("AchievementId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Language")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AchievementId");
-
-                    b.ToTable("AchievementTranslations");
                 });
 
             modelBuilder.Entity("hitsWebsite.Models.ApplicationUser", b =>
@@ -694,17 +661,6 @@ namespace hitsWebsite.Data.Migrations
                     b.Navigation("AcademicSubject");
                 });
 
-            modelBuilder.Entity("hitsWebsite.Models.AchievementTranslation", b =>
-                {
-                    b.HasOne("hitsWebsite.Models.Achievement", "Achievement")
-                        .WithMany("AchievementTranslations")
-                        .HasForeignKey("AchievementId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Achievement");
-                });
-
             modelBuilder.Entity("hitsWebsite.Models.CityFeatureTranslation", b =>
                 {
                     b.HasOne("hitsWebsite.Models.CityFeature", "CityFeature")
@@ -818,11 +774,6 @@ namespace hitsWebsite.Data.Migrations
             modelBuilder.Entity("hitsWebsite.Models.AcademicSubject", b =>
                 {
                     b.Navigation("AcademicSubjectTranslations");
-                });
-
-            modelBuilder.Entity("hitsWebsite.Models.Achievement", b =>
-                {
-                    b.Navigation("AchievementTranslations");
                 });
 
             modelBuilder.Entity("hitsWebsite.Models.CityFeature", b =>

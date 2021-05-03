@@ -20,6 +20,7 @@
     // DB entities
     var academicSubjects = await DataProviderService.GetAcademicSubjects();
     var condition = await DataProviderService.GetCondition();
+    var document = await DataProviderService.GetDocument();
 }
 
 <partial name="_DynamicPageInfo" model="@ViewData["Title"]" />
@@ -244,44 +245,6 @@
                         @Html.Raw(condition.ConditionTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description)
                     </div>
 
-                    @*<div class="row">
-                            <div class="col-6"><h5>Сроки приема документов</h5></div>
-                            <div class="col-6">С 20 июня</div>
-                        </div>
-
-                        <div class="row mt-4">
-                            <div class="col-6"><h5>Стоимость для граждан РФ и СНГ</h5></div>
-                            <div class="col-6">
-                                156 400 рублей<span class="blue-highlight">*</span>
-                                <div class="d-flex mt-2 additional-info blue-highlight">
-                                    <div>
-                                        <span>*</span>&nbsp;&nbsp;&nbsp;
-                                    </div>
-                                    <div>
-                                        Данные расчеты основываются на статистике прошлых лет и не являются гарантией поступления
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mt-4">
-                            <div class="col-6"><h5>Стоимость для иностранных граждан</h5></div>
-                            <div class="col-6">
-                                187 700 рублей - на русском языке<span class="blue-highlight">*</span>
-                                <div class="d-flex mt-2 additional-info blue-highlight">
-                                    <div>
-                                        <span>*</span>&nbsp;&nbsp;&nbsp;
-                                    </div>
-                                    <div>
-                                        Скидка для студентов, имеющих более 230 баллов составляет 15% (стоимость с учетом скидки 159 450 рублей)
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row mt-4">
-                            <div class="col-12">По статистике каждый 4 студент обучающийся платно, переходит на бюджет к 4 году обучения</div>
-                        </div>*@
                 </div>
 
             </div>
@@ -303,22 +266,25 @@
                         </div>
 
                         <partial name="_PopupOpen" model='"documents-edit"' />
-                        <form>
+                        <form asp-action="EditDocuments" method="post">
                             <h4>@localizer["EditAction"]</h4>
                             @for (var j = 0; j < supportedCultures.Count; j++)
                             {
+                                <script src="~/lib/ckeditor/ckeditor.js"></script>
                                 <h5>@supportedCultures[j].Name</h5>
 
-                                <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                       value=",flffskfjkdsfsdfsdfsdfsdf"
-                                       placeholder="@localizer["InputName"]" autocomplete="off" required />
-
                                 // textarea shouldn't has any extra spaces between openning and closing tags
-                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
-                                          required>fjdsfjdsjfksdfd</textarea>
+                                <textarea class="entry-field mt-3" type="text" name="Description" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                          id="documents-@j" required>@Html.Raw(document.DocumentTranslations.Where(x=> x.Language == supportedCultures[j].Name).SingleOrDefault().Description)</textarea>
                                 <hr>
 
-                                <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                                <input type="hidden" name="Language" value="@supportedCultures[j].Name" required />
+
+                                <script>
+                                     document.addEventListener("DOMContentLoaded", function (event) {
+                                         var editor = CKEDITOR.replace("documents-" + @j);
+                                     });
+                                </script>
                             }
                             <div class="mt-3 d-flex justify-content-end">
                                 <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
@@ -328,28 +294,8 @@
                         <partial name="_PopupClose" />
                     }
 
-                    <div class="row">
-                        <div class="col-12">
-                            Заявление, анкета абитуриента и согласие на обработку персональных данных заполняются в приемной комиссии (или в выездном пункте ТГУ в вашем городе).
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-6"><h5>К заявлению нужно приложить:</h5></div>
-                        <div class="col-6">
-                            1. Копию паспорта;<br>
-                            2. Оригинал или копию аттестата;<br>
-                            3. Копию военного билета (для тех, кто уже отдал долг родине);<br>
-                            4. 6 фото 3х4.
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            Для начисления баллов за индивидуальные достижения также можно предоставить дипломы олимпиад школьников, результаты ГТО, медаль за обучение.
-                            <br>
-                            Полный список документов можно посмотреть <a href="#">здесь</a>
-                        </div>
+                    <div>
+                        @Html.Raw(document.DocumentTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description)
                     </div>
 
                 </div>

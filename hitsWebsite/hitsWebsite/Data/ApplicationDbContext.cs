@@ -39,13 +39,17 @@ namespace hitsWebsite.Data
         public DbSet<Condition> Conditions { get; set; }
         public DbSet<ConditionTranslation> ConditionTranslations { get; set; }
 
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<DocumentTranslation> DocumentTranslations { get; set; }
+
+        public DbSet<Achievement> Achievements { get; set; }
+        public DbSet<AchievementTranslation> AchievementTranslations { get; set; }
+
         public DbSet<Picture> Pictures { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
-            //builder.Entity<Human>().HasOne(x => x.Picture).WithOne().OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

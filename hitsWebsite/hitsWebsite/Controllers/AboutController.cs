@@ -105,5 +105,19 @@ namespace hitsWebsite.Controllers
             return RedirectToAction("Index");
         }
         #endregion
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAchievements(AchievementsEditModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _dataProviderService.EditAchievement(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

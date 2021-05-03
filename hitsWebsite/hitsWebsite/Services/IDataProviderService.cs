@@ -72,6 +72,17 @@ namespace hitsWebsite.Services
 		public Task<Condition> EditCondition(ConditionsEditModel model);
 		#endregion
 
+		#region CRU* Document
+		public Task<Document> GetDocument();
+		public Task<Document> EditDocument(DocumentsEditModel model);
+		#endregion
+
+
+		#region CRU* Achievement
+		public Task<Achievement> GetAchievement();
+		public Task<Achievement> EditAchievement(AchievementsEditModel model);
+		#endregion
+
 		// JSON
 
 		#region *RU* Block

@@ -928,6 +928,140 @@ namespace hitsWebsite.Services
 		#endregion
 
 
+		#region CRU* Document
+		public async Task<Document> GetDocument()
+		{
+			var document = await _context.Documents.Include(x => x.DocumentTranslations).SingleOrDefaultAsync();
+
+			if (document == null)
+			{
+				document = new Document()
+				{
+					DocumentTranslations = new Collection<DocumentTranslation>()
+				};
+				_context.Documents.Add(document);
+			}
+
+			if (document.DocumentTranslations.Count < _cultures.Count) // if some language doesn't have a translation for entity
+			{
+				foreach (var culture in _cultures)
+				{
+					if (document.DocumentTranslations.Where(x => x.Language == culture.Name.ToString()).SingleOrDefault() == default) // selecting empty translations
+					{
+						try // .resx contains requiered values
+						{
+							document.DocumentTranslations.Add(new DocumentTranslation()
+							{
+								Description = _resourceManager.GetString("DefaultDescription", culture),
+								Language = culture.Name.ToString(),
+							});
+						}
+						catch // .resx file wasn't updated yet.
+						{
+							document.DocumentTranslations.Add(new DocumentTranslation()
+							{
+								Description = _localizer.GetString("DefaulDescription"),
+								Language = culture.Name.ToString(),
+							});
+						}
+					}
+				}
+			}
+
+			await _context.SaveChangesAsync();
+			return document;
+		}
+
+		public async Task<Document> EditDocument(DocumentsEditModel model)
+		{
+			var document = await _context.Documents.Include(x => x.DocumentTranslations).SingleOrDefaultAsync();
+
+			if (document == null)
+			{
+				return null;
+			}
+
+
+			for (var i = 0; i < model.Language.Count; i++)
+			{
+				document.DocumentTranslations.ElementAt(i).Description = model.Description[i];
+				document.DocumentTranslations.ElementAt(i).Language = model.Language[i];
+			}
+
+			await _context.SaveChangesAsync();
+
+			return document;
+		}
+		#endregion
+
+
+		#region CRU* Achievement
+		public async Task<Achievement> GetAchievement()
+		{
+			var achievement = await _context.Achievements.Include(x => x.AchievementTranslations).SingleOrDefaultAsync();
+
+			if (achievement == null)
+			{
+				achievement = new Achievement()
+				{
+					AchievementTranslations = new Collection<AchievementTranslation>()
+				};
+				_context.Achievements.Add(achievement);
+			}
+
+			if (achievement.AchievementTranslations.Count < _cultures.Count) // if some language doesn't have a translation for entity
+			{
+				foreach (var culture in _cultures)
+				{
+					if (achievement.AchievementTranslations.Where(x => x.Language == culture.Name.ToString()).SingleOrDefault() == default) // selecting empty translations
+					{
+						try // .resx contains requiered values
+						{
+							achievement.AchievementTranslations.Add(new AchievementTranslation()
+							{
+								Description = _resourceManager.GetString("DefaultDescription", culture),
+								Language = culture.Name.ToString(),
+							});
+						}
+						catch // .resx file wasn't updated yet.
+						{
+							achievement.AchievementTranslations.Add(new AchievementTranslation()
+							{
+								Description = _localizer.GetString("DefaulDescription"),
+								Language = culture.Name.ToString(),
+							});
+						}
+					}
+				}
+			}
+
+			await _context.SaveChangesAsync();
+			return achievement;
+		}
+
+		public async Task<Achievement> EditAchievement(AchievementsEditModel model)
+		{
+			var achievement = await _context.Achievements.Include(x => x.AchievementTranslations).SingleOrDefaultAsync();
+
+			if (achievement == null)
+			{
+				return null;
+			}
+
+
+			for (var i = 0; i < model.Language.Count; i++)
+			{
+				achievement.AchievementTranslations.ElementAt(i).Description = model.Description[i];
+				achievement.AchievementTranslations.ElementAt(i).Language = model.Language[i];
+			}
+
+			await _context.SaveChangesAsync();
+
+			return achievement;
+		}
+		#endregion
+
+
 		#region JSON
 		public async Task<Dictionary<String, String>> GetBlockName(String projectBlockName = default)
 		{
