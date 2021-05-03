@@ -647,7 +647,7 @@ namespace hitsWebsite.Services
 
         }
 
-        public async Task<List<CityFeature>> GetCityFeaturesWithPhotos()
+        public async Task<List<CityFeature>> GetCityFeatureWithPhotos()
         {
             return await _context.CityFeatures.Include(x => x.CityFeatureTranslations).Include(x => x.Pictures).Where(x => x.Pictures.Count != 0).AsNoTracking().ToListAsync();
         }

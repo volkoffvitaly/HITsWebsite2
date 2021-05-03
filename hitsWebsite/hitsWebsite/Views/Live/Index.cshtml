@@ -18,7 +18,7 @@
 
     // DB entities
     var cityFeatures = await DataProviderService.GetCityFeatures();
-    var cityFeaturesWithPhotos = await DataProviderService.GetCityFeaturesWithPhotos();
+    var cityFeatureWithPhotos = await DataProviderService.GetCityFeatureWithPhotos();
 
     var dormitories = await DataProviderService.GetDormitories();
 }
@@ -41,7 +41,7 @@
 
             <div class="col-12 mt-3">
                 <div class="row">
-                    @if (cityFeatures.Count == 0 && cityFeaturesWithPhotos.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
+                    @if (cityFeatures.Count == 0 && cityFeatureWithPhotos.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
                     {
                         <h6>@localizer["EmptyCards"]</h6>
                     }
@@ -227,7 +227,7 @@
                     }
 
 
-                    <h4>Томск в фото</h4>
+                    <h4>@cityFeatureWithPhotos</h4>
 
                     <div class="photos-container mt-4">
                         <div class="row">

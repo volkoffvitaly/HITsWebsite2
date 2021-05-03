@@ -1,0 +1,15 @@
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace hitsWebsite.Models.ViewModels
+{
+    public class ConditionsEditModel
+    {
+        public List<String> Description { get; set; }
+        public List<String> Language { get; set; }
+    }
+}

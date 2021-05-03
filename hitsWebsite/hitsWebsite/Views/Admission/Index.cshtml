@@ -200,9 +200,24 @@
                     CurrentControllerName = ViewData["Title"].ToString(),
                     ProjectBlockName = AdmissionСonditionsName
                 }' />
+
+            @*<div>
+                    <script src="~/lib/ckeditor/ckeditor.js"></script>
+                </div>*@
+
             <div class="col-12 mt-3">
 
                 <div class="box large-text">
+                    @for (var i = 0; i < supportedCultures.Count; i++)
+                    {
+                        <div>
+                            <textarea name="">Type here:</textarea>
+                        </div>
+                        <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                    }
+
+
+
 
                     <div class="row">
                         <div class="col-6"><h5>Сроки приема документов</h5></div>

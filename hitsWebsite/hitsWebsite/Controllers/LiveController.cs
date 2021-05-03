@@ -36,6 +36,7 @@ namespace hitsWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(await _dataProviderService.GetCityFeaturesWithPhotos() == null && model.)
                 await _dataProviderService.CreateCityFeature(model);
             }
 
