@@ -36,6 +36,9 @@ namespace hitsWebsite.Data
         public DbSet<Human> Humans { get; set; }
         public DbSet<HumanTranslation> HumanTranslations { get; set; }
 
+        public DbSet<Condition> Conditions { get; set; }
+        public DbSet<ConditionTranslation> ConditionTranslations { get; set; }
+
         public DbSet<Picture> Pictures { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

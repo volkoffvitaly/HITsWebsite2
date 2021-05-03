@@ -61,5 +61,17 @@ namespace hitsWebsite.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditConditions(ConditionsEditModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _dataProviderService.EditCondition(model);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

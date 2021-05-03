@@ -14,12 +14,12 @@
 
     // projectNameOfBlocks
     const string AcademicSubjectsName = "AcademicSubjectsBlock";
-    const string ProbabilityOfAdmissionName = "ProbabilityOfAdmissionsBlock";
     const string AdmissionСonditionsName = "AdmissionСonditionsBlock";
     const string RequiredDocumentsName = "RequiredDocumentsBlock";
 
     // DB entities
     var academicSubjects = await DataProviderService.GetAcademicSubjects();
+    var condition = await DataProviderService.GetCondition();
 }
 
 <partial name="_DynamicPageInfo" model="@ViewData["Title"]" />
@@ -201,24 +201,9 @@
                     ProjectBlockName = AdmissionСonditionsName
                 }' />
 
-            @*<div>
-                    <script src="~/lib/ckeditor/ckeditor.js"></script>
-                </div>*@
-
             <div class="col-12 mt-3">
 
                 <div class="box large-text">
-                    @for (var i = 0; i < supportedCultures.Count; i++)
-                    {
-                        <div>
-                            <textarea name="">Type here:</textarea>
-                        </div>
-                        <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
-                    }
-
-
-
-
                     @if (User.IsInRole(ApplicationRoles.Administrators))
                     {
                         <div class="card-btns-container">
@@ -226,70 +211,77 @@
                         </div>
 
                         <partial name="_PopupOpen" model='"conditions-edit"' />
-                        <form>
+                        <form asp-action="EditConditions" method="post">
                             <h4>@localizer["EditAction"]</h4>
                             @for (var j = 0; j < supportedCultures.Count; j++)
                             {
+                                <script src="~/lib/ckeditor/ckeditor.js"></script>
                                 <h5>@supportedCultures[j].Name</h5>
 
-                                <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                       value=",flffskfjkdsfsdfsdfsdfsdf"
-                                       placeholder="@localizer["InputName"]" autocomplete="off" required />
-
                                 // textarea shouldn't has any extra spaces between openning and closing tags
-                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
-                                          required>fjdsfjdsjfksdfd</textarea>
+                                <textarea class="entry-field mt-3" type="text" name="Description" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                          id="conditions-@j" required>@Html.Raw(condition.ConditionTranslations.Where(x=> x.Language == supportedCultures[j].Name).SingleOrDefault().Description)</textarea>
                                 <hr>
 
-                                <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                                <input type="hidden" name="Language" value="@supportedCultures[j].Name" required />
+
+                                <script>
+                                     document.addEventListener("DOMContentLoaded", function (event) {
+                                         var editor = CKEDITOR.replace("conditions-" + @j);
+                                     });
+                                </script>
                             }
                             <div class="mt-3 d-flex justify-content-end">
                                 <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
                                 <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
                             </div>
                         </form>
+
                         <partial name="_PopupClose" />
                     }
 
-
-                    <div class="row">
-                        <div class="col-6"><h5>Сроки приема документов</h5></div>
-                        <div class="col-6">С 20 июня</div>
+                    <div>
+                        @Html.Raw(condition.ConditionTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description)
                     </div>
 
-                    <div class="row mt-4">
-                        <div class="col-6"><h5>Стоимость для граждан РФ и СНГ</h5></div>
-                        <div class="col-6">
-                            156 400 рублей<span class="blue-highlight">*</span>
-                            <div class="d-flex mt-2 additional-info blue-highlight">
-                                <div>
-                                    <span>*</span>&nbsp;&nbsp;&nbsp;
-                                </div>
-                                <div>
-                                    Данные расчеты основываются на статистике прошлых лет и не являются гарантией поступления
+                    @*<div class="row">
+                            <div class="col-6"><h5>Сроки приема документов</h5></div>
+                            <div class="col-6">С 20 июня</div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-6"><h5>Стоимость для граждан РФ и СНГ</h5></div>
+                            <div class="col-6">
+                                156 400 рублей<span class="blue-highlight">*</span>
+                                <div class="d-flex mt-2 additional-info blue-highlight">
+                                    <div>
+                                        <span>*</span>&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    <div>
+                                        Данные расчеты основываются на статистике прошлых лет и не являются гарантией поступления
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row mt-4">
-                        <div class="col-6"><h5>Стоимость для иностранных граждан</h5></div>
-                        <div class="col-6">
-                            187 700 рублей - на русском языке<span class="blue-highlight">*</span>
-                            <div class="d-flex mt-2 additional-info blue-highlight">
-                                <div>
-                                    <span>*</span>&nbsp;&nbsp;&nbsp;
-                                </div>
-                                <div>
-                                    Скидка для студентов, имеющих более 230 баллов составляет 15% (стоимость с учетом скидки 159 450 рублей)
+                        <div class="row mt-4">
+                            <div class="col-6"><h5>Стоимость для иностранных граждан</h5></div>
+                            <div class="col-6">
+                                187 700 рублей - на русском языке<span class="blue-highlight">*</span>
+                                <div class="d-flex mt-2 additional-info blue-highlight">
+                                    <div>
+                                        <span>*</span>&nbsp;&nbsp;&nbsp;
+                                    </div>
+                                    <div>
+                                        Скидка для студентов, имеющих более 230 баллов составляет 15% (стоимость с учетом скидки 159 450 рублей)
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row mt-4">
-                        <div class="col-12">По статистике каждый 4 студент обучающийся платно, переходит на бюджет к 4 году обучения</div>
-                    </div>
+                        <div class="row mt-4">
+                            <div class="col-12">По статистике каждый 4 студент обучающийся платно, переходит на бюджет к 4 году обучения</div>
+                        </div>*@
                 </div>
 
             </div>
