@@ -12,7 +12,7 @@ namespace hitsWebsite.Models.ViewModels
         public List<String> Name { get; set; }
         public List<String> Description { get; set; }
         public List<String> Language { get; set; }
-        public List<Guid> PicturesToDelete { get; set; }
+        public List<Guid> PicturesToDelete { get; set; } = new List<Guid>();
         public List<IFormFile> Pictures { get; set; }
     }
 }

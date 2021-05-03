@@ -200,7 +200,6 @@
                     {
                         <div class="card-btns-container">
                             <button class="open-popup btn-edit" rel="achievements-edit"></button>
-                            <button class="open-popup btn-delete" rel="achievements-delete"></button>
                         </div>
 
                         <partial name="_PopupOpen" model='"achievements-edit"' />
@@ -220,26 +219,6 @@
                                 <hr>
 
                                 <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
-                            }
-                            <div class="mt-3 d-flex justify-content-end">
-                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
-                            </div>
-                        </form>
-                        <partial name="_PopupClose" />
-
-                        <partial name="_PopupOpen" model='"achievements-delete"' />
-                        <form>
-                            <h4>@localizer["DeleteAction"]</h4>
-
-                            @for (var j = 0; j < supportedCultures.Count; j++)
-                            {
-                                <h5>@supportedCultures[j].Name</h5>
-                                <div>
-                                    @localizer["InputName"]: fdfdfdfd <br>
-                                    @localizer["InputDescription"]: jhkjhkhgkghkjhkhjk
-                                </div>
-                                <hr>
                             }
                             <div class="mt-3 d-flex justify-content-end">
                                 <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
