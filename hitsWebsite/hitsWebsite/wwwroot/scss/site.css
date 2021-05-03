@@ -2,7 +2,6 @@
 .module-border-wrap {
   position: relative;
   padding: 0.25rem;
-  zoom: 90%;
   z-index: -200;
   background: linear-gradient(135deg, #BD4EEE 33%, rgba(0, 133, 255, 0.5) 66%, rgba(0, 154, 99, 0.5) 100%);
   background-size: 300% 300%;

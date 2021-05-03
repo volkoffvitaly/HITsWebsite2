@@ -15,7 +15,6 @@ $border-size-lg: 0.625rem; // 10px/16
 .module-border-wrap {
     position: relative;
     padding: $border-size-xs;
-    zoom: 90%;
     z-index: -200;
 
     @include sm {

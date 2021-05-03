@@ -647,9 +647,10 @@ namespace hitsWebsite.Services
 
         }
 
-        public async Task<List<CityFeature>> GetCityFeatureWithPhotos()
+        public async Task<CityFeature> GetCityFeatureWithPhotos()
         {
-            return await _context.CityFeatures.Include(x => x.CityFeatureTranslations).Include(x => x.Pictures).Where(x => x.Pictures.Count != 0).AsNoTracking().ToListAsync();
+            return await _context.CityFeatures.Include(x => x.CityFeatureTranslations).Include(x => x.Pictures)
+                                               .Where(x => x.Pictures.Count != 0).AsNoTracking().SingleOrDefaultAsync();
         }
 
         public async Task CreateCityFeature(CityFeatureEditModel model)
@@ -659,6 +660,17 @@ namespace hitsWebsite.Services
                 CityFeatureTranslations = new Collection<CityFeatureTranslation>()
             };
 
+            if (model.Pictures != null)
+            {
+                cityFeature.Pictures = new List<Picture>();
+                foreach (var pictureToAdd in model.Pictures)
+                {
+                    var pic = await createPicture(pictureToAdd, "img/city_features");
+                    pic.CityFeatureId = cityFeature.Id;
+                    cityFeature.Pictures.Add(pic);
+                }
+            }
+                        
             for (var i = 0; i < _cultures.Count; i++)
             {
                 cityFeature.CityFeatureTranslations.Add(new CityFeatureTranslation
@@ -676,11 +688,29 @@ namespace hitsWebsite.Services
 
         public async Task EditCityFeature(String id, CityFeatureEditModel model)
         {
-            var cityFeature = await _context.CityFeatures.Where(x => x.Id.ToString() == id).Include(x => x.CityFeatureTranslations).SingleOrDefaultAsync();
+            var cityFeature = await _context.CityFeatures.Where(x => x.Id.ToString() == id).Include(x => x.CityFeatureTranslations).Include(x => x.Pictures).SingleOrDefaultAsync();
 
             if (cityFeature == null)
             {
                 return;
+            }
+
+            if (model.PicturesToDelete != null)
+            {
+                foreach (var pictureTodelete in model.PicturesToDelete)
+                {
+                    await deletePictureAsync(pictureTodelete.ToString(), "img/city_features");
+                }
+            }
+
+            if (model.Pictures != null)
+            {
+                foreach (var pictureToAdd in model.Pictures)
+                {
+                    var pic = await createPicture(pictureToAdd, "img/city_features");
+                    pic.CityFeatureId = cityFeature.Id;
+                    cityFeature.Pictures.Add(pic);
+                }
             }
 
             cityFeature.CityFeatureTranslations.Clear();
@@ -690,7 +720,7 @@ namespace hitsWebsite.Services
                 cityFeature.CityFeatureTranslations.Add(new CityFeatureTranslation()
                 {
                     Name = model.Name[i],
-                    Description = model.Description[i],
+                    Description = model.Description != null ? model.Description[i] : null,
                     Language = model.Language[i]
                 });
             }

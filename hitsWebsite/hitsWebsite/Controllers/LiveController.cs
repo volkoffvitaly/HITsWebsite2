@@ -36,8 +36,10 @@ namespace hitsWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(await _dataProviderService.GetCityFeaturesWithPhotos() == null && model.)
-                await _dataProviderService.CreateCityFeature(model);
+                if (!(await _dataProviderService.GetCityFeatureWithPhotos() != null && model.Pictures.Count > 0))
+                {
+                    await _dataProviderService.CreateCityFeature(model);
+                }
             }
 
             return RedirectToAction("Index");

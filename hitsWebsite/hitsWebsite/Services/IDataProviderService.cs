@@ -53,7 +53,7 @@ namespace hitsWebsite.Services
 
         #region CRUD City Features
         public Task<List<CityFeature>> GetCityFeatures();
-        public Task<List<CityFeature>> GetCityFeaturesWithPhotos();
+        public Task<CityFeature> GetCityFeatureWithPhotos();
         public Task CreateCityFeature(CityFeatureEditModel model);
         public Task EditCityFeature(String id, CityFeatureEditModel model);
         public Task DeleteCityFeature(String id);
