@@ -333,10 +333,11 @@
             }
             else
             {
-                @for (var i = 0; i < dormitories.Count; i++) // List ordered by Name
-                {
-                    <div class="col-12 mt-3">
-                        <div class="w-100 box">
+                <div class="col-12">
+                    @for (var i = 0; i < dormitories.Count; i++) // List ordered by Name
+                    {
+
+                        <div class="w-100 box mt-4">
                             @if (User.IsInRole(ApplicationRoles.Administrators))
                             {
                                 <div class="card-btns-container">
@@ -354,7 +355,7 @@
                                 <div class="row">
 
                                     <div class="col-sm-9">
-                                        <div id="carousel-hostel-sail" class="carousel slide carousel-fade" data-ride="carousel">
+                                        <div id="carousel-hostel-@i" class="carousel slide carousel-fade" data-ride="carousel">
                                             <!--Slides-->
                                             <div class="carousel-inner" role="listbox">
                                                 @for (var j = 0; j < dormitories[i].Pictures.Count; j++)
@@ -378,11 +379,11 @@
                                             </div>
                                             <!--/.Slides-->
                                             <!--Controls-->
-                                            <a class="carousel-control-prev" href="#carousel-hostel-sail" role="button" data-slide="prev">
+                                            <a class="carousel-control-prev" href="#carousel-hostel-@i" role="button" data-slide="prev">
                                                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                                 <span class="sr-only">Previous</span>
                                             </a>
-                                            <a class="carousel-control-next" href="#carousel-hostel-sail" role="button" data-slide="next">
+                                            <a class="carousel-control-next" href="#carousel-hostel-@i" role="button" data-slide="next">
                                                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                                 <span class="sr-only">Next</span>
                                             </a>
@@ -396,7 +397,7 @@
                                             <ol>
                                                 @for (var j = 0; j < dormitories[i].Pictures.Count; j++)
                                                 {
-                                                    <li data-target="#carousel-hostel-sail" data-slide-to="@i">
+                                                    <li data-target="#carousel-hostel-@i" data-slide-to="@j">
                                                         <img class="d-block" src="@dormitories[i].Pictures.ElementAt(j).Path">
                                                     </li>
                                                 }
@@ -408,112 +409,118 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    @*  Edit & Delete Dormitory by Admin  *@
-                    @if (User.IsInRole(ApplicationRoles.Administrators))
-                    {
-                        var idSailEdit = $"sail-edit-{i}";
-                        var idSailDelete = $"sail-delete-{i}";
 
-                        <partial name="_PopupOpen" model='@idSailEdit' />
-                        <form asp-action="EditDormitory" asp-route-id="@dormitories[i].Id"  method="post" enctype="multipart/form-data">
-                            <h4>@localizer["EditAction"]</h4>
-                            @for (var j = 0; j < supportedCultures.Count; j++)
-                            {
-                                <h5>@supportedCultures[j].Name</h5>
+                        @*  Edit & Delete Dormitory by Admin  *@
+                        @if (User.IsInRole(ApplicationRoles.Administrators))
+                        {
+                            var idSailEdit = $"sail-edit-{i}";
+                            var idSailDelete = $"sail-delete-{i}";
 
-                                <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                       placeholder="@localizer["InputName"]" autocomplete="off" required
-                                       value="@dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name" />
-
-                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="Описание общаги" autocomplete="off"
-                                          required>@dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
-
-                                <hr>
-
-                                <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
-                            }
-
-                            <div class="row">
-                                @for (var j = 0; j < dormitories[i].Pictures.Count; j++)
+                            <partial name="_PopupOpen" model='@idSailEdit' />
+                            <form asp-action="EditDormitory" asp-route-id="@dormitories[i].Id" method="post" enctype="multipart/form-data">
+                                <h4>@localizer["EditAction"]</h4>
+                                @for (var j = 0; j < supportedCultures.Count; j++)
                                 {
-                                    <div class="col-6 mb-3">
-                                        <div class="delete-photo">
-                                            <input class="custom-checkbox" type="checkbox" name="@("PicturesToDelete[" + j + "]")" value="@dormitories[i].Pictures.ElementAt(j).Id" id="sail-@j">
-                                            <label for="sail-@j">Удалить?</label>
-                                            <div>
-                                                <img src="@dormitories[i].Pictures.ElementAt(j).Path" />
+                                    <h5>@supportedCultures[j].Name</h5>
+
+                                    <input class="entry-field" type="text" name="@("Name[" + j + "]")"
+                                           placeholder="@localizer["InputName"]" autocomplete="off" required
+                                           value="@dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name" />
+
+                                    <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="Описание общаги" autocomplete="off"
+                                              required>@dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+
+                                    <hr>
+
+                                    <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                                }
+
+                                <div class="row">
+                                    @for (var j = 0; j < dormitories[i].Pictures.Count; j++)
+                                    {
+                                        <div class="col-6 mb-3">
+                                            <div class="delete-photo">
+                                                <input class="custom-checkbox" type="checkbox" name="@("PicturesToDelete[" + j + "]")" value="@dormitories[i].Pictures.ElementAt(j).Id" id="sail-@j">
+                                                <label for="sail-@j">Удалить?</label>
+                                                <div>
+                                                    <img src="@dormitories[i].Pictures.ElementAt(j).Path" />
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                }
-                            </div>
-
-                            <label for="load-sail-photos" class="load-labal">Добавить изображения</label>
-                            <input type="file" class="load-input form-control" id="load-sail-photos" name="@("Pictures")" multiple="multiple" />
-
-                            <div class="mt-3 d-flex justify-content-end">
-                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
-                            </div>
-                        </form>
-                        <partial name="_PopupClose" />
-
-                        <partial name="_PopupOpen" model='@idSailDelete' />
-                        <form asp-action="DeleteDormitory" asp-route-id="@dormitories[i].Id" method="post" enctype="multipart/form-data">
-                            <h4>@localizer["DeleteAction"]</h4>
-
-                            @for (var j = 0; j < supportedCultures.Count; j++)
-                            {
-                                <h5>@supportedCultures[j].Name</h5>
-                                <div>
-                                    @localizer["InputName"]: @dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
-                                    @localizer["InputDescription"]: @dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
+                                    }
                                 </div>
+
+                                <label for="load-sail-photos" class="load-labal">Добавить изображения</label>
+                                <input type="file" class="load-input form-control" id="load-sail-photos" name="@("Pictures")" multiple="multiple" />
+
+                                <div class="mt-3 d-flex justify-content-end">
+                                    <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                    <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                </div>
+                            </form>
+                            <partial name="_PopupClose" />
+
+                            <partial name="_PopupOpen" model='@idSailDelete' />
+                            <form asp-action="DeleteDormitory" asp-route-id="@dormitories[i].Id" method="post" enctype="multipart/form-data">
+                                <h4>@localizer["DeleteAction"]</h4>
+
+                                @for (var j = 0; j < supportedCultures.Count; j++)
+                                {
+                                    <h5>@supportedCultures[j].Name</h5>
+                                    <div>
+                                        @localizer["InputName"]: @dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
+                                        @localizer["InputDescription"]: @dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
+                                    </div>
+                                    <hr>
+                                }
+
+                                <div class="mt-3 d-flex justify-content-end">
+                                    <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                    <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                </div>
+                            </form>
+                            <partial name="_PopupClose" />
+                        }
+                    }
+
+
+
+                    @*  Create a new Dormitory by Admin  *@
+                    @if (User.IsInRole(ApplicationRoles.Administrators))
+                    {
+                        <div class="w-100 mt-4 card-container">
+                            <div class="card box adding-card">
+                                <input type="button" class="open-popup add-btn" rel="add-hostel" />
+                            </div>
+                        </div>
+                        <partial name="_PopupOpen" model='$"add-hostel"' />
+                        <form asp-action="CreateDormitory" method="post" enctype="multipart/form-data">
+                            @for (var i = 0; i < supportedCultures.Count; i++)
+                            {
+                                <h5>@supportedCultures[i].Name</h5>
+                                <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
+                                <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
                                 <hr>
                             }
 
+                            <label for="load-hostel-img" class="load-labal">Выберите изображения</label>
+                            <input type="file" class="load-input form-control" id="load-hostel-img" name="@("Pictures")" required multiple="multiple" />
+
                             <div class="mt-3 d-flex justify-content-end">
                                 <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                <button type="submit" class="btn btn-primary">@localizer["ButtonSave"]</button>
                             </div>
                         </form>
                         <partial name="_PopupClose" />
                     }
-                }
-            }
 
-
-            @*  Create a new Dormitory by Admin  *@
-            @if (User.IsInRole(ApplicationRoles.Administrators))
-            {
-                <div class="w-100 mt-4 card-container">
-                    <div class="card box adding-card">
-                        <input type="button" class="open-popup add-btn" rel="add-hostel" />
-                    </div>
                 </div>
-                <partial name="_PopupOpen" model='$"add-hostel"' />
-                <form asp-action="CreateDormitory" method="post" enctype="multipart/form-data">
-                    @for (var i = 0; i < supportedCultures.Count; i++)
-                    {
-                        <h5>@supportedCultures[i].Name</h5>
-                        <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
-                        <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
-                        <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
-                        <hr>
-                    }
-
-                    <label for="load-hostel-img" class="load-labal">Выберите изображения</label>
-                    <input type="file" class="load-input form-control" id="load-hostel-img" name="@("Pictures")" required multiple="multiple" />
-
-                    <div class="mt-3 d-flex justify-content-end">
-                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                        <button type="submit" class="btn btn-primary">@localizer["ButtonSave"]</button>
-                    </div>
-                </form>
-                <partial name="_PopupClose" />
             }
+
+
+
 
         </div>
 
