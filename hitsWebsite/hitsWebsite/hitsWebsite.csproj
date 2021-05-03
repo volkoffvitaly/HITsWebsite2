@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\img\dormitories\" />
     <Folder Include="wwwroot\img\teachers\" />
     <Folder Include="wwwroot\svg\" />
   </ItemGroup>

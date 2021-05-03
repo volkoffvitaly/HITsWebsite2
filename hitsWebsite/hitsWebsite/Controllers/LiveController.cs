@@ -65,5 +65,41 @@ namespace hitsWebsite.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateDormitory(DormitoryCreateModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _dataProviderService.CreateDormitory(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditDormitory(String id, DormitoryEditModel model)
+        {
+            if (ModelState.IsValid && id != null)
+            {
+                await _dataProviderService.EditDormitory(id, model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteDormitory(String id)
+        {
+            if (id != null)
+            {
+                await _dataProviderService.DeleteDormitory(id);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

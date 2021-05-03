@@ -19,6 +19,8 @@
     // DB entities
     var cityFeatures = await DataProviderService.GetCityFeatures();
     var cityFeaturesWithPhotos = await DataProviderService.GetCityFeaturesWithPhotos();
+
+    var dormitories = await DataProviderService.GetDormitories();
 }
 
 <partial name="_DynamicPageInfo" model="@ViewData["Title"]" />
@@ -323,29 +325,110 @@
                     ProjectBlockName = DormitoriesName
                 }' />
 
-            <div class="col-12 mt-3">
 
-                <div class="w-100 box">
 
+            @if (dormitories.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
+            {
+                <h6>@localizer["EmptyCards"]</h6>
+            }
+            else
+            {
+                @for (var i = 0; i < dormitories.Count; i++) // List ordered by Name
+                {
+                    <div class="col-12 mt-3">
+                        <div class="w-100 box">
+                            @if (User.IsInRole(ApplicationRoles.Administrators))
+                            {
+                                <div class="card-btns-container">
+                                    <button class="open-popup btn-edit" rel="sail-edit-@i"></button>
+                                    <button class="open-popup btn-delete" rel="sail-delete-@i"></button>
+                                </div>
+                            }
+                            <h4>@dormitories[i].DormitoryTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h4>
+
+                            <p class="mt-4">
+                                @dormitories[i].DormitoryTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
+                            </p>
+
+                            <div class="photos-container mt-4">
+                                <div class="row">
+
+                                    <div class="col-sm-9">
+                                        <div id="carousel-hostel-sail" class="carousel slide carousel-fade" data-ride="carousel">
+                                            <!--Slides-->
+                                            <div class="carousel-inner" role="listbox">
+                                                @for (var j = 0; j < dormitories[i].Pictures.Count; j++)
+                                                {
+                                                    @if (j == 0)
+                                                    {
+                                                        <!--First slide-->
+                                                        <div class="carousel-item photo active">
+                                                            <img class="d-block" src="@dormitories[i].Pictures.First().Path">
+                                                        </div>
+                                                        <!--/First slide-->
+                                                    }
+
+                                                    else
+                                                    {
+                                                        <div class="carousel-item photo">
+                                                            <img class="d-block" src="@dormitories[i].Pictures.ElementAt(j).Path">
+                                                        </div>
+                                                    }
+                                                }
+                                            </div>
+                                            <!--/.Slides-->
+                                            <!--Controls-->
+                                            <a class="carousel-control-prev" href="#carousel-hostel-sail" role="button" data-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#carousel-hostel-sail" role="button" data-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                            <!--/.Controls-->
+                                        </div>
+                                    </div>
+
+                                    <div class="d-none d-sm-block col-3">
+                                        <div class="indicators-container position-relative">
+                                            <!--Indicators-->
+                                            <ol>
+                                                @for (var j = 0; j < dormitories[i].Pictures.Count; j++)
+                                                {
+                                                    <li data-target="#carousel-hostel-sail" data-slide-to="@i">
+                                                        <img class="d-block" src="@dormitories[i].Pictures.ElementAt(j).Path">
+                                                    </li>
+                                                }
+                                            </ol>
+                                            <!--Indicators-->
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*  Edit & Delete Dormitory by Admin  *@
                     @if (User.IsInRole(ApplicationRoles.Administrators))
                     {
-                        <div class="card-btns-container">
-                            <button class="open-popup btn-edit" rel="sail-edit"></button>
-                            <button class="open-popup btn-delete" rel="sail-delete"></button>
-                        </div>
+                        var idSailEdit = $"sail-edit-{i}";
+                        var idSailDelete = $"sail-delete-{i}";
 
-                        <partial name="_PopupOpen" model='"sail-edit"' />
-                        <form>
+                        <partial name="_PopupOpen" model='@idSailEdit' />
+                        <form asp-action="EditDormitory" asp-route-id="@dormitories[i].Id"  method="post" enctype="multipart/form-data">
                             <h4>@localizer["EditAction"]</h4>
                             @for (var j = 0; j < supportedCultures.Count; j++)
                             {
                                 <h5>@supportedCultures[j].Name</h5>
 
                                 <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                       placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                       placeholder="@localizer["InputName"]" autocomplete="off" required
+                                       value="@dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name" />
 
-                                <textarea class="entry-field mt-3" type="text" placeholder="Описание общаги" autocomplete="off"
-                                          required>Вот тут текущее описание общаги и тд</textarea>
+                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="Описание общаги" autocomplete="off"
+                                          required>@dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
 
                                 <hr>
 
@@ -353,55 +436,22 @@
                             }
 
                             <div class="row">
-                                <div class="col-6 mb-3">
-                                    <div class="delete-photo">
-                                        <input class="custom-checkbox" type="checkbox" id="sail-1">
-                                        <label for="sail-1">Удалить?</label>
-                                        <div>
-                                            <img src="/img/photos/sail1.jpg" />
+                                @for (var j = 0; j < dormitories[i].Pictures.Count; j++)
+                                {
+                                    <div class="col-6 mb-3">
+                                        <div class="delete-photo">
+                                            <input class="custom-checkbox" type="checkbox" name="@("PicturesToDelete[" + j + "]")" value="@dormitories[i].Pictures.ElementAt(j).Id" id="sail-@j">
+                                            <label for="sail-@j">Удалить?</label>
+                                            <div>
+                                                <img src="@dormitories[i].Pictures.ElementAt(j).Path" />
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <div class="delete-photo">
-                                        <input class="custom-checkbox" type="checkbox" id="sail-2">
-                                        <label for="sail-2">Удалить?</label>
-                                        <div>
-                                            <img src="/img/photos/sail2.jpg" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <div class="delete-photo">
-                                        <input class="custom-checkbox" type="checkbox" id="sail-3">
-                                        <label for="sail-3">Удалить?</label>
-                                        <div>
-                                            <img src="/img/photos/sail3.jpg" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <div class="delete-photo">
-                                        <input class="custom-checkbox" type="checkbox" id="sail-4">
-                                        <label for="sail-4">Удалить?</label>
-                                        <div>
-                                            <img src="/img/photos/sail4.jpg" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-6 mb-3">
-                                    <div class="delete-photo">
-                                        <input class="custom-checkbox" type="checkbox" id="sail-5">
-                                        <label for="sail-5">Удалить?</label>
-                                        <div>
-                                            <img src="/img/photos/sail5.jpg" />
-                                        </div>
-                                    </div>
-                                </div>
+                                }
                             </div>
 
                             <label for="load-sail-photos" class="load-labal">Добавить изображения</label>
-                            <input type="file" class="load-input form-control" id="load-sail-photos" name="@("Picture")" multiple="multiple" />
+                            <input type="file" class="load-input form-control" id="load-sail-photos" name="@("Pictures")" multiple="multiple" />
 
                             <div class="mt-3 d-flex justify-content-end">
                                 <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
@@ -410,18 +460,20 @@
                         </form>
                         <partial name="_PopupClose" />
 
-                        <partial name="_PopupOpen" model='"sail-delete"' />
-                        <form>
-                            <h4>Элемент будет удален, продолжить?</h4>
-                            @*@for (var j = 0; j < supportedCultures.Count; j++)
-                    {
-                        <h5>@supportedCultures[j].Name</h5>
-                        <div>
-                            @localizer["InputName"]: @Model.Humans[i].HumanTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
-                            @localizer["InputDescription"]: @Model.Humans[i].HumanTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
-                        </div>
-                        <hr>
-                    }*@
+                        <partial name="_PopupOpen" model='@idSailDelete' />
+                        <form asp-action="DeleteDormitory" asp-route-id="@dormitories[i].Id" method="post" enctype="multipart/form-data">
+                            <h4>@localizer["DeleteAction"]</h4>
+
+                            @for (var j = 0; j < supportedCultures.Count; j++)
+                            {
+                                <h5>@supportedCultures[j].Name</h5>
+                                <div>
+                                    @localizer["InputName"]: @dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
+                                    @localizer["InputDescription"]: @dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
+                                </div>
+                                <hr>
+                            }
+
                             <div class="mt-3 d-flex justify-content-end">
                                 <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
                                 <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
@@ -429,224 +481,40 @@
                         </form>
                         <partial name="_PopupClose" />
                     }
-
-                    <h4>Парус</h4>
-
-                    <p class="mt-4">
-                        Общежитие 2016 года постройки, в основном наши студенты проживают в нем. Здесь вы получите всё самое необходимое: постельное белье, матрас, одеяло, подушки и т.д. В общежитии функционируют кухни, оборудованные электроплитами и холодильниками. Каждое жилое помещение оснащено туалетной и ванной комнатами. В общежитии есть прачечная, оборудованная стиральными машинами и сушильной комнатой, спортивный зал и учебные комнаты. На каждом этаже выделена большая деловая зона, где размещаются танцевальные залы, зал для занятия балетом, конференц-зал.
-                    </p>
-
-                    <div class="photos-container mt-4">
-                        <div class="row">
-
-                            <div class="col-sm-9">
-                                <div id="carousel-hostel-sail" class="carousel slide carousel-fade" data-ride="carousel">
-
-                                    <!--Slides-->
-                                    <div class="carousel-inner" role="listbox">
-                                        <!--First slide-->
-                                        <div class="carousel-item photo active">
-                                            <img class="d-block" src="/img/photos/sail1.jpg"
-                                                 alt="First slide">
-                                        </div>
-                                        <!--/First slide-->
-                                        <!--Second slide-->
-                                        <div class="carousel-item photo">
-                                            <img class="d-block" src="/img/photos/sail2.jpg"
-                                                 alt="First slide">
-                                        </div>
-                                        <!--/Second slide-->
-                                        <!--Third slide-->
-                                        <div class="carousel-item photo">
-                                            <img class="d-block" src="/img/photos/sail3.jpg"
-                                                 alt="First slide">
-                                        </div>
-                                        <!--/Third slide-->
-
-                                        <div class="carousel-item photo">
-                                            <img class="d-block" src="/img/photos/sail4.jpg"
-                                                 alt="First slide">
-                                        </div>
-
-                                        <div class="carousel-item photo">
-                                            <img class="d-block" src="/img/photos/sail5.jpg"
-                                                 alt="First slide">
-                                        </div>
-
-                                    </div>
-                                    <!--/.Slides-->
-                                    <!--Controls-->
-                                    <a class="carousel-control-prev" href="#carousel-hostel-sail" role="button" data-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="carousel-control-next" href="#carousel-hostel-sail" role="button" data-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                    <!--/.Controls-->
-                                </div>
-                            </div>
-
-                            <div class="d-none d-sm-block col-3">
-                                <div class="indicators-container position-relative">
-                                    <!--Indicators-->
-                                    <ol>
-                                        <li data-target="#carousel-hostel-sail" data-slide-to="0">
-                                            <img class="d-block" src="/img/photos/sail1.jpg"
-                                                 alt="First slide">
-                                        </li>
-                                        <li data-target="#carousel-hostel-sail" data-slide-to="1">
-                                            <img class="d-block" src="/img/photos/sail2.jpg"
-                                                 alt="First slide">
-                                        </li>
-                                        <li data-target="#carousel-hostel-sail" data-slide-to="2">
-                                            <img class="d-block" src="/img/photos/sail3.jpg"
-                                                 alt="First slide">
-                                        </li>
-                                        <li data-target="#carousel-hostel-sail" data-slide-to="3">
-                                            <img class="d-block" src="/img/photos/sail4.jpg"
-                                                 alt="First slide">
-                                        </li>
-                                        <li data-target="#carousel-hostel-sail" data-slide-to="4">
-                                            <img class="d-block" src="/img/photos/sail5.jpg"
-                                                 alt="First slide">
-                                        </li>
-                                    </ol>
-                                    <!--/.Indicators-->
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="w-100 mt-4 box">
-                    <h4>Маяк</h4>
-
-                    <p class="mt-4">
-                        Общежитие 2016 года постройки, в основном наши студенты проживают в нем. Здесь вы получите всё самое необходимое: постельное белье, матрас, одеяло, подушки и т.д. В общежитии функционируют кухни, оборудованные электроплитами и холодильниками. Каждое жилое помещение оснащено туалетной и ванной комнатами. В общежитии есть прачечная, оборудованная стиральными машинами и сушильной комнатой, спортивный зал и учебные комнаты. На каждом этаже выделена большая деловая зона, где размещаются танцевальные залы, зал для занятия балетом, конференц-зал.
-                    </p>
-
-                    <div class="photos-container mt-4">
-                        <div class="row">
-
-                            <div class="col-sm-9">
-                                <div id="carousel-hostel-lighthouse" class="carousel slide carousel-fade" data-ride="carousel">
-
-                                    <!--Slides-->
-                                    <div class="carousel-inner" role="listbox">
-                                        <!--First slide-->
-                                        <div class="carousel-item photo active">
-                                            <img class="d-block" src="/img/photos/sail1.jpg"
-                                                 alt="First slide">
-                                        </div>
-                                        <!--/First slide-->
-                                        <!--Second slide-->
-                                        <div class="carousel-item photo">
-                                            <img class="d-block" src="/img/photos/sail2.jpg"
-                                                 alt="First slide">
-                                        </div>
-                                        <!--/Second slide-->
-                                        <!--Third slide-->
-                                        <div class="carousel-item photo">
-                                            <img class="d-block" src="/img/photos/sail3.jpg"
-                                                 alt="First slide">
-                                        </div>
-                                        <!--/Third slide-->
-
-                                        <div class="carousel-item photo">
-                                            <img class="d-block" src="/img/photos/sail4.jpg"
-                                                 alt="First slide">
-                                        </div>
-
-                                        <div class="carousel-item photo">
-                                            <img class="d-block" src="/img/photos/sail5.jpg"
-                                                 alt="First slide">
-                                        </div>
-
-                                    </div>
-                                    <!--/.Slides-->
-                                    <!--Controls-->
-                                    <a class="carousel-control-prev" href="#carousel-hostel-lighthouse" role="button" data-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="carousel-control-next" href="#carousel-hostel-lighthouse" role="button" data-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
-                                    <!--/.Controls-->
-                                </div>
-                            </div>
-
-                            <div class="d-none d-sm-block col-3">
-                                <div class="indicators-container position-relative">
-                                    <!--Indicators-->
-                                    <ol>
-                                        <li data-target="#carousel-hostel-lighthouse" data-slide-to="0">
-                                            <img class="d-block" src="/img/photos/sail1.jpg"
-                                                 alt="First slide">
-                                        </li>
-                                        <li data-target="#carousel-hostel-lighthouse" data-slide-to="1">
-                                            <img class="d-block" src="/img/photos/sail2.jpg"
-                                                 alt="First slide">
-                                        </li>
-                                        <li data-target="#carousel-hostel-lighthouse" data-slide-to="2">
-                                            <img class="d-block" src="/img/photos/sail3.jpg"
-                                                 alt="First slide">
-                                        </li>
-                                        <li data-target="#carousel-hostel-lighthouse" data-slide-to="3">
-                                            <img class="d-block" src="/img/photos/sail4.jpg"
-                                                 alt="First slide">
-                                        </li>
-                                        <li data-target="#carousel-hostel-lighthouse" data-slide-to="4">
-                                            <img class="d-block" src="/img/photos/sail5.jpg"
-                                                 alt="First slide">
-                                        </li>
-                                    </ol>
-                                    <!--/.Indicators-->
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-
-                @if (User.IsInRole(ApplicationRoles.Administrators))
-                {
-                    <div class="w-100 mt-4 card-container">
-                        <div class="card box adding-card">
-                            <input type="button" class="open-popup add-btn" rel="add-hostel" />
-                        </div>
-                    </div>
-                    <partial name="_PopupOpen" model='$"add-hostel"' />
-                    <form asp-action="CreateHuman" method="post" enctype="multipart/form-data">
-                        @for (var i = 0; i < supportedCultures.Count; i++)
-                        {
-                            <h5>@supportedCultures[i].Name</h5>
-                            <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
-                            <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
-                            <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
-                            <hr>
-                        }
-
-                        <label for="load-hostel-img" class="load-labal">Выберите изображения</label>
-                        <input type="file" class="load-input form-control" id="load-hostel-img" name="@("Picture")" required multiple="multiple"/>
-
-                        @*<input type="hidden" name="@("Post")" value="@Model.Post" required />*@
-
-                        <div class="mt-3 d-flex justify-content-end">
-                            <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                            <button type="submit" class="btn btn-primary">@localizer["ButtonSave"]</button>
-                        </div>
-                    </form>
-                    <partial name="_PopupClose" />
                 }
+            }
 
-            </div>
+
+            @*  Create a new Dormitory by Admin  *@
+            @if (User.IsInRole(ApplicationRoles.Administrators))
+            {
+                <div class="w-100 mt-4 card-container">
+                    <div class="card box adding-card">
+                        <input type="button" class="open-popup add-btn" rel="add-hostel" />
+                    </div>
+                </div>
+                <partial name="_PopupOpen" model='$"add-hostel"' />
+                <form asp-action="CreateDormitory" method="post" enctype="multipart/form-data">
+                    @for (var i = 0; i < supportedCultures.Count; i++)
+                    {
+                        <h5>@supportedCultures[i].Name</h5>
+                        <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
+                        <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
+                        <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                        <hr>
+                    }
+
+                    <label for="load-hostel-img" class="load-labal">Выберите изображения</label>
+                    <input type="file" class="load-input form-control" id="load-hostel-img" name="@("Pictures")" required multiple="multiple" />
+
+                    <div class="mt-3 d-flex justify-content-end">
+                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                        <button type="submit" class="btn btn-primary">@localizer["ButtonSave"]</button>
+                    </div>
+                </form>
+                <partial name="_PopupClose" />
+            }
+
         </div>
 
     </div>

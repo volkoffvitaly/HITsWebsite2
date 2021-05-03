@@ -59,6 +59,14 @@ namespace hitsWebsite.Services
         public Task DeleteCityFeature(String id);
         #endregion
 
+
+        #region CRUD Dormitory
+        public Task<List<Dormitory>> GetDormitories();
+        public Task CreateDormitory(DormitoryCreateModel model);
+        public Task EditDormitory(String id, DormitoryEditModel model);
+        public Task DeleteDormitory(String id);
+        #endregion
+
         // JSON
 
         #region *RU* Block

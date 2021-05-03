@@ -24,6 +24,9 @@ namespace hitsWebsite.Data
         public DbSet<CityFeature> CityFeatures { get; set; }
         public DbSet<CityFeatureTranslation> CityFeatureTranslations { get; set; }
 
+        public DbSet<Dormitory> Dormitories { get; set; }
+        public DbSet<DormitoryTranslation> DormitoryTranslations { get; set; }
+
         public DbSet<AcademicSubject> AcademicSubjects { get; set; }
         public DbSet<AcademicSubjectTranslation> AcademicSubjectTranslations { get; set; }
 

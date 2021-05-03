@@ -7,17 +7,21 @@ using Microsoft.AspNetCore.Identity;
 
 namespace hitsWebsite.Models
 {
-    public class Picture
+    public class DormitoryTranslation
     {
         public Guid Id { get; set; }
 
         [Required]
-        public DateTime Created { get; set; }
+        public String Language { get; set; }
 
         [Required]
-        public String Path { get; set; }
+        public String Name { get; set; }
 
-        public Guid? CityFeatureId { get; set; }
-        public Guid? DormitoryId { get; set; }
+        [Required]
+        public String Description { get; set; }
+
+
+        public Dormitory Dormitory { get; set; }
+        public Guid DormitoryId { get; set; }
     }
 }

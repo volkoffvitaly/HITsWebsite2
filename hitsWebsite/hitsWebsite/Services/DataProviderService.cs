@@ -351,7 +351,7 @@ namespace hitsWebsite.Services
                 });
             }
 
-            human.Picture = await createPicture(model.Picture);
+            human.Picture = await createPicture(model.Picture, "img/teachers");
             human.PictureId = human.Picture.Id;
 
             await _context.Humans.AddAsync(human);
@@ -371,8 +371,8 @@ namespace hitsWebsite.Services
             if (model.Picture != null)
             {
                 var oldPicture = human.Picture; // Track to delete it after changing, cause human.picture cannot be null in db
-                human.Picture = await createPicture(model.Picture); // getting new picture from model
-                await deletePictureAsync(oldPicture);
+                human.Picture = await createPicture(model.Picture, "img/teachers"); // getting new picture from model
+                await deletePictureAsync(oldPicture.Id.ToString(), "img/teachers");
                 _context.Pictures.Remove(oldPicture); // Deleting tracked old picture
             }
 
@@ -395,7 +395,7 @@ namespace hitsWebsite.Services
         {
             var human = await _context.Humans.Where(x => x.Id.ToString() == id).Include(x => x.Picture).SingleOrDefaultAsync();
             _context.Humans.Remove(human);
-            await deletePictureAsync(human.Picture);
+            await deletePictureAsync(human.Picture.Id.ToString(), "img/teachers");
             await _context.SaveChangesAsync();
         }
 
@@ -403,7 +403,7 @@ namespace hitsWebsite.Services
 
 
         #region C**D Pictures
-        private async Task<Picture> createPicture(IFormFile modelPicture)
+        private async Task<Picture> createPicture(IFormFile modelPicture, String localPath)
         {
             Picture newPicture = new Picture()
             {
@@ -414,8 +414,8 @@ namespace hitsWebsite.Services
             var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(modelPicture.ContentDisposition).FileName.Value.Trim('"'));
             var fileExt = Path.GetExtension(fileName);
 
-            var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, "img/teachers", newPicture.Id.ToString("N") + fileExt);
-            newPicture.Path = $"/img/teachers/{newPicture.Id:N}{fileExt}";
+            var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, localPath, newPicture.Id.ToString("N") + fileExt);
+            newPicture.Path = $"/{localPath}/{newPicture.Id:N}{fileExt}";
 
             using (var fileStream = new FileStream(attachmentPath, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read))
             {
@@ -426,13 +426,15 @@ namespace hitsWebsite.Services
             return newPicture;
         }
 
-        private async Task deletePictureAsync(Picture picture)
+        private async Task deletePictureAsync(String id, String localPath)
         {
-            File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, "img/teachers", picture.Id.ToString("N") + Path.GetExtension(picture.Path)));
-            var dbInstance = await _context.Pictures.Where(x => x.Id == picture.Id).SingleOrDefaultAsync();
+            var picture = await _context.Pictures.SingleOrDefaultAsync(x => x.Id.ToString() == id);
+            File.Delete(Path.Combine(_hostingEnvironment.WebRootPath, localPath, picture.Id.ToString("N") + Path.GetExtension(picture.Path)));
+            var dbInstance = await _context.Pictures.SingleOrDefaultAsync(x => x.Id == picture.Id);
             _context.Pictures.Remove(dbInstance);
         }
         #endregion
+
 
         #region CRUD CityFeatures
         public async Task<List<CityFeature>> GetCityFeatures()
@@ -501,6 +503,93 @@ namespace hitsWebsite.Services
         }
 
         #endregion
+
+
+        #region CRUD Dormitory
+        public async Task<List<Dormitory>> GetDormitories()
+        {
+            return await _context.Dormitories.Include(x => x.DormitoryTranslations).Include(x => x.Pictures).AsNoTracking().ToListAsync();
+        }
+        public async Task CreateDormitory(DormitoryCreateModel model)
+        {
+            var dormitory = new Dormitory()
+            {
+                DormitoryTranslations = new Collection<DormitoryTranslation>(),
+                Pictures = new Collection<Picture>()
+            };
+
+            foreach (var picture in model.Pictures)
+            {
+                dormitory.Pictures.Add(await createPicture(picture, "img/dormitories"));
+            }
+
+            for (var i = 0; i < _cultures.Count; i++)
+            {
+                dormitory.DormitoryTranslations.Add(new DormitoryTranslation
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            await _context.Dormitories.AddAsync(dormitory);
+            await _context.SaveChangesAsync();
+            return;
+        }
+        public async Task EditDormitory(String id, DormitoryEditModel model)
+        {
+            var dormitory = await _context.Dormitories.Where(x => x.Id.ToString() == id).Include(x => x.DormitoryTranslations).Include(x => x.Pictures).SingleOrDefaultAsync();
+
+            if (dormitory == null)
+            {
+                return;
+            }
+
+            if (model.PicturesToDelete != null)
+            {
+                foreach (var pictureTodelete in model.PicturesToDelete)
+                {
+                    await deletePictureAsync(pictureTodelete.ToString(), "img/dormitories");
+                }
+            }
+
+            if (model.Pictures != null)
+            {
+                foreach (var pictureToAdd in model.Pictures)
+                {
+                    var pic = await createPicture(pictureToAdd, "img/dormitories");
+                    pic.DormitoryId = dormitory.Id;
+                    dormitory.Pictures.Add(pic);
+                }
+            }
+
+            dormitory.DormitoryTranslations.Clear();
+            for (var i = 0; i < model.Language.Count; i++)
+            {
+                dormitory.DormitoryTranslations.Add(new DormitoryTranslation()
+                {
+                    Name = model.Name[i],
+                    Description = model.Description[i],
+                    Language = model.Language[i]
+                });
+            }
+
+            await _context.SaveChangesAsync();
+            return;
+        }
+        public async Task DeleteDormitory(String id)
+        {
+            var dormitory = await _context.Dormitories.Where(x => x.Id.ToString() == id).Include(x => x.Pictures).SingleOrDefaultAsync();
+            _context.Dormitories.Remove(dormitory);
+            foreach (var pic in dormitory.Pictures)
+            {
+                await deletePictureAsync(pic.Id.ToString(), "img/dormitories");
+            }
+            await _context.SaveChangesAsync();
+        }
+        #endregion
+
 
 
 
