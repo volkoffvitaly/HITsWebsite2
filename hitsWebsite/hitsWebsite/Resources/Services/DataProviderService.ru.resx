@@ -117,18 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DefaultBlockName" xml:space="preserve">
-    <value>Новый блок</value>
-  </data>
-  <data name="DefaultPageDescription" xml:space="preserve">
+  <data name="DefaultDescription" xml:space="preserve">
     <value>Описание</value>
-    <comment>Описание динамической страницы, данных о которой еще нет в БД (описание по умолчанию)</comment>
   </data>
-  <data name="DefaultPageName" xml:space="preserve">
-    <value>Новая страница</value>
-    <comment>Название динамической страницы, данных о которой еще нет в БД (название по умолчанию)</comment>
-  </data>
-  <data name="UnexpectedProjectBlockName" xml:space="preserve">
-    <value>Некорректное поведение, свяжитесь с администратором.</value>
+  <data name="DefaultName" xml:space="preserve">
+    <value>Название</value>
   </data>
 </root>

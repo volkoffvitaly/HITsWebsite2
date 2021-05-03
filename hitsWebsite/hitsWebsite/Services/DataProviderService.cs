@@ -79,8 +79,8 @@ namespace hitsWebsite.Services
                     {
                         dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
                         {
-                            Name = _resourceManager.GetString("DefaultPageName", culture),
-                            Description = _resourceManager.GetString("DefaultPageDescription", culture),
+                            Name = _resourceManager.GetString("DefaultName", culture),
+                            Description = _resourceManager.GetString("DefaultDescription", culture),
                             Language = culture.Name.ToString(),
                         });
                     }
@@ -88,8 +88,8 @@ namespace hitsWebsite.Services
                     {
                         dynamicPage.DynamicPageTranslations.Add(new DynamicPageTranslation()
                         {
-                            Name = _localizer.GetString("DefaultPageName"),
-                            Description = _localizer.GetString("DefaultPageDescription"),
+                            Name = _localizer.GetString("DefaultName"),
+                            Description = _localizer.GetString("DefaultDescription"),
                             Language = culture.Name.ToString(),
                         });
                     }
@@ -136,7 +136,41 @@ namespace hitsWebsite.Services
         #region CRUD Professions
         public async Task<List<Profession>> GetProfessions()
         {
-            return await _context.Professions.Include(x => x.ProfessionTranslations).AsNoTracking().ToListAsync();
+            var professions = await _context.Professions.Include(x => x.ProfessionTranslations).AsNoTracking().ToListAsync();
+
+            foreach (var profession in professions)
+            {
+                if (profession.ProfessionTranslations.Count < _cultures.Count) // if some language doesn't have a translation for entity
+                {
+                    foreach (var culture in _cultures)
+                    {
+                        if (profession.ProfessionTranslations.Where(x => x.Language == culture.Name.ToString()).SingleOrDefault() == default) // selecting empty translations
+                        {
+                            try // .resx contains requiered values
+                            {
+                                profession.ProfessionTranslations.Add(new ProfessionTranslation()
+                                {
+                                    Name = _resourceManager.GetString("DefaultName", culture),
+                                    Description = _resourceManager.GetString("DefaultDescription", culture),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                            catch // .resx file wasn't updated yet.
+                            {
+                                profession.ProfessionTranslations.Add(new ProfessionTranslation()
+                                {
+                                    Name = _localizer.GetString("DefaultName"),
+                                    Description = _localizer.GetString("DefaultDescription"),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return professions;
         }
 
         public async Task CreateProfession(ProfessionEditModel model)
@@ -199,7 +233,41 @@ namespace hitsWebsite.Services
         #region CRUD Features
         public async Task<List<Feature>> GetFeatures()
         {
-            return await _context.Features.Include(x => x.FeatureTranslations).AsNoTracking().ToListAsync();
+            var features = await _context.Features.Include(x => x.FeatureTranslations).AsNoTracking().ToListAsync();
+
+            foreach (var feature in features)
+            {
+                if (feature.FeatureTranslations.Count < _cultures.Count) // if some language doesn't have a translation for entity
+                {
+                    foreach (var culture in _cultures)
+                    {
+                        if (feature.FeatureTranslations.Where(x => x.Language == culture.Name.ToString()).SingleOrDefault() == default) // selecting empty translations
+                        {
+                            try // .resx contains requiered values
+                            {
+                                feature.FeatureTranslations.Add(new FeatureTranslation()
+                                {
+                                    Name = _resourceManager.GetString("DefaultName", culture),
+                                    Description = _resourceManager.GetString("DefaultDescription", culture),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                            catch // .resx file wasn't updated yet.
+                            {
+                                feature.FeatureTranslations.Add(new FeatureTranslation()
+                                {
+                                    Name = _localizer.GetString("DefaultName"),
+                                    Description = _localizer.GetString("DefaultDescription"),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return features;
         }
 
         public async Task CreateFeature(FeatureEditModel model)
@@ -262,7 +330,41 @@ namespace hitsWebsite.Services
         #region CRUD Academic Subjects
         public async Task<List<AcademicSubject>> GetAcademicSubjects()
         {
-            return await _context.AcademicSubjects.Include(x => x.AcademicSubjectTranslations).AsNoTracking().ToListAsync();
+            var academicSubjects = await _context.AcademicSubjects.Include(x => x.AcademicSubjectTranslations).AsNoTracking().ToListAsync();
+
+            foreach (var academicSubject in academicSubjects)
+            {
+                if (academicSubject.AcademicSubjectTranslations.Count < _cultures.Count) // if some language doesn't have a translation for entity
+                {
+                    foreach (var culture in _cultures)
+                    {
+                        if (academicSubject.AcademicSubjectTranslations.Where(x => x.Language == culture.Name.ToString()).SingleOrDefault() == default) // selecting empty translations
+                        {
+                            try // .resx contains requiered values
+                            {
+                                academicSubject.AcademicSubjectTranslations.Add(new AcademicSubjectTranslation()
+                                {
+                                    Name = _resourceManager.GetString("DefaultName", culture),
+                                    Description = _resourceManager.GetString("DefaultDescription", culture),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                            catch // .resx file wasn't updated yet.
+                            {
+                                academicSubject.AcademicSubjectTranslations.Add(new AcademicSubjectTranslation()
+                                {
+                                    Name = _localizer.GetString("DefaultName"),
+                                    Description = _localizer.GetString("DefaultDescription"),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return academicSubjects;
         }
 
         public async Task CreateAcademicSubject(AcademicSubjectEditModel model)
@@ -325,12 +427,80 @@ namespace hitsWebsite.Services
         #region CRUD Humans
         public async Task<List<Human>> GetTeachers()
         {
-            return await _context.Humans.Where(x => x.Post == "Teacher").Include(x => x.HumanTranslations).Include(x => x.Picture).AsNoTracking().ToListAsync();
+            var teachers = await _context.Humans.Where(x => x.Post == "Teacher").Include(x => x.HumanTranslations).Include(x => x.Picture).AsNoTracking().ToListAsync();
+
+            foreach (var teacher in teachers)
+            {
+                if (teacher.HumanTranslations.Count < _cultures.Count) // if some language doesn't have a translation for entity
+                {
+                    foreach (var culture in _cultures)
+                    {
+                        if (teacher.HumanTranslations.Where(x => x.Language == culture.Name.ToString()).SingleOrDefault() == default) // selecting empty translations
+                        {
+                            try // .resx contains requiered values
+                            {
+                                teacher.HumanTranslations.Add(new HumanTranslation()
+                                {
+                                    Name = _resourceManager.GetString("DefaultName", culture),
+                                    Description = _resourceManager.GetString("DefaultDescription", culture),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                            catch // .resx file wasn't updated yet.
+                            {
+                                teacher.HumanTranslations.Add(new HumanTranslation()
+                                {
+                                    Name = _localizer.GetString("DefaultName"),
+                                    Description = _localizer.GetString("DefaultDescription"),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return teachers;
         }
 
         public async Task<List<Human>> GetGraduates()
         {
-            return await _context.Humans.Where(x => x.Post == "Graduate").Include(x => x.HumanTranslations).Include(x => x.Picture).AsNoTracking().ToListAsync();
+            var grasuates = await _context.Humans.Where(x => x.Post == "Graduate").Include(x => x.HumanTranslations).Include(x => x.Picture).AsNoTracking().ToListAsync();
+
+            foreach (var graduate in grasuates)
+            {
+                if (graduate.HumanTranslations.Count < _cultures.Count) // if some language doesn't have a translation for entity
+                {
+                    foreach (var culture in _cultures)
+                    {
+                        if (graduate.HumanTranslations.Where(x => x.Language == culture.Name.ToString()).SingleOrDefault() == default) // selecting empty translations
+                        {
+                            try // .resx contains requiered values
+                            {
+                                graduate.HumanTranslations.Add(new HumanTranslation()
+                                {
+                                    Name = _resourceManager.GetString("DefaultName", culture),
+                                    Description = _resourceManager.GetString("DefaultDescription", culture),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                            catch // .resx file wasn't updated yet.
+                            {
+                                graduate.HumanTranslations.Add(new HumanTranslation()
+                                {
+                                    Name = _localizer.GetString("DefaultName"),
+                                    Description = _localizer.GetString("DefaultDescription"),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return grasuates;
         }
 
         public async Task CreateHuman(HumanCreateModel model)
@@ -386,11 +556,11 @@ namespace hitsWebsite.Services
                     Language = model.Language[i]
                 });
             }
-            
+
             await _context.SaveChangesAsync();
             return;
         }
-    
+
         public async Task DeleteHuman(String id)
         {
             var human = await _context.Humans.Where(x => x.Id.ToString() == id).Include(x => x.Picture).SingleOrDefaultAsync();
@@ -439,7 +609,42 @@ namespace hitsWebsite.Services
         #region CRUD CityFeatures
         public async Task<List<CityFeature>> GetCityFeatures()
         {
-            return await _context.CityFeatures.Include(x => x.CityFeatureTranslations).Include(x => x.Pictures).Where(x => x.Pictures.Count == 0).AsNoTracking().ToListAsync();
+            var cityFeatures = await _context.CityFeatures.Include(x => x.CityFeatureTranslations).Include(x => x.Pictures).Where(x => x.Pictures.Count == 0).AsNoTracking().ToListAsync();
+
+            foreach (var cityFeature in cityFeatures)
+            {
+                if (cityFeature.CityFeatureTranslations.Count < _cultures.Count) // if some language doesn't have a translation for entity
+                {
+                    foreach (var culture in _cultures)
+                    {
+                        if (cityFeature.CityFeatureTranslations.Where(x => x.Language == culture.Name.ToString()).SingleOrDefault() == default) // selecting empty translations
+                        {
+                            try // .resx contains requiered values
+                            {
+                                cityFeature.CityFeatureTranslations.Add(new CityFeatureTranslation()
+                                {
+                                    Name = _resourceManager.GetString("DefaultName", culture),
+                                    Description = _resourceManager.GetString("DefaultDescription", culture),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                            catch // .resx file wasn't updated yet.
+                            {
+                                cityFeature.CityFeatureTranslations.Add(new CityFeatureTranslation()
+                                {
+                                    Name = _localizer.GetString("DefaultName"),
+                                    Description = _localizer.GetString("DefaultDescription"),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return cityFeatures;
+
         }
 
         public async Task<List<CityFeature>> GetCityFeaturesWithPhotos()
@@ -508,8 +713,43 @@ namespace hitsWebsite.Services
         #region CRUD Dormitory
         public async Task<List<Dormitory>> GetDormitories()
         {
-            return await _context.Dormitories.Include(x => x.DormitoryTranslations).Include(x => x.Pictures).AsNoTracking().ToListAsync();
+            var dormitories = await _context.Dormitories.Include(x => x.DormitoryTranslations).Include(x => x.Pictures).AsNoTracking().ToListAsync();
+
+            foreach (var cityFeature in dormitories)
+            {
+                if (cityFeature.DormitoryTranslations.Count < _cultures.Count) // if some language doesn't have a translation for entity
+                {
+                    foreach (var culture in _cultures)
+                    {
+                        if (cityFeature.DormitoryTranslations.Where(x => x.Language == culture.Name.ToString()).SingleOrDefault() == default) // selecting empty translations
+                        {
+                            try // .resx contains requiered values
+                            {
+                                cityFeature.DormitoryTranslations.Add(new DormitoryTranslation()
+                                {
+                                    Name = _resourceManager.GetString("DefaultName", culture),
+                                    Description = _resourceManager.GetString("DefaultDescription", culture),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                            catch // .resx file wasn't updated yet.
+                            {
+                                cityFeature.DormitoryTranslations.Add(new DormitoryTranslation()
+                                {
+                                    Name = _localizer.GetString("DefaultName"),
+                                    Description = _localizer.GetString("DefaulDescription"),
+                                    Language = culture.Name.ToString(),
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return dormitories;
         }
+
         public async Task CreateDormitory(DormitoryCreateModel model)
         {
             var dormitory = new Dormitory()
@@ -673,11 +913,11 @@ namespace hitsWebsite.Services
                 {
                     try
                     {
-                        defaultBlock.Translations.Add(culture.Name.ToString(), _resourceManager.GetString("DefaultBlockName", culture));
+                        defaultBlock.Translations.Add(culture.Name.ToString(), _resourceManager.GetString("DefaultName", culture));
                     }
                     catch // if we need to implement a new language but .resx file wasn't updated yet.
                     {
-                        defaultBlock.Translations.Add(culture.Name.ToString(), _localizer.GetString("DefaultBlockName"));
+                        defaultBlock.Translations.Add(culture.Name.ToString(), _localizer.GetString("DefaultName"));
                     }
                 }
             }
