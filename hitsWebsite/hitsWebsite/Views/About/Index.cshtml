@@ -196,6 +196,37 @@
 
             <div class="col-12 mt-3">
                 <div class="box">
+                    @if (User.IsInRole(ApplicationRoles.Administrators))
+                    {
+                        <div class="card-btns-container">
+                            <button class="open-popup btn-edit" rel="achievements-edit"></button>
+                        </div>
+
+                        <partial name="_PopupOpen" model='"achievements-edit"' />
+                        <form>
+                            <h4>@localizer["EditAction"]</h4>
+                            @for (var j = 0; j < supportedCultures.Count; j++)
+                            {
+                                <h5>@supportedCultures[j].Name</h5>
+
+                                <input class="entry-field" type="text" name="@("Name[" + j + "]")"
+                                       value=",flffskfjkdsfsdfsdfsdfsdf"
+                                       placeholder="@localizer["InputName"]" autocomplete="off" required />
+
+                                // textarea shouldn't has any extra spaces between openning and closing tags
+                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                          required>fjdsfjdsjfksdfd</textarea>
+                                <hr>
+
+                                <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                            }
+                            <div class="mt-3 d-flex justify-content-end">
+                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                            </div>
+                        </form>
+                        <partial name="_PopupClose" />
+                    }
                     <div class="row justify-content-around">
 
                         <div class="col-7">
