@@ -41,7 +41,9 @@
                 <div class="row">
                     @if (professions.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
                     {
-                        <h6>@localizer["EmptyCards"]</h6>
+                        <div class="col-auto">
+                            <h6>@localizer["EmptyCards"]</h6>                            
+                        </div>
                     }
                     else
                     {

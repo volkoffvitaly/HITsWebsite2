@@ -257,6 +257,12 @@ main {
     .social_media_conteiner {
         letter-spacing: 1rem;
     }
+
+    .open-popup {
+        height: 2em;
+        width: 2em;
+        transform: translateY(25%);
+    }
 }
 
 /*Debug only is here*/
@@ -1344,6 +1350,10 @@ h6 {
         background-color: rgba(0, 0, 0, 0.15);
         -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
     }
+
+    textarea {
+        line-height: inherit;
+    }
 }
 
 .person-container {
@@ -1557,7 +1567,7 @@ h6 {
         }
     }
 
-    button {
+    .tell-more {
         width: 229px;
         max-width: 100%;
         height: 40px;

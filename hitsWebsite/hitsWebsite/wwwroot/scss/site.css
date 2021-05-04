@@ -152,6 +152,10 @@ main {
     width: auto; }
   .footer .social_media_conteiner {
     letter-spacing: 1rem; }
+  .footer .open-popup {
+    height: 2em;
+    width: 2em;
+    transform: translateY(25%); }
 
 /*Debug only is here*/
 /*.blank-test {
@@ -927,6 +931,8 @@ h6 {
     border-radius: 0.925rem;
     background-color: rgba(0, 0, 0, 0.15);
     -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05); }
+  .popup textarea {
+    line-height: inherit; }
 
 .person-container {
   position: relative;
@@ -1092,7 +1098,7 @@ h6 {
     #learn-more-popup input:focus {
       border: 1px solid #40A9FF;
       box-shadow: 0px 0px 4px rgba(24, 144, 255, 0.5); }
-  #learn-more-popup button {
+  #learn-more-popup .tell-more {
     width: 229px;
     max-width: 100%;
     height: 40px;

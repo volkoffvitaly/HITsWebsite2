@@ -122,8 +122,26 @@
                                 <br>
                                 Email: abiturient@hits.tsu.ru <br>
                                 Приёмная комиссия: +7(3822)942-101, +7(953)911-76-59 <br>
-                                (только в рабочие часы) <br>
+                                (только в рабочие часы)
+                                @if (User.IsInRole(ApplicationRoles.Administrators))
+                                {
+                                    <input type="button" class="open-popup edit-block-name" rel="footer-edit" />
+                                } <br>
                             </p>
+
+                            @if (User.IsInRole(ApplicationRoles.Administrators))
+                            {
+                                <partial name="_PopupOpen" model='"footer-edit"' />
+                                <form asp-action="EditDynamicPageInfo" asp-controller="Home" asp-route-projectNameOfPage="@ViewData["Title"].ToString()" asp-route-currentControllerName="@ViewData["Title"].ToString()" method="post">
+                                    <h4>@localizer["EditAction"]</h4>
+                                    
+                                    <div class="mt-3 d-flex justify-content-end">
+                                        <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                        <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
+                                    </div>
+                                </form>
+                                <partial name="_PopupClose" />
+                            }
 
                             <div class="d-inline-block social_media_conteiner">
                                 <a href="#"><img src="~/svg/vk-logo.svg"></a>

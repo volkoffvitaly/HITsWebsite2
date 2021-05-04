@@ -5,7 +5,7 @@
 
 function AssignNavbarParameters() {
     //navbarWidth = $navbarContainer.width()
-    topIndent = parseInt($('.box').first().offset().top - $("#blocks-container .info-block:first").first().offset().top)
+    topIndent = parseInt($(".title-block").next().offset().top - $("#blocks-container .info-block:first").first().offset().top)
     $navbar.css('margin-top', `${topIndent}px`)
     $navbar.css('top', `${topIndent}px`)
 
@@ -215,30 +215,43 @@ function ChangePhotosWidth() {
 
 
 
+let openPopupCount = 0
+let popupList = []
+
+function HidePopup() {
+    popupList[popupList.length - 1].slideUp(300)
+    popupList.pop()
+    if (popupList.length == 0) {
+        $('.popup-bg').fadeOut(300)
+    } else {
+        popupList[popupList.length - 1].css('z-index', '+=' + 2)
+    }
+}
+
 $('.popup-bg').click(function () {
-    $('.popup').slideUp(300)
-    $(this).fadeOut(300)
+    HidePopup()
 })
 
 var $popup = $('.popup');
 $popup.each(function () {
-    let popup = $(this)
     let closeBtn = $(this).find('.close-popup').first()
 
     closeBtn.click(function () {
-        hide()
+        HidePopup()
     })
-
-    function hide() {
-        $(popup).slideUp(300)
-        $('.popup-bg').fadeOut(300)
-    }
 })
 
 $('.open-popup').click(function () {
     let popup_id = $('#' + $(this).attr("rel")); // Связываем rel и popup_id
     $(popup_id).slideDown('slow'); // Открываем окно
-    $('.popup-bg').fadeIn('slow'); // Открываем блок заднего фона
+
+    if (popupList.length == 0) {
+        $('.popup-bg').fadeIn('slow'); // Открываем блок заднего фона
+    } else {
+        popupList[popupList.length - 1].css('z-index', '-=' + 2)
+    }
+
+    popupList.push($(popup_id))
 })
 
 $('.load-input').change(function () {
