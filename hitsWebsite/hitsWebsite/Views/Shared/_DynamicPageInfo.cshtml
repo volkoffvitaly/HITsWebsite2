@@ -71,7 +71,24 @@
             </div>
             <div class="col-md-4 mt-4 mt-md-0">
                 @*  Learn more button *@
-                <button type="button" class="big-btn">@localizer["LearnMore"]</button>
+                <button type="button" class="big-btn open-popup" rel="learn-more-popup">@localizer["LearnMore"]</button>
+                <div class="popup" id="learn-more-popup">
+                    <div class="learn-more-content">
+                        <h3 class="w-100">Давай знакомиться!</h3>
+                        <p class="mt-4">
+                            Мы с удовольствием расскажем о нашей школе все, что вам интересно.
+                        </p>
+                        <input class="mt-4 d-block w-100" placeholder="Ваше имя">
+                        <input class="mt-4 d-block w-100" placeholder="Email">
+
+                        <div class="mt-4">
+                            <button>расскажите еще!</button>
+                            <span class="d-inline-block close-popup">Нет, спасибо</span>
+                        </div>
+                    </div>
+                    <img src="/img/rita.png" alt="Alternate Text" />
+                    
+                </div>
             </div>
         </div>
     </div>
