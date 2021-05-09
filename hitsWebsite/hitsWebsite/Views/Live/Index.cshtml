@@ -9,87 +9,93 @@
     ViewData["Title"] = "Live";
 
     // Cultures info
-    var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();  // Current culture request
+    var requestedCulture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>().RequestCulture.UICulture.Name;  // Current culture request
     var supportedCultures = localizationOptions.Value.SupportedUICultures;  // Supported cultures in app
 
     // projectNameOfBlocks
-    const string AboutCityName = "AboutCityBlock";
+    const string CityFeaturesName = "CityFeaturesBlock";
     const string DormitoriesName = "DormitoriesBlock";
 
     // DB entities
     var cityFeatures = await DataProviderService.GetCityFeatures();
-    var cityFeatureWithPhotos = await DataProviderService.GetCityFeatureWithPhotos();
+    var cityFeaturesWithPhotos = await DataProviderService.GetCityFeaturesWithPhotos();
 
     var dormitories = await DataProviderService.GetDormitories();
 }
 
+
 <partial name="_DynamicPageInfo" model="@ViewData["Title"]" />
+
 
 <div class="row pt-4">
 
-    @*  Left Bar  *@
+
     <partial name="_LeftNavigationBar" />
 
     <div id="blocks-container" class="col col-lg-9">
 
+        @* CITY FEATURES CARDS *@
         <div class="row info-block">
 
             <partial name="_BlockName" model='new _BlockNameViewModel() {
                     CurrentControllerName = ViewData["Title"].ToString(),
-                    ProjectBlockName = AboutCityName
+                    ProjectBlockName = CityFeaturesName
                 }' />
 
             <div class="col-12 mt-3">
                 <div class="row">
-                    @if (cityFeatures.Count == 0 && cityFeatureWithPhotos != null && !User.IsInRole(ApplicationRoles.Administrators))
+                    @if (cityFeatures.Count == 0 && cityFeaturesWithPhotos.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
                     {
                         <div class="col-auto">
                             <h6>@localizer["EmptyCards"]</h6>
                         </div>
                     }
+
                     else
                     {
-                        @for (var i = 0; i < cityFeatures.Count; i++) // List ordered by Name
+                        @for (var i = 0; i < cityFeatures.Count; i++)
                         {
+                            var idEdit = $"city-features-edit-{i}";
+                            var idDelete = $"city-features-delete-{i}";
+
                             <div class="col-sm-6 col-md-4 card-container">
                                 <div class="card box">
                                     @if (User.IsInRole(ApplicationRoles.Administrators))
                                     {
                                         <div class="card-btns-container">
-                                            <button class="open-popup btn-edit" rel="city-features-edit-@i"></button>
-                                            <button class="open-popup btn-delete" rel="city-features-delete-@i"></button>
+                                            <button class="open-popup btn-edit" rel="@idEdit"></button>
+                                            <button class="open-popup btn-delete" rel="@idDelete"></button>
                                         </div>
                                     }
-                                    <h4>@cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h4>
+
+                                    <h4>@cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name</h4>
                                     <p class="pt-3">
-                                        @cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
+                                        @cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Description
                                     </p>
                                 </div>
                             </div>
+
+                            @* EDIT & DELETE CITY FEATURES CARD *@
                             @if (User.IsInRole(ApplicationRoles.Administrators))
                             {
-                                var idCityFeatureEdit = $"city-features-edit-{i}";
-                                var idCityFeatureDelete = $"city-features-delete-{i}";
-
-                                <partial name="_PopupOpen" model="@idCityFeatureEdit" />
+                                <partial name="_PopupOpen" model="idEdit" />
                                 <form asp-action="EditCityFeature" asp-route-id="@cityFeatures[i].Id" method="post" enctype="multipart/form-data">
+
                                     <h4>@localizer["EditAction"]</h4>
+
                                     @for (var j = 0; j < supportedCultures.Count; j++)
                                     {
                                         <h5>@supportedCultures[j].Name</h5>
 
-                                        <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                               value="@cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name"
-                                               placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                        <input required name="Name" type="text" placeholder="@localizer["InputName"]" autocomplete="off" class="entry-field"
+                                               value="@cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name" />
 
-                                        // textarea shouldn't has any extra spaces between openning and closing tags
-                                        <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
-                                                  required>@cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+                                        <textarea required name="Description" type="text" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                                  class="entry-field mt-3">@cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+
+                                        <input required hidden type="text" name="Language" value="@supportedCultures[j].Name" />
                                         <hr>
-
-                                        <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
                                     }
-
 
                                     <div class="mt-3 d-flex justify-content-end">
                                         <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
@@ -98,7 +104,8 @@
                                 </form>
                                 <partial name="_PopupClose" />
 
-                                <partial name="_PopupOpen" model="@idCityFeatureDelete" />
+
+                                <partial name="_PopupOpen" model="idDelete" />
                                 <form asp-action="DeleteCityFeature" asp-route-id="@cityFeatures[i].Id">
                                     <h4>@localizer["DeleteAction"]</h4>
 
@@ -106,8 +113,11 @@
                                     {
                                         <h5>@supportedCultures[j].Name</h5>
                                         <div>
-                                            @localizer["InputName"]: @cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
-                                            @localizer["InputDescription"]: @cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
+                                            @localizer["InputName"]:
+                                            @cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name
+                                            <br>
+                                            @localizer["InputDescription"]:
+                                            @cityFeatures[i].CityFeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
                                         </div>
                                         <hr>
                                     }
@@ -121,82 +131,100 @@
                         }
                     }
 
+                    @* CREATE ABOUT CITY CARD *@
                     @if (User.IsInRole(ApplicationRoles.Administrators))
                     {
+                        var idCreate = "add-city-feature";
+
                         <div class="col-sm-6 col-md-4 card-container">
                             <div class="card box adding-card">
-                                <input type="button" class="open-popup add-btn" rel="add-subject" />
+                                <input type="button" class="open-popup add-btn" rel="@idCreate" />
                             </div>
                         </div>
 
-                        <partial name="_PopupOpen" model='"add-subject"' />
+                        <partial name="_PopupOpen" model="idCreate" />
                         <form asp-action="CreateCityFeature" method="post" enctype="multipart/form-data">
+
                             <h4>@localizer["AddAction"]</h4>
+
                             @for (var i = 0; i < supportedCultures.Count; i++)
                             {
                                 <h5>@supportedCultures[i].Name</h5>
-                                <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
-                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
+
+                                <input required name="Name" type="text" placeholder="@localizer["InputName"]" autocomplete="off" class="entry-field" />
+                                <textarea required name="Description" type="text" placeholder="@localizer["InputDescription"]" autocomplete="off" class="entry-field mt-3"></textarea>
+                                <input required hidden name="Language" type="text" value="@supportedCultures[i].Name" />
                                 <hr>
-                                <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
                             }
 
-                            @if (cityFeatureWithPhotos == null)
-                            {
-                                <label for="load-tomsk-photos-create" class="load-labal">Добавить изображения</label>
-                                <input type="file" class="load-input form-control" id="load-tomsk-photos-create" name="@("Pictures")" multiple="multiple" />
-                            }
+                            <label for="load-@idCreate" class="load-labal">@localizer["SelectImages"]</label>
+                            <input id="load-@idCreate" name="Pictures" multiple type="file" class="load-input form-control" />
 
                             <div class="mt-3 d-flex justify-content-end">
                                 <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
                                 <button type="submit" class="btn btn-primary">@localizer["ButtonSave"]</button>
                             </div>
+
                         </form>
                         <partial name="_PopupClose" />
                     }
 
                 </div>
 
-                @if (cityFeatureWithPhotos != null)
+
+                @* CITY FEATURES WITH PHOTOS CARDS *@
+                @for (var i = 0; i < cityFeaturesWithPhotos.Count; i++)
                 {
+                    var idEdit = $"city-features-edit-with-photos-{i}";
+                    var idDelete = $"city-features-delete-with-photos-{i}";
+
                     <div class="w-100 box">
+                        @* EDIT & DELETE CITY FEATURES WITH PHOTOS CARDS *@
                         @if (User.IsInRole(ApplicationRoles.Administrators))
                         {
                             <div class="card-btns-container">
-                                <button class="open-popup btn-edit" rel="tomsk-edit"></button>
+                                <button class="open-popup btn-edit" rel="@idEdit"></button>
                             </div>
 
-                            <partial name="_PopupOpen" model='"tomsk-edit"' />
-                            <form asp-action="EditCityFeature" asp-route-id="@cityFeatureWithPhotos.Id" method="post" enctype="multipart/form-data">
+                            <partial name="_PopupOpen" model="@idEdit" />
+                            <form asp-action="EditCityFeature" asp-route-id="@cityFeaturesWithPhotos[i].Id" method="post" enctype="multipart/form-data">
+
                                 <h4>@localizer["EditAction"]</h4>
+
                                 @for (var j = 0; j < supportedCultures.Count; j++)
                                 {
                                     <h5>@supportedCultures[j].Name</h5>
 
-                                    <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                           placeholder="@localizer["InputName"]" autocomplete="off" required />
-                                    <hr>
+                                    <input required name="Name" type="text" placeholder="@localizer["InputName"]" autocomplete="off" class="entry-field"
+                                           value="@cityFeaturesWithPhotos[i].CityFeatureTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name" />
+                                    <textarea required name="Description" type="text" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                              class="entry-field mt-3">@cityFeaturesWithPhotos[i].CityFeatureTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Description</textarea>
 
-                                    <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
+                                    <input required hidden name="Language" type="text" value="@supportedCultures[j].Name" />
+                                    <hr>
                                 }
 
                                 <div class="row">
-                                    @for (var j = 0; j < cityFeatureWithPhotos.Pictures.Count; j++)
+                                    @for (var j = 0; j < cityFeaturesWithPhotos[i].Pictures.Count; j++)
                                     {
+                                        var idDeletePhoto = idDelete + $"photo-{j}";
+
                                         <div class="col-6 mb-3">
                                             <div class="delete-photo">
-                                                <input class="custom-checkbox" type="checkbox" name="@("PicturesToDelete")" value="@cityFeatureWithPhotos.Pictures.ElementAt(j).Id" id="tomsk-photo-@j">
-                                                <label for="tomsk-photo-@j">Удалить?</label>
+                                                <input class="custom-checkbox" type="checkbox" name="PicturesToDelete"
+                                                       value="@cityFeaturesWithPhotos[i].Pictures.ElementAt(j).Id" id="@idDeletePhoto">
+
+                                                <label for="@idDeletePhoto">@localizer["Remove"]</label>
                                                 <div>
-                                                    <img src="@cityFeatureWithPhotos.Pictures.ElementAt(j).Path" />
+                                                    <img src="@cityFeaturesWithPhotos[i].Pictures.ElementAt(j).Path" />
                                                 </div>
                                             </div>
                                         </div>
                                     }
                                 </div>
 
-                                <label for="load-tomsk-photos" class="load-labal">Добавить изображения</label>
-                                <input type="file" class="load-input form-control" id="load-tomsk-photos" name="@("Pictures")" multiple="multiple" />
+                                <label for="load-@idEdit" class="load-labal">@localizer["SelectImages"]</label>
+                                <input multiple type="file" name="Pictures" id="load-@idEdit" class="load-input form-control" />
 
                                 <div class="mt-3 d-flex justify-content-end">
                                     <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
@@ -206,73 +234,76 @@
                             <partial name="_PopupClose" />
                         }
 
-                        @if (cityFeatureWithPhotos != null)
-                        {
-                            <h4>@cityFeatureWithPhotos.CityFeatureTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h4>
 
-                            <p class="mt-4">
-                                @cityFeatureWithPhotos.CityFeatureTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
-                            </p>
+                        @* RETRIEVE CITY FEATURES WITH PHOTOS CARDS *@
+                        <h4>@cityFeaturesWithPhotos[i].CityFeatureTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name</h4>
 
-                            <div class="photos-container mt-4">
-                                <div class="row">
+                        <p class="pt-3">
+                            @cityFeaturesWithPhotos[i].CityFeatureTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Description
+                        </p>
 
-                                    <div class="col-sm-9">
-                                        <div id="carousel-tomsk" class="carousel slide carousel-fade" data-ride="carousel">
-
-                                            <!--Slides-->
-                                            <div class="carousel-inner" role="listbox">
-                                                @for (var j = 0; j < cityFeatureWithPhotos.Pictures.Count; j++)
-                                                {
-                                                    @if (j == 0)
-                                                    {
-                                                        <!--First slide-->
-                                                        <div class="carousel-item photo active">
-                                                            <img class="d-block" src="@cityFeatureWithPhotos.Pictures.First().Path">
-                                                        </div>
-                                                        <!--/First slide-->
-                                                    }
-
-                                                    else
-                                                    {
-                                                        <div class="carousel-item photo">
-                                                            <img class="d-block" src="@cityFeatureWithPhotos.Pictures.ElementAt(j).Path">
-                                                        </div>
-                                                    }
-                                                }
-                                            </div>
-                                            <!--/.Slides-->
-                                            <!--Controls-->
-                                            <a class="carousel-control-prev" href="#carousel-tomsk" role="button" data-slide="prev">
-                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                <span class="sr-only">Previous</span>
-                                            </a>
-                                            <a class="carousel-control-next" href="#carousel-tomsk" role="button" data-slide="next">
-                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                <span class="sr-only">Next</span>
-                                            </a>
-                                            <!--/.Controls-->
-                                        </div>
-                                    </div>
-
-                                    <div class="d-none d-sm-block col-3">
-                                        <div class="indicators-container position-relative">
-                                            <!--Indicators-->
-                                            <ol>
-                                                @for (var j = 0; j < cityFeatureWithPhotos.Pictures.Count; j++)
-                                                {
-                                                    <li data-target="#carousel-tomsk" data-slide-to="@j">
-                                                        <img class="d-block" src="@cityFeatureWithPhotos.Pictures.ElementAt(j).Path">
-                                                    </li>
-                                                }
-                                            </ol>
-                                            <!--/.Indicators-->
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
+                        @{
+                            var idCarouselCityFeature = $"carousel-city-feature-{i}";
                         }
+
+                        <div class="photos-container mt-4">
+                            <div class="row">
+
+                                <div class="col-sm-9">
+                                    <div id="@idCarouselCityFeature" class="carousel slide carousel-fade" data-ride="carousel">
+
+                                        <!--Slides-->
+                                        <div class="carousel-inner" role="listbox">
+                                            @for (var j = 0; j < cityFeaturesWithPhotos[i].Pictures.Count; j++)
+                                            {
+                                                @if (j == 0)
+                                                {
+                                                    <!--First slide-->
+                                                    <div class="carousel-item photo active">
+                                                        <img class="d-block" src="@cityFeaturesWithPhotos[i].Pictures.First().Path">
+                                                    </div>
+                                                    <!--/First slide-->
+                                                }
+
+                                                else
+                                                {
+                                                    <div class="carousel-item photo">
+                                                        <img class="d-block" src="@cityFeaturesWithPhotos[i].Pictures.ElementAt(j).Path">
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                        <!--/.Slides-->
+                                        <!--Controls-->
+                                        <a class="carousel-control-prev" href="#@idCarouselCityFeature" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#@idCarouselCityFeature" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                        <!--/.Controls-->
+                                    </div>
+                                </div>
+
+                                <div class="d-none d-sm-block col-3">
+                                    <div class="indicators-container position-relative">
+                                        <!--Indicators-->
+                                        <ol>
+                                            @for (var j = 0; j < cityFeaturesWithPhotos[i].Pictures.Count; j++)
+                                            {
+                                                <li data-target="#@idCarouselCityFeature" data-slide-to="@j">
+                                                    <img class="d-block" src="@cityFeaturesWithPhotos[i].Pictures.ElementAt(j).Path">
+                                                </li>
+                                            }
+                                        </ol>
+                                        <!--/.Indicators-->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 }
 
@@ -280,6 +311,8 @@
 
         </div>
 
+
+        @* DORMITORIES CARDS *@
         <div class="row info-block mt-5">
             <partial name="_BlockName" model='new _BlockNameViewModel() {
                     CurrentControllerName = ViewData["Title"].ToString(),
@@ -290,26 +323,30 @@
 
             @if (dormitories.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
             {
-                <h6>@localizer["EmptyCards"]</h6>
+                <div class="col-auto">
+                    <h6>@localizer["EmptyCards"]</h6>
+                </div>
             }
             else
             {
                 <div class="col-12">
-                    @for (var i = 0; i < dormitories.Count; i++) // List ordered by Name
+                    @for (var i = 0; i < dormitories.Count; i++)
                     {
+                        var idEdit = $"dormitory-edit-{i}";
+                        var idDelete = $"dormitory-delete-{i}";
 
                         <div class="w-100 box mt-4">
                             @if (User.IsInRole(ApplicationRoles.Administrators))
                             {
                                 <div class="card-btns-container">
-                                    <button class="open-popup btn-edit" rel="dormitory-edit-@i"></button>
-                                    <button class="open-popup btn-delete" rel="dormitory-delete-@i"></button>
+                                    <button class="open-popup btn-edit" rel="@idEdit"></button>
+                                    <button class="open-popup btn-delete" rel="@idDelete"></button>
                                 </div>
                             }
-                            <h4>@dormitories[i].DormitoryTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h4>
+                            <h4>@dormitories[i].DormitoryTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name</h4>
 
                             <p class="mt-4">
-                                @dormitories[i].DormitoryTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
+                                @dormitories[i].DormitoryTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Description
                             </p>
 
                             <div class="photos-container mt-4">
@@ -375,26 +412,23 @@
                         @*  Edit & Delete Dormitory by Admin  *@
                         @if (User.IsInRole(ApplicationRoles.Administrators))
                         {
-                            var idEdit = $"dormitory-edit-{i}";
-                            var idDelete = $"dormitory-delete-{i}";
-
                             <partial name="_PopupOpen" model='@idEdit' />
                             <form asp-action="EditDormitory" asp-route-id="@dormitories[i].Id" method="post" enctype="multipart/form-data">
+
                                 <h4>@localizer["EditAction"]</h4>
+
                                 @for (var j = 0; j < supportedCultures.Count; j++)
                                 {
                                     <h5>@supportedCultures[j].Name</h5>
 
-                                    <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                           placeholder="@localizer["InputName"]" autocomplete="off" required
+                                    <input required name="Name" type="text" placeholder="@localizer["InputName"]" autocomplete="off" class="entry-field"
                                            value="@dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name" />
 
-                                    <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="Описание общаги" autocomplete="off"
-                                              required>@dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+                                    <textarea required name="Description" type="text" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                              class="entry-field mt-3">@dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
 
+                                    <input required hidden type="text" name="Language" value="@supportedCultures[j].Name" />
                                     <hr>
-
-                                    <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
                                 }
 
                                 <div class="row">
@@ -402,8 +436,9 @@
                                     {
                                         <div class="col-6 mb-3">
                                             <div class="delete-photo">
-                                                <input class="custom-checkbox" type="checkbox" name="@("PicturesToDelete")" value="@dormitories[i].Pictures.ElementAt(j).Id" id="dormitory-@i-photo-@j">
-                                                <label for="dormitory-@i-photo-@j">Удалить?</label>
+                                                <input class="custom-checkbox" type="checkbox" name="PicturesToDelete"
+                                                       value="@dormitories[i].Pictures.ElementAt(j).Id" id="dormitory-@i-photo-@j">
+                                                <label for="dormitory-@i-photo-@j">@localizer["Remove"]</label>
                                                 <div>
                                                     <img src="@dormitories[i].Pictures.ElementAt(j).Path" />
                                                 </div>
@@ -412,8 +447,8 @@
                                     }
                                 </div>
 
-                                <label for="load-dormitory-@i" class="load-labal">Добавить изображения</label>
-                                <input type="file" class="load-input form-control" id="load-dormitory-@i" name="@("Pictures")" multiple="multiple" />
+                                <label for="load-dormitory-@i" class="load-labal">@localizer["SelectImages"]</label>
+                                <input multiple name="Pictures" id="load-dormitory-@i" type="file" class="load-input form-control" />
 
                                 <div class="mt-3 d-flex justify-content-end">
                                     <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
@@ -421,6 +456,7 @@
                                 </div>
                             </form>
                             <partial name="_PopupClose" />
+
 
                             <partial name="_PopupOpen" model='@idDelete' />
                             <form asp-action="DeleteDormitory" asp-route-id="@dormitories[i].Id" method="post" enctype="multipart/form-data">
@@ -430,8 +466,11 @@
                                 {
                                     <h5>@supportedCultures[j].Name</h5>
                                     <div>
-                                        @localizer["InputName"]: @dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
-                                        @localizer["InputDescription"]: @dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
+                                        @localizer["InputName"]:
+                                        @dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name
+                                        <br>
+                                        @localizer["InputDescription"]:
+                                        @dormitories[i].DormitoryTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
                                     </div>
                                     <hr>
                                 }
@@ -457,17 +496,20 @@
                         </div>
                         <partial name="_PopupOpen" model='$"add-hostel"' />
                         <form asp-action="CreateDormitory" method="post" enctype="multipart/form-data">
+
+                            <h4>@localizer["AddAction"]</h4>
+
                             @for (var i = 0; i < supportedCultures.Count; i++)
                             {
                                 <h5>@supportedCultures[i].Name</h5>
-                                <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
-                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
-                                <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                                <input class="entry-field" type="text" name="Name" placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                <textarea class="entry-field mt-3" type="text" name="Description" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
+                                <input required hidden name="Language" type="text" value="@supportedCultures[i].Name" />
                                 <hr>
                             }
 
-                            <label for="load-hostel-img" class="load-labal">Выберите изображения</label>
-                            <input type="file" class="load-input form-control" id="load-hostel-img" name="@("Pictures")" required multiple="multiple" />
+                            <label for="load-hostel-img" class="load-labal">@localizer["SelectImages"]</label>
+                            <input required multiple type="file" name="Pictures" class="load-input form-control" id="load-hostel-img" />
 
                             <div class="mt-3 d-flex justify-content-end">
                                 <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>

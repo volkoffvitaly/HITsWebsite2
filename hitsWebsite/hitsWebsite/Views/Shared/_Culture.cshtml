@@ -3,14 +3,19 @@
 @inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
 
 @{
-    var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();
-    var cultureList = localizationOptions.Value.SupportedUICultures.Where(x => x.Name != culture.RequestCulture.UICulture.Name).Select(x => new SelectListItem { Value = x.Name, Text = localizer.GetString(x.Name) }).ToList();
+    var requestedCulture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>().RequestCulture.UICulture.Name;
+
+    var cultureList = localizationOptions.Value.SupportedUICultures
+        .Where(x => x.Name != requestedCulture)
+        .Select(x => new SelectListItem { Value = x.Name, Text = localizer.GetString(x.Name) })
+        .ToList();
+
     var returnUrl = string.IsNullOrWhiteSpace(Context.Request.Path) ? "~/" : $"~{Context.Request.Path.Value}{Context.Request.QueryString}";
 }
 
 <form asp-controller="Home" asp-action="CultureManagement" asp-route-returnUrl="@returnUrl" method="post">
-    <select name="culture" asp-for="@culture.RequestCulture.UICulture.Name" asp-items="cultureList" onchange="this.form.submit()" class="nav-link dropdown-toggle"
-            data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" style="border: none; outline: none; background-color: transparent; text-align-last: end;">
-        <option value="" selected disabled hidden>@localizer[$"{culture.RequestCulture.UICulture.Name}"]</option>
+    <select name="culture" asp-for="@requestedCulture" asp-items="cultureList" onchange="this.form.submit()" class="nav-link dropdown-toggle" data-toggle="dropdown"
+            role="button" aria-haspopup="true" aria-expanded="false" style="border: none; outline: none; background-color: transparent; text-align-last: end;">
+        <option value="" selected disabled hidden>@localizer[$"{requestedCulture}"]</option>
     </select>
 </form>

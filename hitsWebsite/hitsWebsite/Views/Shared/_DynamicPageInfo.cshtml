@@ -9,12 +9,11 @@
     ViewData["Title"] = Model;
 
     // Cultures info
-    var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();  // Current culture request
+    var requestedCulture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>().RequestCulture.UICulture.Name;  // Current culture request
     var supportedCultures = localizationOptions.Value.SupportedUICultures;  // Supported cultures in app
 
     // Get required info about page
     var dynamicPage = await DataProviderService.GetDynamicPage(ViewData["Title"].ToString());
-    var dynamicPage_CurrentCulture = dynamicPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
 }
 
 <div class="popup-bg"></div>
@@ -24,41 +23,43 @@
     </div>
     <div class="col-lg-9 title-page">
         <span class="purple-highlight">&lt;title&gt;</span>
-        @*  Page info  *@
         <h1>
-            @dynamicPage_CurrentCulture.Name
-            @*  Edit page info  *@
+            @dynamicPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+
             @if (User.IsInRole(ApplicationRoles.Administrators))
             {
                 <input type="button" class="open-popup edit-block-name" rel="edit-page-info" />
             }
         </h1>
+
         @if (User.IsInRole(ApplicationRoles.Administrators))
         {
             <partial name="_PopupOpen" model='"edit-page-info"' />
-            <form asp-action="EditDynamicPageInfo" asp-controller="Home" asp-route-projectNameOfPage="@ViewData["Title"].ToString()" asp-route-currentControllerName="@ViewData["Title"].ToString()" method="post">
+            <form asp-action="EditDynamicPageInfo" asp-controller="Home" asp-route-projectNameOfPage="@ViewData["Title"].ToString()"
+                  asp-route-currentControllerName="@ViewData["Title"].ToString()" method="post">
+
                 <h4>@localizer["EditAction"]</h4>
+
                 @for (var i = 0; i < supportedCultures.Count; i++)
                 {
                     var dynamicPageTranslation = dynamicPage.DynamicPageTranslations.Where(x => x.Language == supportedCultures[i].Name).SingleOrDefault();
 
                     <h5>@supportedCultures[i].Name</h5>
 
-                    <input class="entry-field" type="text" name="@("Name[" + i + "]")"
-                           value="@dynamicPageTranslation.Name"
-                           placeholder="@localizer["InputName"]" autocomplete="off" required />
+                    <input class="entry-field" type="text" name="Name" value="@dynamicPageTranslation.Name" placeholder="@localizer["InputName"]" autocomplete="off" required />
 
-                    // textarea shouldn't has any extra spaces between openning and closing tags
-                    <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                    <textarea class="entry-field mt-3" type="text" name="Description" placeholder="@localizer["InputDescription"]" autocomplete="off"
                               required>@dynamicPageTranslation.Description</textarea>
 
-                    <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+                    <input type="hidden" name="Language" value="@supportedCultures[i].Name" required />
                     <hr>
                 }
+
                 <div class="mt-3 d-flex justify-content-end">
                     <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
                     <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
                 </div>
+
             </form>
             <partial name="_PopupClose" />
         }
@@ -66,64 +67,34 @@
         <div class="row mt-5 align-items-center">
             <div class="col-md-8">
                 <p>
-                    @dynamicPage_CurrentCulture.Description
+                    @dynamicPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Description
                 </p>
             </div>
+
+            @*  LEARN MORE  *@
             <div class="col-md-4 mt-4 mt-md-0">
-                @*  Learn more button *@
                 <button type="button" class="big-btn open-popup" rel="learn-more-popup">@localizer["LearnMore"]</button>
                 <div class="popup" id="learn-more-popup">
-                    @if (User.IsInRole(ApplicationRoles.Administrators))
-                    {
-                        <div class="card-btns-container">
-                            <button class="open-popup btn-edit" rel="learn-more-edit"></button>
-                        </div>
-                    }
-                    <div class="learn-more-content">
-                        <h3 class="w-100">Давай знакомиться!</h3>
-                        <p class="mt-4">
-                            Мы с удовольствием расскажем о нашей школе все, что вам интересно.
-                        </p>
-                        <input class="mt-4 d-block w-100" placeholder="Ваше имя">
-                        <input class="mt-4 d-block w-100" placeholder="Email">
 
-                        <div class="mt-4">
-                            <button class="tell-more">расскажите еще!</button>
-                            <span class="d-inline-block close-popup">Нет, спасибо</span>
-                        </div>
+                    <div class="learn-more-content">
+                        <h3 class="w-100">@localizer["AcquaintanceName"]</h3>
+                        <p class="mt-4">
+                            @localizer["AcquaintanceDescription"]
+                        </p>
+                        <form asp-controller="Home" asp-action="CreateRequest">
+                            <input required name="Name" type="text" placeholder="@localizer["YourName"]" class="mt-4 d-block w-100">
+                            <input required name="Email" type="email" id="emailAddress" placeholder="@localizer["YourEmail"]" class="mt-4 d-block w-100">
+
+                            <div class="mt-4">
+                                <button type="submit" class="tell-more">@localizer["ButtonTellMore"]</button>
+                                <span class="d-inline-block close-popup">@localizer["ButtonNoThanks"]</span>
+                            </div>
+                        </form>
                     </div>
                     <img src="/img/rita.png" alt="Alternate Text" />
 
                 </div>
 
-                @if (User.IsInRole(ApplicationRoles.Administrators))
-                {
-                    <partial name="_PopupOpen" model='"learn-more-edit"' />
-                    <form>
-                        <h4>@localizer["EditAction"]</h4>
-                        @for (var j = 0; j < supportedCultures.Count; j++)
-                        {
-                            <h5>@supportedCultures[j].Name</h5>
-
-                            <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                   placeholder="@localizer["InputName"]" autocomplete="off" required />
-
-                            // textarea shouldn't has any extra spaces between openning and closing tags
-                            <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
-                                      required></textarea>
-                            <hr>
-
-                            <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
-                        }
-
-
-                        <div class="mt-3 d-flex justify-content-end">
-                            <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                            <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
-                        </div>
-                    </form>
-                    <partial name="_PopupClose" />
-                }
             </div>
         </div>
     </div>

@@ -48,7 +48,7 @@ namespace hitsWebsite
                         new CultureInfo("en"),
                         new CultureInfo("ru"),
                         new CultureInfo("zh"),
-                        new CultureInfo("es"),
+                        //new CultureInfo("es"),
                     };
                     opt.DefaultRequestCulture = new RequestCulture("ru");
                     opt.SupportedCultures = supportedCultures;

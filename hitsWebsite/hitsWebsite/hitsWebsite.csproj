@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\Human - Copy.cs" />
     <Compile Remove="Models\HumanTranslation - Copy.cs" />
   </ItemGroup>
 

@@ -117,16 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddAction" xml:space="preserve">
+    <value>新增项目</value>
+  </data>
+  <data name="AllGraduates" xml:space="preserve">
+    <value>您可以结识我们老师的整个团队</value>
+  </data>
+  <data name="AllGraduatesLink" xml:space="preserve">
+    <value>这里</value>
+  </data>
+  <data name="AllTeachers" xml:space="preserve">
+    <value>您可以结识我们老师的整个团队</value>
+  </data>
+  <data name="AllTeachersLink" xml:space="preserve">
+    <value>这里</value>
+  </data>
   <data name="ButtonCancel" xml:space="preserve">
-    <value>Отменить</value>
+    <value>取消</value>
   </data>
   <data name="ButtonSave" xml:space="preserve">
-    <value>Подтвердить</value>
+    <value>保存</value>
+  </data>
+  <data name="DeleteAction" xml:space="preserve">
+    <value>该项目将被删除。继续？</value>
   </data>
   <data name="EditAction" xml:space="preserve">
-    <value>Редактирование элемента</value>
+    <value>编辑项目</value>
+  </data>
+  <data name="EmptyCards" xml:space="preserve">
+    <value>糟糕，这里是空的</value>
+  </data>
+  <data name="GeographyOfStudents" xml:space="preserve">
+    <value>学生地理</value>
+  </data>
+  <data name="Graduates" xml:space="preserve">
+    <value>应届毕业生</value>
+  </data>
+  <data name="InputDescription" xml:space="preserve">
+    <value>描述</value>
   </data>
   <data name="InputName" xml:space="preserve">
-    <value>Название</value>
+    <value>名称</value>
+  </data>
+  <data name="Students" xml:space="preserve">
+    <value>学生们</value>
+  </data>
+  <data name="Teachers" xml:space="preserve">
+    <value>教师</value>
   </data>
 </root>

@@ -47,6 +47,8 @@ namespace hitsWebsite.Data
 
         public DbSet<Picture> Pictures { get; set; }
 
+        public DbSet<Request> Requests { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

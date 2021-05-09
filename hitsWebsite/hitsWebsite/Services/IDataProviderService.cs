@@ -10,6 +10,7 @@ namespace hitsWebsite.Services
 {
 	public interface IDataProviderService
 	{
+
 		// DB
 
 		#region *RU* DynamicPage
@@ -53,7 +54,7 @@ namespace hitsWebsite.Services
 
 		#region CRUD City Features
 		public Task<List<CityFeature>> GetCityFeatures();
-		public Task<CityFeature> GetCityFeatureWithPhotos();
+		public Task<List<CityFeature>> GetCityFeaturesWithPhotos();
 		public Task CreateCityFeature(CityFeatureEditModel model);
 		public Task EditCityFeature(String id, CityFeatureEditModel model);
 		public Task DeleteCityFeature(String id);
@@ -67,10 +68,12 @@ namespace hitsWebsite.Services
 		public Task DeleteDormitory(String id);
 		#endregion
 
+
 		#region CRU* Condition
 		public Task<Condition> GetCondition();
 		public Task<Condition> EditCondition(ConditionsEditModel model);
 		#endregion
+
 
 		#region CRU* Document
 		public Task<Document> GetDocument();
@@ -83,11 +86,18 @@ namespace hitsWebsite.Services
 		public Task<Achievement> EditAchievement(AchievementsEditModel model);
 		#endregion
 
+
+		#region C*** Request
+		public Task CreateRequest(RequestCreateModel model);
+		#endregion
+
+
+
 		// JSON
 
 		#region *RU* Block
 		public Task<Dictionary<String, String>> GetBlockName(String projectBlockName = default);
-		public void ChangeBlockName(String projectBlockName, MainPageBlockEditModel model);
+		public Task ChangeBlockName(String projectBlockName, MainPageBlockEditModel model);
 		#endregion
 	}
 }

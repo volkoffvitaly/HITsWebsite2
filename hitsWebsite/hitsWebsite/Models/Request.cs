@@ -7,13 +7,15 @@ using Microsoft.AspNetCore.Identity;
 
 namespace hitsWebsite.Models
 {
-    public class Human
+    public class Request
     {
         public Guid Id { get; set; }
-        public String Post { get; set; }
-        public ICollection<HumanTranslation> HumanTranslations { get; set; }
 
-        public Picture Picture { get; set; }
-        public Guid PictureId { get; set; }
+        [Required]
+        public String Name { get; set; }
+
+        [Required]
+        [EmailAddress]
+        public String Email { get; set; }
     }
 }

@@ -117,11 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AcquaintanceDescription" xml:space="preserve">
+    <value>We will be happy to tell you everything that interests you about our school!</value>
+  </data>
+  <data name="AcquaintanceName" xml:space="preserve">
+    <value>Let's get acquainted!</value>
+  </data>
   <data name="ButtonCancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="ButtonNoThanks" xml:space="preserve">
+    <value>No, thanks...</value>
+  </data>
   <data name="ButtonSave" xml:space="preserve">
     <value>Confirm</value>
+  </data>
+  <data name="ButtonTellMore" xml:space="preserve">
+    <value>Tell me more!</value>
   </data>
   <data name="EditAction" xml:space="preserve">
     <value>Editing the page header</value>
@@ -134,5 +146,11 @@
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Learn more</value>
+  </data>
+  <data name="YourEmail" xml:space="preserve">
+    <value>Your e-mail</value>
+  </data>
+  <data name="YourName" xml:space="preserve">
+    <value>Your name</value>
   </data>
 </root>

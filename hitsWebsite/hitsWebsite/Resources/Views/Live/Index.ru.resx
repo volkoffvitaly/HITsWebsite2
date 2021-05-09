@@ -117,16 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddAction" xml:space="preserve">
+    <value>Добавление нового элемента</value>
+  </data>
   <data name="ButtonCancel" xml:space="preserve">
     <value>Отменить</value>
   </data>
   <data name="ButtonSave" xml:space="preserve">
     <value>Подтвердить</value>
   </data>
+  <data name="DeleteAction" xml:space="preserve">
+    <value>Элемент будет удален. Продолжить?</value>
+  </data>
   <data name="EditAction" xml:space="preserve">
     <value>Редактирование элемента</value>
   </data>
+  <data name="EmptyCards" xml:space="preserve">
+    <value>Упс, здесь пока пусто...</value>
+  </data>
+  <data name="InputDescription" xml:space="preserve">
+    <value>Описание</value>
+  </data>
   <data name="InputName" xml:space="preserve">
     <value>Название</value>
+  </data>
+  <data name="RemovePicture" xml:space="preserve">
+    <value>Удалить?</value>
+  </data>
+  <data name="SelectImages" xml:space="preserve">
+    <value>Выберите изображения</value>
   </data>
 </root>

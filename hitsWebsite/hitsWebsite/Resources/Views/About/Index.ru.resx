@@ -117,16 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AddAction" xml:space="preserve">
+    <value>Добавление нового элемента</value>
+  </data>
+  <data name="AllGraduates" xml:space="preserve">
+    <value>Со всей командой наших выпускников вы можете ознакомиться</value>
+  </data>
+  <data name="AllGraduatesLink" xml:space="preserve">
+    <value>здесь</value>
+  </data>
+  <data name="AllTeachers" xml:space="preserve">
+    <value>Со всей командой наших преподавателей вы можете ознакомиться</value>
+  </data>
+  <data name="AllTeachersLink" xml:space="preserve">
+    <value>здесь</value>
+  </data>
   <data name="ButtonCancel" xml:space="preserve">
     <value>Отменить</value>
   </data>
   <data name="ButtonSave" xml:space="preserve">
     <value>Подтвердить</value>
   </data>
+  <data name="DeleteAction" xml:space="preserve">
+    <value>Элемент будет удален. Продолжить?</value>
+  </data>
   <data name="EditAction" xml:space="preserve">
     <value>Редактирование элемента</value>
   </data>
+  <data name="EmptyCards" xml:space="preserve">
+    <value>Упс, здесь пока пусто...</value>
+  </data>
+  <data name="GeographyOfStudents" xml:space="preserve">
+    <value>География студентов</value>
+  </data>
+  <data name="Graduates" xml:space="preserve">
+    <value>Выпускники</value>
+  </data>
+  <data name="InputDescription" xml:space="preserve">
+    <value>Описание</value>
+  </data>
   <data name="InputName" xml:space="preserve">
     <value>Название</value>
+  </data>
+  <data name="Students" xml:space="preserve">
+    <value>Студенты</value>
+  </data>
+  <data name="Teachers" xml:space="preserve">
+    <value>Преподаватели</value>
   </data>
 </root>

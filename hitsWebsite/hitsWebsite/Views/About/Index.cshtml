@@ -5,19 +5,19 @@
 @inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
 
 @{
-    // projectNameOfPage
+    // projectNameOfPage/name of current controller
     ViewData["Title"] = "About";
 
     // Cultures info
-    var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();  // Current culture request
+    var requestedCulture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>().RequestCulture.UICulture.Name;  // Current culture request
     var supportedCultures = localizationOptions.Value.SupportedUICultures;  // Supported cultures in app
 
-    // projectNameOfBlocks
+    // projectNamesOfBlocks
     const string FeaturesName = "FeaturesBlock";
     const string OurPeopleName = "OurPeopleBlock";
     const string AchievementsName = "AchievementsBlock";
 
-    // DB entities
+    // DB entities to render page for GET-request
     var features = await DataProviderService.GetFeatures();
 
     var teachers = await DataProviderService.GetTeachers();
@@ -26,15 +26,17 @@
     var achievement = await DataProviderService.GetAchievement();
 }
 
+
 <partial name="_DynamicPageInfo" model="@ViewData["Title"]" />
+
 
 <div class="row pt-4">
 
-    @*  Left Bar  *@
     <partial name="_LeftNavigationBar" />
 
     <div id="blocks-container" class="col col-lg-9">
 
+        @*  FEATURES  *@
         <div class="row info-block">
             <partial name="_BlockName" model='new _BlockNameViewModel() {
                     CurrentControllerName = ViewData["Title"].ToString(),
@@ -47,47 +49,50 @@
                     <h6>@localizer["EmptyCards"]</h6>
                 </div>
             }
+
             else
             {
-                @for (int i = 0; i < features.Count(); i++) // List ordered by Name
+                @for (int i = 0; i < features.Count(); i++)
                 {
+                    var idEdit = $"feature-edit-{i}";
+                    var idDelete = $"feature-delete-{i}";
+
                     <div class="col-12 mt-3">
                         <div class="box">
                             @if (User.IsInRole(ApplicationRoles.Administrators))
                             {
                                 <div class="card-btns-container">
-                                    <button class="open-popup btn-edit" rel="feature-edit-@i"></button>
-                                    <button class="open-popup btn-delete" rel="feature-delete-@i"></button>
+                                    <button class="open-popup btn-edit" rel="@idEdit"></button>
+                                    <button class="open-popup btn-delete" rel="@idDelete"></button>
                                 </div>
                             }
-                            <h4>@features[i].FeatureTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Name</h4>
+                            <h4>@features[i].FeatureTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name</h4>
                             <p class="pt-3">
-                                @features[i].FeatureTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description
+                                @features[i].FeatureTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Description
                             </p>
                         </div>
                     </div>
+
+                    //  EDIT & DELETE FEATURE
                     @if (User.IsInRole(ApplicationRoles.Administrators))
                     {
-                        var idEdit = $"feature-edit-{i}";
-                        var idDelete = $"feature-delete-{i}";
-
                         <partial name="_PopupOpen" model="@idEdit" />
                         <form asp-action="EditFeature" asp-route-id="@features[i].Id">
+
                             <h4>@localizer["EditAction"]</h4>
+
                             @for (var j = 0; j < supportedCultures.Count; j++)
                             {
                                 <h5>@supportedCultures[j].Name</h5>
 
-                                <input class="entry-field" type="text" name="@("Name[" + j + "]")"
-                                       value="@features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name"
-                                       placeholder="@localizer["InputName"]" autocomplete="off" required />
+                                <input required name="Name" type="text" placeholder="@localizer["InputName"]" autocomplete="off" class="entry-field"
+                                       value="@features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name" />
 
-                                // textarea shouldn't has any extra spaces between openning and closing tags
-                                <textarea class="entry-field mt-3" type="text" name="@("Description[" + j + "]")" placeholder="@localizer["InputDescription"]" autocomplete="off"
-                                          required>@features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+                                <textarea required name="Description" type="text" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                          class="entry-field mt-3">@features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+
+                                <input required hidden name="Language" type="text" value="@supportedCultures[j].Name" />
                                 <hr>
-
-                                <input type="hidden" name="@("Language[" + j + "]")" value="@supportedCultures[j].Name" required />
                             }
                             <div class="mt-3 d-flex justify-content-end">
                                 <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
@@ -96,6 +101,7 @@
                         </form>
                         <partial name="_PopupClose" />
 
+
                         <partial name="_PopupOpen" model="@idDelete" />
                         <form asp-action="DeleteFeature" asp-route-id="@features[i].Id">
                             <h4>@localizer["DeleteAction"]</h4>
@@ -103,12 +109,18 @@
                             @for (var j = 0; j < supportedCultures.Count; j++)
                             {
                                 <h5>@supportedCultures[j].Name</h5>
+
                                 <div>
-                                    @localizer["InputName"]: @features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name <br>
-                                    @localizer["InputDescription"]: @features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
+                                    @localizer["InputName"]:
+                                    @features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name
+                                    <br>
+                                    @localizer["InputDescription"]:
+                                    @features[i].FeatureTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description
                                 </div>
+
                                 <hr>
                             }
+
                             <div class="mt-3 d-flex justify-content-end">
                                 <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
                                 <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
@@ -119,22 +131,28 @@
                 }
             }
 
+            @*  CREATE FEATURE  *@
             @if (User.IsInRole(ApplicationRoles.Administrators))
             {
+                var idCreate = "add-feature";
+
                 <div class="col-12 mt-4 card-container">
                     <div class="card box adding-card">
-                        <input type="button" class="open-popup add-btn" rel="add-feature" />
+                        <input type="button" class="open-popup add-btn" rel="@idCreate" />
                     </div>
                 </div>
-                <partial name="_PopupOpen" model='"add-feature"' />
+
+                <partial name="_PopupOpen" model="idCreate" />
                 <form asp-action="CreateFeature" method="post">
                     @for (var i = 0; i < supportedCultures.Count; i++)
                     {
                         <h5>@supportedCultures[i].Name</h5>
-                        <input class="entry-field" type="text" name="@("Name[" + i + "]")" value="" placeholder="@localizer["InputName"]" autocomplete="off" required />
-                        <textarea class="entry-field mt-3" type="text" name="@("Description[" + i + "]")" value="" placeholder="@localizer["InputDescription"]" autocomplete="off" required></textarea>
-                        <input type="hidden" name="@("Language[" + i + "]")" value="@supportedCultures[i].Name" required />
+
+                        <input required name="Name" type="text" placeholder="@localizer["InputName"]" autocomplete="off" class="entry-field" />
+                        <textarea required name="Description" type="text" placeholder="@localizer["InputDescription"]" autocomplete="off" class="entry-field mt-3"></textarea>
+                        <input required hidden name="Language" type="text" value="@supportedCultures[i].Name" />
                     }
+
                     <div class="mt-3 d-flex justify-content-end">
                         <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
                         <button type="submit" class="btn btn-primary">@localizer["ButtonSave"]</button>
@@ -145,6 +163,8 @@
 
         </div>
 
+
+        @*  OUR PEOPLE  *@
         <div class="row info-block mt-5">
             <partial name="_BlockName" model='new _BlockNameViewModel() {
                     CurrentControllerName = ViewData["Title"].ToString(),
@@ -152,19 +172,14 @@
                 }' />
 
             <div class="col-12 mt-3" id="our-people">
-
-                <input type="radio" name="our-people" id="students-btn" checked><label for="students-btn">Студенты</label>
-
-                <input type="radio" name="our-people" id="teachers-btn"><label for="teachers-btn">Преподаватели</label>
-
-                <input type="radio" name="our-people" id="graduates-btn"><label for="graduates-btn">Выпускники</label>
-
+                <input type="radio" name="our-people" id="students-btn" checked><label for="students-btn">@localizer["Students"]</label>
+                <input type="radio" name="our-people" id="teachers-btn"><label for="teachers-btn">@localizer["Teachers"]</label>
+                <input type="radio" name="our-people" id="graduates-btn"><label for="graduates-btn">@localizer["Graduates"]</label>
                 <div class="clearfix"></div>
 
                 <div class="box mt-3">
-
                     <div id="students-geographic">
-                        <h4 class="mt-2">География студентов</h4>
+                        <h4 class="mt-2">@localizer["GeographyOfStudents"]</h4>
                         <img class="mt-4" src="~/svg/map-students.svg">
                     </div>
 
@@ -172,8 +187,8 @@
                         <partial name="_HumanList" model='new _HumanListViewModel() { Humans = teachers, Post = "teacher" }'>
 
                             <p class="mt-4">
-                                Со всей командой наших преподавателей вы можете ознакомиться
-                                <a href="http://hits.tsu.ru/ru/teachers">здесь</a>
+                                @localizer["AllTeachers"]
+                                <a href="http://hits.tsu.ru/ru/teachers">@localizer["AllTeachersLink"]</a>
                             </p>
                     </div>
 
@@ -181,8 +196,8 @@
                         <partial name="_HumanList" model='new _HumanListViewModel() { Humans = graduates, Post = "graduate" }'>
 
                             <p class="mt-4">
-                                Со всей командой наших преподавателей вы можете ознакомиться
-                                <a href="http://hits.tsu.ru/ru/teachers">здесь</a>
+                                @localizer["AllGraduates"]
+                                <a href="http://hits.tsu.ru/ru/teachers">@localizer["AllGraduatesLink"]</a>
                             </p>
                     </div>
 
@@ -191,6 +206,8 @@
 
         </div>
 
+
+        @*  ACHIEVEMENTS  *@
         <div class="row info-block mt-5" id="achievements">
 
             <partial name="_BlockName" model='new _BlockNameViewModel() {
@@ -200,26 +217,30 @@
 
             <div class="col-12 mt-3">
                 <div class="box">
+                    @* EDIT ACHIEVEMENTS *@
                     @if (User.IsInRole(ApplicationRoles.Administrators))
                     {
+                        var idEdit = "achievements-edit";
                         <div class="card-btns-container">
-                            <button class="open-popup btn-edit" rel="achievements-edit"></button>
+                            <button class="open-popup btn-edit" rel="@idEdit"></button>
                         </div>
 
-                        <partial name="_PopupOpen" model='"achievements-edit"' />
+                        <partial name="_PopupOpen" model="idEdit" />
                         <form asp-action="EditAchievements" method="post">
+
                             <h4>@localizer["EditAction"]</h4>
+
                             @for (var j = 0; j < supportedCultures.Count; j++)
                             {
                                 <script src="~/lib/ckeditor/ckeditor.js"></script>
+
                                 <h5>@supportedCultures[j].Name</h5>
 
-                                // textarea shouldn't has any extra spaces between openning and closing tags
-                                <textarea class="entry-field mt-3" type="text" name="Description" placeholder="@localizer["InputDescription"]" autocomplete="off"
-                                          id="achievements-@j" required>@Html.Raw(achievement.AchievementTranslations.Where(x=> x.Language == supportedCultures[j].Name).SingleOrDefault().Description)</textarea>
-                                <hr>
+                                <textarea required name="Description" id="achievements-@j" type="text" placeholder="@localizer["InputDescription"]" autocomplete="off"
+                                          class="entry-field mt-3">@Html.Raw(achievement.AchievementTranslations.Where(x=> x.Language == supportedCultures[j].Name).SingleOrDefault().Description)</textarea>
 
-                                <input type="hidden" name="Language" value="@supportedCultures[j].Name" required />
+                                <input required hidden name="Language" type="text" value="@supportedCultures[j].Name" />
+                                <hr>
 
                                 <script>
                                      document.addEventListener("DOMContentLoaded", function (event) {
@@ -227,6 +248,7 @@
                                      });
                                 </script>
                             }
+
                             <div class="mt-3 d-flex justify-content-end">
                                 <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
                                 <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
@@ -235,15 +257,14 @@
                         <partial name="_PopupClose" />
                     }
 
+                    @* RETRIEVE ACHIEVEMENTS *@
                     <div>
-                        @Html.Raw(achievement.AchievementTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault().Description)
+                        @Html.Raw(achievement.AchievementTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Description)
                     </div>
-
                 </div>
             </div>
 
         </div>
-
 
     </div>
 </div>

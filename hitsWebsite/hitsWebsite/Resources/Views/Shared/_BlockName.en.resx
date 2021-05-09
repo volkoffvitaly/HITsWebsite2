@@ -123,4 +123,10 @@
   <data name="ButtonSave" xml:space="preserve">
     <value>Confirm</value>
   </data>
+  <data name="EditAction" xml:space="preserve">
+    <value>Editing an item</value>
+  </data>
+  <data name="InputName" xml:space="preserve">
+    <value>Name</value>
+  </data>
 </root>

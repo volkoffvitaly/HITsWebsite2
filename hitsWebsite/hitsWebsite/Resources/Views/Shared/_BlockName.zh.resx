@@ -123,4 +123,10 @@
   <data name="ButtonSave" xml:space="preserve">
     <value>保存</value>
   </data>
+  <data name="EditAction" xml:space="preserve">
+    <value>编辑项目</value>
+  </data>
+  <data name="InputName" xml:space="preserve">
+    <value>名称</value>
+  </data>
 </root>

@@ -4,17 +4,13 @@
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
 @inject Microsoft.Extensions.Options.IOptions<Microsoft.AspNetCore.Builder.RequestLocalizationOptions> localizationOptions
 
-@{var culture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>();
+@{
+    var requestedCulture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>().RequestCulture.UICulture.Name;
 
     var professionPage = await DataProviderService.GetDynamicPage("Professions");
     var admissionPage = await DataProviderService.GetDynamicPage("Admission");
     var livePage = await DataProviderService.GetDynamicPage("Live");
     var aboutPage = await DataProviderService.GetDynamicPage("About");
-
-    var dynamicPageProfession_CurrentCulture = professionPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
-    var dynamicPageAdmission_CurrentCulture = admissionPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
-    var dynamicPageLive_CurrentCulture = livePage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
-    var dynamicPageAbout_CurrentCulture = aboutPage.DynamicPageTranslations.Where(x => x.Language == culture.RequestCulture.UICulture.Name).SingleOrDefault();
 }
 
 <!DOCTYPE html>
@@ -69,16 +65,24 @@
                     <div class="w-100">
                         <ul class="navbar-nav d-flex align-items-sm-center">
                             <li class="nav-item active header-left-margin text-nowrap mr-xl-4 mr-lg-3">
-                                <a class="nav-link" asp-controller="Professions" asp-action="Index">@dynamicPageProfession_CurrentCulture.Name</a>
+                                <a class="nav-link" asp-controller="Professions" asp-action="Index">
+                                    @professionPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+                                </a>
                             </li>
                             <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
-                                <a class="nav-link" asp-controller="Admission" asp-action="Index">@dynamicPageAdmission_CurrentCulture.Name</a>
+                                <a class="nav-link" asp-controller="Admission" asp-action="Index">
+                                    @admissionPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+                                </a>
                             </li>
                             <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
-                                <a class="nav-link" asp-controller="Live" asp-action="Index">@dynamicPageLive_CurrentCulture.Name</a>
+                                <a class="nav-link" asp-controller="Live" asp-action="Index">
+                                    @livePage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+                                </a>
                             </li>
                             <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
-                                <a class="nav-link" asp-controller="About" asp-action="Index">@dynamicPageAbout_CurrentCulture.Name</a>
+                                <a class="nav-link" asp-controller="About" asp-action="Index">
+                                    @aboutPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+                                </a>
                             </li>
                             <li class="nav-item dropdown ml-lg-auto">
                                 <partial name="_Culture" model="@new LanguageEditModel()">
@@ -134,7 +138,7 @@
                                 <partial name="_PopupOpen" model='"footer-edit"' />
                                 <form asp-action="EditDynamicPageInfo" asp-controller="Home" asp-route-projectNameOfPage="@ViewData["Title"].ToString()" asp-route-currentControllerName="@ViewData["Title"].ToString()" method="post">
                                     <h4>@localizer["EditAction"]</h4>
-                                    
+
                                     <div class="mt-3 d-flex justify-content-end">
                                         <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
                                         <button type="submit" class="btn btn-outline-primary">@localizer["ButtonSave"]</button>
@@ -155,6 +159,7 @@
                 </div>
             </footer>
         }
+
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

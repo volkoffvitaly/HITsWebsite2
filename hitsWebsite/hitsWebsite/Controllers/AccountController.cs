@@ -36,7 +36,6 @@ namespace hitsWebsite.Controllers
         {
             // Clear the existing external cookie to ensure a clean login process
             await this.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
-
             ViewBag.DisplayLinkStatus = "hidden";
             return this.View();
         }

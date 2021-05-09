@@ -51,14 +51,43 @@ namespace hitsWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult EditBlockName(String projectBlockName, String currentControllerName, MainPageBlockEditModel model)
+        public async Task<IActionResult> EditBlockName(String projectBlockName, String currentControllerName, MainPageBlockEditModel model)
         {
             if (ModelState.IsValid && !String.IsNullOrEmpty(projectBlockName))
             {
-                _dataProviderService.ChangeBlockName(projectBlockName, model);
+                await _dataProviderService.ChangeBlockName(projectBlockName, model);
             }
 
             return RedirectToAction("Index", $"{currentControllerName}");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateRequest(RequestCreateModel model, String returnUrl = null)
+        {
+            if (ModelState.IsValid)
+            {
+                await _dataProviderService.CreateRequest(model);
+            }
+
+            return RedirectToLocal(returnUrl);
+        }
+
+        private IActionResult RedirectToLocal(String returnUrl)
+        {
+            if (returnUrl == null)
+            {
+                return this.RedirectToAction("Index", "Professions");
+            }
+
+            if (this.Url.IsLocalUrl(returnUrl))
+            {
+                return this.Redirect(returnUrl);
+            }
+            else
+            {
+                return this.RedirectToAction("Index", "Professions");
+            }
         }
     }
 }
