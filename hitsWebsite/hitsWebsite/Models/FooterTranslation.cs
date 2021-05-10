@@ -7,13 +7,17 @@ using Microsoft.AspNetCore.Identity;
 
 namespace hitsWebsite.Models
 {
-    public class Human
+    public class FooterTranslation
     {
         public Guid Id { get; set; }
-        public String Post { get; set; }
-        public ICollection<HumanTranslation> HumanTranslations { get; set; }
 
-        public Picture Picture { get; set; }
-        public Guid? PictureId { get; set; }
+        [Required]
+        public String Language { get; set; } 
+        [Required]
+        public String Description { get; set; }
+
+
+        public Footer Footer { get; set; }
+        public Guid FooterId { get; set; }
     }
 }

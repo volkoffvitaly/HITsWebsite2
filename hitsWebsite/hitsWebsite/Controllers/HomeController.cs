@@ -39,54 +39,62 @@ namespace hitsWebsite.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditDynamicPageInfo(String projectNameOfPage, String currentControllerName, DynamicPageEditModel model)
+        public async Task<IActionResult> EditDynamicPageInfo(String projectNameOfPage, DynamicPageEditModel model, String currentControllerName = null)
         {
             if (ModelState.IsValid && !String.IsNullOrEmpty(projectNameOfPage))
             {
                 await _dataProviderService.ChangeDynamicPageInfo(projectNameOfPage, model);
             }
 
-            return RedirectToAction("Index", $"{currentControllerName}");
+            return RedirectToLocal(currentControllerName);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditBlockName(String projectBlockName, String currentControllerName, MainPageBlockEditModel model)
+        public async Task<IActionResult> EditBlockName(String projectBlockName, MainPageBlockEditModel model, String currentControllerName = null)
         {
             if (ModelState.IsValid && !String.IsNullOrEmpty(projectBlockName))
             {
                 await _dataProviderService.ChangeBlockName(projectBlockName, model);
             }
 
-            return RedirectToAction("Index", $"{currentControllerName}");
+            return RedirectToLocal(currentControllerName);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateRequest(RequestCreateModel model, String returnUrl = null)
+        [AllowAnonymous]
+        public async Task<IActionResult> CreateRequest(RequestCreateModel model, String currentControllerName = null)
         {
             if (ModelState.IsValid)
             {
                 await _dataProviderService.CreateRequest(model);
             }
 
-            return RedirectToLocal(returnUrl);
+            return RedirectToLocal(currentControllerName);
         }
 
-        private IActionResult RedirectToLocal(String returnUrl)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditFooter(FooterEditModel model, String currentControllerName = null)
         {
-            if (returnUrl == null)
+            if (ModelState.IsValid)
             {
-                return this.RedirectToAction("Index", "Professions");
+                await _dataProviderService.EditFooter(model);
             }
 
-            if (this.Url.IsLocalUrl(returnUrl))
+            return RedirectToLocal(currentControllerName);
+        }
+
+        private IActionResult RedirectToLocal(String controllerName)
+        {
+            if (controllerName == null)
             {
-                return this.Redirect(returnUrl);
+                return this.RedirectToAction("Index", "Professions");
             }
             else
             {
-                return this.RedirectToAction("Index", "Professions");
+                return this.RedirectToAction("Index", $"{controllerName}");
             }
         }
     }

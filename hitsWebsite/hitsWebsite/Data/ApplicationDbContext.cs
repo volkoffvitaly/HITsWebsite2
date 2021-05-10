@@ -45,6 +45,9 @@ namespace hitsWebsite.Data
         public DbSet<Achievement> Achievements { get; set; }
         public DbSet<AchievementTranslation> AchievementTranslations { get; set; }
 
+        public DbSet<Footer> Footers { get; set; }
+        public DbSet<FooterTranslation> FooterTranslations { get; set; }
+
         public DbSet<Picture> Pictures { get; set; }
 
         public DbSet<Request> Requests { get; set; }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using hitsWebsite.Data;
 
 namespace hitsWebsite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210510114146_FooterWasModeled")]
+    partial class FooterWasModeled
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,6 +215,9 @@ namespace hitsWebsite.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("FooterId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Language")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -220,6 +225,8 @@ namespace hitsWebsite.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AchievementId");
+
+                    b.HasIndex("FooterId");
 
                     b.ToTable("AchievementTranslations");
                 });
@@ -756,6 +763,10 @@ namespace hitsWebsite.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("hitsWebsite.Models.Footer", null)
+                        .WithMany("AchievementTranslations")
+                        .HasForeignKey("FooterId");
+
                     b.Navigation("Achievement");
                 });
 
@@ -828,7 +839,7 @@ namespace hitsWebsite.Data.Migrations
             modelBuilder.Entity("hitsWebsite.Models.FooterTranslation", b =>
                 {
                     b.HasOne("hitsWebsite.Models.Footer", "Footer")
-                        .WithMany("FooterTranslations")
+                        .WithMany()
                         .HasForeignKey("FooterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -924,7 +935,7 @@ namespace hitsWebsite.Data.Migrations
 
             modelBuilder.Entity("hitsWebsite.Models.Footer", b =>
                 {
-                    b.Navigation("FooterTranslations");
+                    b.Navigation("AchievementTranslations");
                 });
 
             modelBuilder.Entity("hitsWebsite.Models.Human", b =>

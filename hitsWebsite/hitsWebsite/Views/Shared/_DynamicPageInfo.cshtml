@@ -81,7 +81,7 @@
                         <p class="mt-4">
                             @localizer["AcquaintanceDescription"]
                         </p>
-                        <form asp-controller="Home" asp-action="CreateRequest">
+                        <form asp-controller="Home" asp-action="CreateRequest" asp-route-currentControllerName="@ViewData["Title"].ToString()">
                             <input required name="Name" type="text" placeholder="@localizer["YourName"]" class="mt-4 d-block w-100">
                             <input required name="Email" type="email" id="emailAddress" placeholder="@localizer["YourEmail"]" class="mt-4 d-block w-100">
 

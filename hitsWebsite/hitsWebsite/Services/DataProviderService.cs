@@ -26,6 +26,8 @@ namespace hitsWebsite.Services
 {
     public class DataProviderService : IDataProviderService
     {
+        private static readonly HashSet<String> _allowedExtensions = new HashSet<String> { ".jpg", ".jpeg", ".png" };
+
         private readonly ApplicationDbContext _context;
         private readonly IList<CultureInfo> _cultures;
         private readonly IWebHostEnvironment _hostingEnvironment;
@@ -522,8 +524,17 @@ namespace hitsWebsite.Services
                 });
             }
 
-            human.Picture = await createPicture(model.Picture, "img/teachers");
-            human.PictureId = human.Picture.Id;
+            if (model.Picture != null)
+            {
+                var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(model.Picture.ContentDisposition).FileName.Value.Trim('"'));
+                var fileExt = Path.GetExtension(fileName);
+
+                if (_allowedExtensions.Contains(fileExt))
+                {
+                    human.Picture = await createPicture(model.Picture, "img/humans", fileExt);
+                    human.PictureId = human.Picture.Id;
+                }
+            }
 
             await _context.Humans.AddAsync(human);
             await _context.SaveChangesAsync();
@@ -541,10 +552,20 @@ namespace hitsWebsite.Services
 
             if (model.Picture != null)
             {
-                var oldPicture = human.Picture; // Track to delete it after changing, cause human.picture cannot be null in db
-                human.Picture = await createPicture(model.Picture, "img/teachers"); // getting new picture from model
-                await deletePictureAsync(oldPicture.Id.ToString(), "img/teachers");
-                _context.Pictures.Remove(oldPicture); // Deleting tracked old picture
+                var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(model.Picture.ContentDisposition).FileName.Value.Trim('"'));
+                var fileExt = Path.GetExtension(fileName);
+
+                if (_allowedExtensions.Contains(fileExt))
+                {
+                    var oldPicture = human.Picture; // Track to delete it after changing, cause human.picture cannot be null in db
+                    human.Picture = await createPicture(model.Picture, "img/humans", fileExt); // getting new picture from model
+
+                    if (oldPicture != null)
+                    {
+                        await deletePictureAsync(oldPicture.Id.ToString(), "img/humans");
+                        _context.Pictures.Remove(oldPicture); // Deleting tracked old picture
+                    }
+                }
             }
 
             human.HumanTranslations.Clear();
@@ -566,7 +587,11 @@ namespace hitsWebsite.Services
         {
             var human = await _context.Humans.Where(x => x.Id.ToString() == id).Include(x => x.Picture).SingleOrDefaultAsync();
             _context.Humans.Remove(human);
-            await deletePictureAsync(human.Picture.Id.ToString(), "img/teachers");
+
+            if (human.Picture != null)
+            {
+                await deletePictureAsync(human.Picture.Id.ToString(), "img/humans");
+            }
             await _context.SaveChangesAsync();
         }
 
@@ -574,16 +599,13 @@ namespace hitsWebsite.Services
 
 
         #region C**D Pictures
-        private async Task<Picture> createPicture(IFormFile modelPicture, String localPath)
+        private async Task<Picture> createPicture(IFormFile modelPicture, String localPath, String fileExt)
         {
             Picture newPicture = new Picture()
             {
                 Id = Guid.NewGuid(),
                 Created = DateTime.UtcNow
             };
-
-            var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(modelPicture.ContentDisposition).FileName.Value.Trim('"'));
-            var fileExt = Path.GetExtension(fileName);
 
             var attachmentPath = Path.Combine(_hostingEnvironment.WebRootPath, localPath, newPicture.Id.ToString("N") + fileExt);
             newPicture.Path = $"/{localPath}/{newPicture.Id:N}{fileExt}";
@@ -666,9 +688,16 @@ namespace hitsWebsite.Services
                 cityFeature.Pictures = new List<Picture>();
                 foreach (var pictureToAdd in model.Pictures)
                 {
-                    var pic = await createPicture(pictureToAdd, "img/city_features");
-                    pic.CityFeatureId = cityFeature.Id;
-                    cityFeature.Pictures.Add(pic);
+                    var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(pictureToAdd.ContentDisposition).FileName.Value.Trim('"'));
+                    var fileExt = Path.GetExtension(fileName);
+
+                    if (_allowedExtensions.Contains(fileExt))
+                    {
+
+                        var pic = await createPicture(pictureToAdd, "img/city_features", fileExt);
+                        pic.CityFeatureId = cityFeature.Id;
+                        cityFeature.Pictures.Add(pic);
+                    }
                 }
             }
 
@@ -708,9 +737,15 @@ namespace hitsWebsite.Services
             {
                 foreach (var pictureToAdd in model.Pictures)
                 {
-                    var pic = await createPicture(pictureToAdd, "img/city_features");
-                    pic.CityFeatureId = cityFeature.Id;
-                    cityFeature.Pictures.Add(pic);
+                    var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(pictureToAdd.ContentDisposition).FileName.Value.Trim('"'));
+                    var fileExt = Path.GetExtension(fileName);
+
+                    if (_allowedExtensions.Contains(fileExt))
+                    {
+                        var pic = await createPicture(pictureToAdd, "img/city_features", fileExt);
+                        pic.CityFeatureId = cityFeature.Id;
+                        cityFeature.Pictures.Add(pic);
+                    }
                 }
             }
 
@@ -733,8 +768,14 @@ namespace hitsWebsite.Services
 
         public async Task DeleteCityFeature(String id)
         {
-            var cityFeature = await _context.CityFeatures.Where(x => x.Id.ToString() == id).Include(x => x.CityFeatureTranslations).SingleOrDefaultAsync();
+            var cityFeature = await _context.CityFeatures.Where(x => x.Id.ToString() == id).Include(x => x.CityFeatureTranslations).Include(x => x.Pictures).SingleOrDefaultAsync();
             _context.CityFeatures.Remove(cityFeature);
+
+            foreach (var picture in cityFeature.Pictures)
+            {
+                await deletePictureAsync(picture.Id.ToString(), "img/city_features");
+            }
+
             await _context.SaveChangesAsync();
         }
 
@@ -789,9 +830,20 @@ namespace hitsWebsite.Services
                 Pictures = new Collection<Picture>()
             };
 
-            foreach (var picture in model.Pictures)
+            if (model.Pictures != null)
             {
-                dormitory.Pictures.Add(await createPicture(picture, "img/dormitories"));
+                dormitory.Pictures = new List<Picture>();
+
+                foreach (var picture in model.Pictures)
+                {
+                    var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(picture.ContentDisposition).FileName.Value.Trim('"'));
+                    var fileExt = Path.GetExtension(fileName);
+
+                    if (_allowedExtensions.Contains(fileExt))
+                    {
+                        dormitory.Pictures.Add(await createPicture(picture, "img/dormitories", fileExt));
+                    }
+                }
             }
 
             for (var i = 0; i < _cultures.Count; i++)
@@ -829,9 +881,15 @@ namespace hitsWebsite.Services
             {
                 foreach (var pictureToAdd in model.Pictures)
                 {
-                    var pic = await createPicture(pictureToAdd, "img/dormitories");
-                    pic.DormitoryId = dormitory.Id;
-                    dormitory.Pictures.Add(pic);
+                    var fileName = Path.GetFileName(ContentDispositionHeaderValue.Parse(pictureToAdd.ContentDisposition).FileName.Value.Trim('"'));
+                    var fileExt = Path.GetExtension(fileName);
+
+                    if (_allowedExtensions.Contains(fileExt))
+                    {
+                        var pic = await createPicture(pictureToAdd, "img/dormitories", fileExt);
+                        pic.DormitoryId = dormitory.Id;
+                        dormitory.Pictures.Add(pic);
+                    }
                 }
             }
 
@@ -853,6 +911,7 @@ namespace hitsWebsite.Services
         {
             var dormitory = await _context.Dormitories.Where(x => x.Id.ToString() == id).Include(x => x.Pictures).SingleOrDefaultAsync();
             _context.Dormitories.Remove(dormitory);
+
             foreach (var pic in dormitory.Pictures)
             {
                 await deletePictureAsync(pic.Id.ToString(), "img/dormitories");
@@ -1078,6 +1137,76 @@ namespace hitsWebsite.Services
         }
 
         #endregion
+
+
+        #region CRU* Footer
+
+        public async Task<Footer> GetFooter()
+        {
+            var footer = await _context.Footers.Include(x => x.FooterTranslations).SingleOrDefaultAsync();
+
+            if (footer == null)
+            {
+                footer = new Footer()
+                {
+                    FooterTranslations = new Collection<FooterTranslation>()
+                };
+                _context.Footers.Add(footer);
+            }
+
+            if (footer.FooterTranslations.Count < _cultures.Count) // if some language doesn't have a translation for entity
+            {
+                foreach (var culture in _cultures)
+                {
+                    if (footer.FooterTranslations.Where(x => x.Language == culture.Name.ToString()).SingleOrDefault() == default) // selecting empty translations
+                    {
+                        try // .resx contains requiered values
+                        {
+                            footer.FooterTranslations.Add(new FooterTranslation()
+                            {
+                                Description = _resourceManager.GetString("DefaultDescription", culture),
+                                Language = culture.Name.ToString(),
+                            });
+                        }
+                        catch // .resx file wasn't updated yet.
+                        {
+                            footer.FooterTranslations.Add(new FooterTranslation()
+                            {
+                                Description = _localizer.GetString("DefaulDescription"),
+                                Language = culture.Name.ToString(),
+                            });
+                        }
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+            return footer;
+        }
+
+        public async Task<Footer> EditFooter(FooterEditModel model)
+        {
+            var footer = await _context.Footers.Include(x => x.FooterTranslations).SingleOrDefaultAsync();
+
+            if (footer == null)
+            {
+                return null;
+            }
+
+
+            for (var i = 0; i < model.Language.Count; i++)
+            {
+                footer.FooterTranslations.ElementAt(i).Description = model.Description[i];
+                footer.FooterTranslations.ElementAt(i).Language = model.Language[i];
+            }
+
+            await _context.SaveChangesAsync();
+
+            return footer;
+        }
+
+        #endregion
+
 
 
         #region JSON

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using hitsWebsite.Data;
 
 namespace hitsWebsite.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210510111228_FkIsNotRequiredForHuman")]
+    partial class FkIsNotRequiredForHuman
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -518,41 +520,6 @@ namespace hitsWebsite.Data.Migrations
                     b.ToTable("FeatureTranslations");
                 });
 
-            modelBuilder.Entity("hitsWebsite.Models.Footer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Footers");
-                });
-
-            modelBuilder.Entity("hitsWebsite.Models.FooterTranslation", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("FooterId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Language")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FooterId");
-
-                    b.ToTable("FooterTranslations");
-                });
-
             modelBuilder.Entity("hitsWebsite.Models.Human", b =>
                 {
                     b.Property<Guid>("Id")
@@ -825,17 +792,6 @@ namespace hitsWebsite.Data.Migrations
                     b.Navigation("Feature");
                 });
 
-            modelBuilder.Entity("hitsWebsite.Models.FooterTranslation", b =>
-                {
-                    b.HasOne("hitsWebsite.Models.Footer", "Footer")
-                        .WithMany("FooterTranslations")
-                        .HasForeignKey("FooterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Footer");
-                });
-
             modelBuilder.Entity("hitsWebsite.Models.Human", b =>
                 {
                     b.HasOne("hitsWebsite.Models.Picture", "Picture")
@@ -920,11 +876,6 @@ namespace hitsWebsite.Data.Migrations
             modelBuilder.Entity("hitsWebsite.Models.Feature", b =>
                 {
                     b.Navigation("FeatureTranslations");
-                });
-
-            modelBuilder.Entity("hitsWebsite.Models.Footer", b =>
-                {
-                    b.Navigation("FooterTranslations");
                 });
 
             modelBuilder.Entity("hitsWebsite.Models.Human", b =>

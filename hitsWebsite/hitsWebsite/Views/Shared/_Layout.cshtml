@@ -6,11 +6,15 @@
 
 @{
     var requestedCulture = Context.Features.Get<Microsoft.AspNetCore.Localization.IRequestCultureFeature>().RequestCulture.UICulture.Name;
+    var supportedCultures = localizationOptions.Value.SupportedUICultures;  // Supported cultures in app
 
     var professionPage = await DataProviderService.GetDynamicPage("Professions");
     var admissionPage = await DataProviderService.GetDynamicPage("Admission");
     var livePage = await DataProviderService.GetDynamicPage("Live");
     var aboutPage = await DataProviderService.GetDynamicPage("About");
+
+    //db entities
+    var footer = await DataProviderService.GetFooter();
 }
 
 <!DOCTYPE html>
@@ -101,6 +105,8 @@
 
         @if (ViewBag.DisplayLinkStatus == null || ViewBag.DisplayLinkStatus == "visible")
         {
+            var idEdit = "footer-edit";
+
             <footer class="footer">
                 <div class="row m-0">
                     <div class="col-12 d-none d-sm-block col-lg-6 order-lg-last m-0 p-5 p-lg-0">
@@ -118,26 +124,38 @@
                             </div>
 
                             <p class="pt-4">
-                                634050, Томск, Проспект Ленина, 36 <br>
-                                <br>
-                                Пн-пт: с 9:00 до 17:00 <br>
-                                Сб: с 9:00 до 13:00 <br>
-                                Воскресенье — выходной день <br>
-                                <br>
-                                Email: abiturient@hits.tsu.ru <br>
-                                Приёмная комиссия: +7(3822)942-101, +7(953)911-76-59 <br>
-                                (только в рабочие часы)
+                                @Html.Raw(footer.FooterTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Description)
+
                                 @if (User.IsInRole(ApplicationRoles.Administrators))
                                 {
-                                    <input type="button" class="open-popup edit-block-name" rel="footer-edit" />
-                                } <br>
+                                    <input type="button" class="open-popup edit-block-name" rel="@idEdit" />
+                                }
+                                <br>
                             </p>
 
                             @if (User.IsInRole(ApplicationRoles.Administrators))
                             {
                                 <partial name="_PopupOpen" model='"footer-edit"' />
-                                <form asp-action="EditDynamicPageInfo" asp-controller="Home" asp-route-projectNameOfPage="@ViewData["Title"].ToString()" asp-route-currentControllerName="@ViewData["Title"].ToString()" method="post">
+                                <form asp-action="EditFooter" asp-controller="Home" asp-route-currentControllerName="@ViewData["Title"].ToString()" method="post">
                                     <h4>@localizer["EditAction"]</h4>
+
+                                    @for (var j = 0; j < supportedCultures.Count; j++)
+                                    {
+                                        <script src="~/lib/ckeditor/ckeditor.js"></script>
+                                        <h5>@supportedCultures[j].Name</h5>
+
+                                        <textarea required name="Description" id="footer-@j" type="text" autocomplete="off" placeholder="@localizer["InputDescription"]"
+                                                  class="entry-field mt-3">@Html.Raw(footer.FooterTranslations.Where(x=> x.Language == supportedCultures[j].Name).SingleOrDefault().Description)</textarea>
+
+                                        <input required hidden type="text" name="Language" value="@supportedCultures[j].Name" />
+                                        <hr>
+
+                                        <script>
+                                             document.addEventListener("DOMContentLoaded", function (event) {
+                                                 var editor = CKEDITOR.replace("footer-" + @j);
+                                             });
+                                        </script>
+                                    }
 
                                     <div class="mt-3 d-flex justify-content-end">
                                         <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
@@ -148,10 +166,10 @@
                             }
 
                             <div class="d-inline-block social_media_conteiner">
-                                <a href="#"><img src="~/svg/vk-logo.svg"></a>
-                                <a href="#"><img src="~/svg/facebook-logo.svg"></a>
-                                <a href="#"><img src="~/svg/instagram-logo.svg"></a>
-                                <a href="#"><img src="~/svg/youtube-logo.svg"></a>
+                                <a href="https://vk.com/hits_tsu"><img src="~/svg/vk-logo.svg"></a>
+                                <a href="https://www.facebook.com/software.engineering.tsu"><img src="~/svg/facebook-logo.svg"></a>
+                                <a href="https://www.instagram.com/hits.tsu/"><img src="~/svg/instagram-logo.svg"></a>
+                                <a href="https://www.youtube.com/channel/UC8jUXsbop4qV8tamXxsivyA"><img src="~/svg/youtube-logo.svg"></a>
                             </div>
 
                         </div>

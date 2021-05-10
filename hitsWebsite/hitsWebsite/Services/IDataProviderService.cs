@@ -92,6 +92,11 @@ namespace hitsWebsite.Services
 		#endregion
 
 
+		#region CRU* Footer
+		public Task<Footer> GetFooter();
+		public Task<Footer> EditFooter(FooterEditModel model);
+		#endregion
+
 
 		// JSON
 
