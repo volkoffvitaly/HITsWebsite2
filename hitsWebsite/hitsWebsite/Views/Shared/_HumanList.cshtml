@@ -25,17 +25,18 @@
             var idEdit = $"{Model.Post}-edit-{i}";
             var idDelete = $"{Model.Post}-delete-{i}";
 
-            <div class="col-4 p-2 person-container">
+            <div class="col-sm-6 col-md-4 col-lg-6 col-xl-4 pb-3 person-container">
 
-                @if (User.IsInRole(ApplicationRoles.Administrators))
-                {
-                    <div class="card-btns-container">
-                        <button class="open-popup btn-edit" rel="@idEdit"></button>
-                        <button class="open-popup btn-delete" rel="@idDelete"></button>
-                    </div>
-                }
+                
 
                 <div class="img-wrapper">
+                    @if (User.IsInRole(ApplicationRoles.Administrators))
+                    {
+                        <div class="card-btns-container">
+                            <button class="open-popup btn-edit" rel="@idEdit"></button>
+                            <button class="open-popup btn-delete" rel="@idDelete"></button>
+                        </div>
+                    }
                     @if (Model.Humans[i].Picture == null)
                     {
                         <img src="~/img/default_avatar.png" />

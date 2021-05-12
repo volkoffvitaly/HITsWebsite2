@@ -200,6 +200,12 @@ nav {
             }
         }
     }
+
+    .navbar-toggler {
+        &:focus {
+            outline: none;
+        }
+    }
 }
 
 .header-left-margin {
@@ -1101,11 +1107,8 @@ h6 {
 #our-people {
 
     & > label {
-        float: left;
         cursor: pointer;
         background-color: white;
-        border: 1px solid rgba(143, 147, 154, 0.556885);
-        border-right: none;
         outline: none;
         font-family: Open Sans;
         font-style: normal;
@@ -1114,21 +1117,44 @@ h6 {
         line-height: 2.3em;
         color: #262626;
         padding: .375rem .75rem;
+        border: 1px solid rgba(143, 147, 154, 0.556885);
         -webkit-transition: all 0.15s;
         -moz-transition: all 0.15s;
         transition: all 0.15s;
+        //
+        width: 100%;
+        margin-bottom: 0;
+        text-align: center;
+        border-bottom: none;
+
 
         &:nth-of-type(1) {
-            border-radius: 10px 0px 0px 10px;
+            border-radius: 10px 10px 0px 0px;
         }
 
         &:nth-last-of-type(1) {
-            border-radius: 0px 10px 10px 0px;
-            border-right: 1px solid rgba(143, 147, 154, 0.556885);
+            border-radius: 0px 0px 10px 10px;
+            border-bottom: 1px solid rgba(143, 147, 154, 0.556885);
         }
 
         &:hover {
             background-color: #edf7ff;
+        }
+
+        @include sm {
+            width: auto;
+            float: left;
+            border-right: none;
+            border-bottom: 1px solid rgba(143, 147, 154, 0.556885);
+
+            &:nth-of-type(1) {
+                border-radius: 10px 0px 0px 10px;
+            }
+
+            &:nth-last-of-type(1) {
+                border-radius: 0px 10px 10px 0px;
+                border-right: 1px solid rgba(143, 147, 154, 0.556885);
+            }
         }
     }
 
@@ -1136,19 +1162,39 @@ h6 {
         display: none;
 
         &:checked + label {
-            border-bottom: 1px solid #3FAEFF;
+            border-right: 1px solid #3FAEFF;
             border-top: 1px solid #3FAEFF;
             border-left: 1px solid #3FAEFF;
             color: #3FAEFF;
             text-shadow: 0 0 .65px #3FAEFF, 0 0 .65px #3FAEFF;
 
             & + input + label {
-                border-left: 1px solid #3FAEFF;
+                border-top: 1px solid #3FAEFF;
             }
         }
 
         &:nth-last-of-type(1):checked + label {
-            border-right: 1px solid #3FAEFF;
+            border-bottom: 1px solid #3FAEFF;
+        }
+
+        @include sm {
+            &:checked + label {
+                border-bottom: 1px solid #3FAEFF;
+                border-top: 1px solid #3FAEFF;
+                border-left: 1px solid #3FAEFF;
+                border-right: none;
+                color: #3FAEFF;
+                text-shadow: 0 0 .65px #3FAEFF, 0 0 .65px #3FAEFF;
+
+                & + input + label {
+                    border-left: 1px solid #3FAEFF;
+                    border-top: 1px solid rgba(143, 147, 154, 0.556885);
+                }
+            }
+
+            &:nth-last-of-type(1):checked + label {
+                border-right: 1px solid #3FAEFF;
+            }
         }
     }
 
@@ -1172,10 +1218,11 @@ h6 {
     .img-wrapper {
         height: 300px;
         position: relative;
+        overflow: hidden;
 
         img {
             max-width: 100%;
-            max-height: 300px;
+            max-height: 100%;
             margin: 0 auto;
             display: block;
             position: absolute;
