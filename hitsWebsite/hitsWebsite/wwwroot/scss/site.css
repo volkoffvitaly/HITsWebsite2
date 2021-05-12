@@ -105,15 +105,19 @@ nav {
       /*padding-left: 0.5rem;
             padding-right: 0.5rem;*/
       border: none;
-      background-color: transparent; }
-      nav .header-list .nav-link:hover {
-        color: #3FAEFF !important; }
+      background-color: transparent;
+      -webkit-transition: all 0.25s;
+      -moz-transition: all 0.25s;
+      transition: all 0.25s; }
     nav .header-list ul li {
       /*&:focus {
                 border: 2px solid black;
             }*/ }
       nav .header-list ul li:first-of-type .nav-link {
         padding-left: 0 !important; }
+      nav .header-list ul li:hover .nav-link {
+        color: #3FAEFF !important;
+        transform: translateY(-0.2rem); }
   nav .navbar-toggler:focus {
     outline: none; }
 
@@ -1058,11 +1062,14 @@ h6 {
     background-color: rgba(0, 0, 0, 0.15);
     -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05); }
   .photos-container ol img {
-    width: 100%; }
+    width: 100%;
+    -webkit-transition: all 0.1s;
+    -moz-transition: all 0.1s;
+    transition: all 0.1s; }
   .photos-container ol li:not(:first-child) {
     margin-top: 1rem; }
   .photos-container ol li:hover img {
-    opacity: 0.75; }
+    opacity: 0.85; }
 
 .delete-photo {
   border: 1px solid rgba(0, 0, 0, 0.15);

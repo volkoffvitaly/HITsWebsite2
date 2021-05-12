@@ -57,7 +57,7 @@
                             var idEdit = $"subject-edit-{i}";
                             var idDelete = $"subject-delete-{i}";
 
-                            <div class="col-sm-6 col-md-4 card-container">
+                            <div class="col-md-6 col-lg-6 col-xl-4 card-container">
                                 <div class="card box">
                                     @if (User.IsInRole(ApplicationRoles.Administrators))
                                     {
@@ -134,7 +134,7 @@
                     {
                         var idCreate = $"subject-create";
 
-                        <div class="col-sm-6 col-md-4 card-container">
+                        <div class="col-md-6 col-lg-6 col-xl-4 card-container">
                             <div class="card box adding-card">
                                 <input type="button" class="open-popup add-btn" rel="@idCreate" />
                             </div>
@@ -167,7 +167,7 @@
 
 
                 @*  PROBABILITY OF ADMISSION (FRONT-END ONLY)  *@
-                <div class="row">
+                <div class="row mt-4">
 
                     <div class="col-12 w-100">
                         <h3 style="color:dodgerblue;">@localizer["ProbabilityOfAdmission"] <span class="purple-highlight">*</span></h3>

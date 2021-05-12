@@ -58,7 +58,7 @@
                             var idEdit = $"city-features-edit-{i}";
                             var idDelete = $"city-features-delete-{i}";
 
-                            <div class="col-sm-6 col-md-4 card-container">
+                            <div class="col-md-6 col-lg-6 col-xl-4 card-container">
                                 <div class="card box">
                                     @if (User.IsInRole(ApplicationRoles.Administrators))
                                     {
@@ -139,7 +139,7 @@
                     {
                         var idCreate = "add-city-feature";
 
-                        <div class="col-sm-6 col-md-4 card-container">
+                        <div class="col-md-6 col-lg-6 col-xl-4 card-container">
                             <div class="card box adding-card">
                                 <input type="button" class="open-popup add-btn" rel="@idCreate" />
                             </div>
@@ -181,7 +181,7 @@
                     var idEdit = $"city-features-edit-with-photos-{i}";
                     var idDelete = $"city-features-delete-with-photos-{i}";
 
-                    <div class="w-100 box mt-4">
+                    <div class="w-100 box mt-5">
                         @* EDIT & DELETE CITY FEATURES WITH PHOTOS CARDS *@
                         @if (User.IsInRole(ApplicationRoles.Administrators))
                         {
@@ -277,7 +277,7 @@
                         <div class="photos-container mt-4">
                             <div class="row">
 
-                                <div class="col-sm-9">
+                                <div class="col-md-9 col-lg-12 col-xl-9">
                                     <div id="@idCarouselCityFeature" class="carousel slide carousel-fade" data-ride="carousel">
 
                                         <!--Slides-->
@@ -315,7 +315,7 @@
                                     </div>
                                 </div>
 
-                                <div class="d-none d-sm-block col-3">
+                                <div class="d-none d-md-block d-lg-none d-xl-block col-3">
                                     <div class="indicators-container position-relative">
                                         <!--Indicators-->
                                         <ol>
@@ -380,7 +380,7 @@
                             <div class="photos-container mt-4">
                                 <div class="row">
 
-                                    <div class="col-sm-9">
+                                    <div class="col-md-9 col-lg-12 col-xl-9">
                                         <div id="carousel-hostel-@i" class="carousel slide carousel-fade" data-ride="carousel">
                                             <!--Slides-->
                                             <div class="carousel-inner" role="listbox">
@@ -417,7 +417,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="d-none d-sm-block col-3">
+                                    <div class="d-none d-md-block d-lg-none d-xl-block col-3">
                                         <div class="indicators-container position-relative">
                                             <!--Indicators-->
                                             <ol>
