@@ -66,7 +66,22 @@
 nav {
   font-family: Montserrat;
   font-style: normal;
-  font-size: 1.125rem; }
+  font-size: 1.125rem;
+  /*.header-logo-name {
+        font-family: Montserrat;
+        font-style: normal;
+        font-weight: 500;
+        font-size: $header-logo-name_font-size; // 1.5rem by default
+        //width: $header-logo-name_width + em; // 5 by default (Fixed width to calculate left-margin for main content)
+        font-weight: 500;
+        line-height: 1.04em;
+        color: #393939;
+
+
+        > p {
+            margin-bottom: 0;
+        }
+    }*/ }
   @media (min-width: 62em) {
     nav {
       font-size: 0.875rem; } }
@@ -76,21 +91,29 @@ nav {
   @media (min-width: 1300px) {
     nav {
       font-size: 1.125rem; } }
-  nav .header-logo-name {
-    font-size: 1.5rem;
-    width: 5em;
+  nav .header-logo {
     font-weight: 500;
+    font-size: 1.5rem;
     line-height: 1.04em;
-    color: #393939; }
-    nav .header-logo-name > p {
-      margin-bottom: 0; }
+    color: #393939;
+    text-decoration: none; }
   nav .header-list {
     font-weight: 700;
     line-height: 1.2em; }
     nav .header-list .nav-link {
-      color: #2F3843 !important; }
+      color: #2F3843 !important;
+      /*padding-left: 0.5rem;
+            padding-right: 0.5rem;*/
+      border: none;
+      background-color: transparent; }
       nav .header-list .nav-link:hover {
         color: #3FAEFF !important; }
+    nav .header-list ul li {
+      /*&:focus {
+                border: 2px solid black;
+            }*/ }
+      nav .header-list ul li:first-of-type .nav-link {
+        padding-left: 0 !important; }
 
 .header-left-margin {
   margin-left: 0; }
@@ -1138,3 +1161,6 @@ h6 {
     #learn-more-popup .learn-more-content {
       margin-right: 250px;
       width: 390px; } }
+
+.cards-container {
+  margin-bottom: -30px; }

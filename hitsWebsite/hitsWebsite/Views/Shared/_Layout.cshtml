@@ -55,8 +55,71 @@
         </div>
 
         <header>
-            <nav class="navbar navbar-expand-lg navbar-light bg-transparent pt-4 pb-4">
-                <a class="navbar-brand d-flex" href="#">
+            <nav class="navbar navbar-expand-lg navbar-light bg-transparent pb-4 pl-0 pr-0 justify-content-center" style="padding-top: 2rem;">
+
+
+                <div class="w-100" style="padding: 0 2rem;">
+                    <div class="row">
+
+                        <div class="col col-lg-3 order-first">
+                            <a class="header-logo d-flex" href="#">
+                                <img class="mr-3" src="~/svg/logo.svg">
+                                <div class="align-self-center header-logo-name">
+                                    @localizer["SchoolName"]
+                                </div>
+                            </a>
+                        </div>
+
+
+                        <div class="col-auto col-lg-9 d-flex order-lg-last">
+
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+
+                        </div>
+
+                        <div class="col-lg-9 d-flex">
+                            <div class="collapse navbar-collapse header-list mt-3 mt-sm-0 align-self-center" id="navbarSupportedContent">
+                                <div class="w-100">
+                                    <ul class="navbar-nav d-flex align-items-center">
+                                        <li class="nav-item text-center active mr-xl-4 mr-lg-3">
+                                            <a class="nav-link" asp-controller="Professions" asp-action="Index">
+                                                @professionPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+                                            </a>
+                                        </li>
+                                        <li class="nav-item text-center mr-xl-4 mr-lg-2">
+                                            <a class="nav-link" asp-controller="Admission" asp-action="Index">
+                                                @admissionPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+                                            </a>
+                                        </li>
+                                        <li class="nav-item text-center mr-xl-4 mr-lg-2">
+                                            <a class="nav-link" asp-controller="Live" asp-action="Index">
+                                                @livePage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+                                            </a>
+                                        </li>
+                                        <li class="nav-item text-center mr-xl-4 mr-lg-2">
+                                            <a class="nav-link" asp-controller="About" asp-action="Index">
+                                                @aboutPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+                                            </a>
+                                        </li>
+                                        <li class="nav-item dropdown ml-lg-auto">
+                                            <partial name="_Culture" model="@new LanguageEditModel()">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+
+                
+
+
+                @*<a class="header-logo d-flex w-25" href="#">
                     <img class="mr-3" src="~/svg/logo.svg">
                     <div class="align-self-center header-logo-name">
                         @localizer["SchoolName"]
@@ -65,25 +128,26 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse header-list mt-3 mt-sm-0 ml-3 ml-sm-0" id="navbarSupportedContent">
+
+                <div class="collapse navbar-collapse header-list mt-3 mt-sm-0 ml-3 ml-sm-0 align-self-center w-75" id="navbarSupportedContent">
                     <div class="w-100">
                         <ul class="navbar-nav d-flex align-items-sm-center">
-                            <li class="nav-item active header-left-margin text-nowrap mr-xl-4 mr-lg-3">
+                            <li class="nav-item text-center active mr-xl-4 mr-lg-3">
                                 <a class="nav-link" asp-controller="Professions" asp-action="Index">
                                     @professionPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
                                 </a>
                             </li>
-                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
+                            <li class="nav-item text-center mr-xl-4 mr-lg-2">
                                 <a class="nav-link" asp-controller="Admission" asp-action="Index">
                                     @admissionPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
                                 </a>
                             </li>
-                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
+                            <li class="nav-item text-center mr-xl-4 mr-lg-2">
                                 <a class="nav-link" asp-controller="Live" asp-action="Index">
                                     @livePage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
                                 </a>
                             </li>
-                            <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
+                            <li class="nav-item text-center mr-xl-4 mr-lg-2">
                                 <a class="nav-link" asp-controller="About" asp-action="Index">
                                     @aboutPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
                                 </a>
@@ -93,7 +157,48 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div>*@
+
+
+
+                @*<a class="navbar-brand d-flex" href="#">
+                        <img class="mr-3" src="~/svg/logo.svg">
+                        <div class="align-self-center header-logo-name">
+                            @localizer["SchoolName"]
+                        </div>
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse header-list mt-3 mt-sm-0 ml-3 ml-sm-0" id="navbarSupportedContent">
+                        <div class="w-100">
+                            <ul class="navbar-nav d-flex align-items-sm-center">
+                                <li class="nav-item active header-left-margin text-nowrap mr-xl-4 mr-lg-3">
+                                    <a class="nav-link" asp-controller="Professions" asp-action="Index">
+                                        @professionPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+                                    </a>
+                                </li>
+                                <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
+                                    <a class="nav-link" asp-controller="Admission" asp-action="Index">
+                                        @admissionPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+                                    </a>
+                                </li>
+                                <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
+                                    <a class="nav-link" asp-controller="Live" asp-action="Index">
+                                        @livePage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+                                    </a>
+                                </li>
+                                <li class="nav-item text-nowrap mr-xl-4 mr-lg-2">
+                                    <a class="nav-link" asp-controller="About" asp-action="Index">
+                                        @aboutPage.DynamicPageTranslations.Where(x => x.Language == requestedCulture).SingleOrDefault().Name
+                                    </a>
+                                </li>
+                                <li class="nav-item dropdown ml-lg-auto">
+                                    <partial name="_Culture" model="@new LanguageEditModel()">
+                                </li>
+                            </ul>
+                        </div>
+                    </div>*@
 
 
             </nav>

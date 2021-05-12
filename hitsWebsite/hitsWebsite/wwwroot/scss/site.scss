@@ -146,26 +146,57 @@ nav {
         font-size: 1.125rem;
     }
 
-    .header-logo-name {
+
+    .header-logo {
+        font-weight: 500;
         font-size: $header-logo-name_font-size; // 1.5rem by default
-        width: $header-logo-name_width + em; // 5 by default (Fixed width to calculate left-margin for main content)
+        //width: $header-logo-name_width + em; // 5 by default (Fixed width to calculate left-margin for main content)
+        line-height: 1.04em;
+        color: #393939;
+        text-decoration: none;
+        //margin-right: 15px;
+    }
+    /*.header-logo-name {
+        font-family: Montserrat;
+        font-style: normal;
+        font-weight: 500;
+        font-size: $header-logo-name_font-size; // 1.5rem by default
+        //width: $header-logo-name_width + em; // 5 by default (Fixed width to calculate left-margin for main content)
         font-weight: 500;
         line-height: 1.04em;
         color: #393939;
 
+
         > p {
             margin-bottom: 0;
         }
-    }
-
+    }*/
     .header-list {
         font-weight: 700;
         line-height: 1.2em;
 
         .nav-link {
             color: #2F3843 !important; // !important used to override bootstrap link color
+            /*padding-left: 0.5rem;
+            padding-right: 0.5rem;*/
+            border: none;
+            background-color: transparent;
+            //margin-left: 2rem;
             &:hover {
                 color: #3FAEFF !important; // !important used to override bootstrap link color
+            }
+
+            &:first-of-type {
+                //padding-left: 0;
+            }
+        }
+
+        ul li {
+            /*&:focus {
+                border: 2px solid black;
+            }*/
+            &:first-of-type .nav-link {
+                padding-left: 0 !important;
             }
         }
     }
@@ -1622,4 +1653,8 @@ h6 {
             width: 390px;
         }
     }
+}
+
+.cards-container {
+    margin-bottom: -30px;
 }
