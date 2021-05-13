@@ -146,6 +146,13 @@ nav {
         font-size: 1.125rem;
     }
 
+    > div {
+        padding: 0 0.8rem;
+
+        @include sm {
+            padding: 0 2rem;
+        }
+    }
 
     .header-logo {
         font-weight: 500;
@@ -156,21 +163,7 @@ nav {
         text-decoration: none;
         //margin-right: 15px;
     }
-    /*.header-logo-name {
-        font-family: Montserrat;
-        font-style: normal;
-        font-weight: 500;
-        font-size: $header-logo-name_font-size; // 1.5rem by default
-        //width: $header-logo-name_width + em; // 5 by default (Fixed width to calculate left-margin for main content)
-        font-weight: 500;
-        line-height: 1.04em;
-        color: #393939;
 
-
-        > p {
-            margin-bottom: 0;
-        }
-    }*/
     .header-list {
         font-weight: 700;
         line-height: 1.2em;
@@ -251,21 +244,6 @@ main {
     }
 
     flex: 1;
-    /*@include lg {
-        @include calculate-left-margin($dynamic-left-margin-lg);
-    }
-
-    @include rwd(1050) {
-        @include calculate-left-margin($dynamic-left-margin-rwd-1050);
-    }
-
-    @include rwd(1100) {
-        @include calculate-left-margin($dynamic-left-margin-rwd-1100);
-    }
-
-    @include rwd(1400) {
-        @include calculate-left-margin($dynamic-left-margin-rwd-1400);
-    }*/
 }
 // Main
 
@@ -927,30 +905,39 @@ main {
     }
 
     h1 {
-
-        @include sm {
+        /*@include sm {
             font-size: 4rem;
             line-height: 4.875rem;
-        }
+        }*/
     }
 
     p {
         font-family: "Open Sans";
         font-style: normal;
         font-weight: normal;
-        font-size: 1.5rem;
-        line-height: 2.0625rem;
+        font-size: 1rem;
+        line-height: 1.5rem;
         color: #000000;
+
+        @include sm {
+            font-size: 1.25rem;
+            line-height: 1.7rem;
+        }
+
+        @include md {
+            font-size: 1.5rem;
+            line-height: 2.0625rem;
+        }
     }
 }
 
 #blocks-container {
-    h2 {
+    /*h2 {
         @include sm {
             font-size: 3rem;
             line-height: 3.7rem;
         }
-    }
+    }*/
 }
 
 .card-container {
@@ -1022,44 +1009,94 @@ h1 {
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 2.8rem;
-    line-height: 3rem;
+    font-size: 2rem;
+    line-height: 2.2rem;
     color: #000000;
+
+    @include sm {
+        font-size: 2.2rem;
+        line-height: 2.4rem;
+    }
+
+    @include md {
+        font-size: 2.8rem;
+        line-height: 3rem;
+    }
 }
 
 h2 {
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 2.4rem;
-    line-height: 3rem;
+    font-size: 1.75rem;
+    line-height: 1.95rem;
     color: #000000;
+
+    @include sm {
+        font-size: 2rem;
+        line-height: 2.2rem;
+    }
+
+    @include md {
+        font-size: 2.4rem;
+        line-height: 3rem;
+    }
 }
 
 h3 {
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 36px;
-    line-height: 44px;
+    font-size: 1.5rem;
+    line-height: 1.9rem;
+
+    @include sm {
+        font-size: 1.8rem;
+        line-height: 2rem;
+    }
+
+    @include md {
+        font-size: 2rem;
+        line-height: 2.75rem;
+    }
 }
 
 h4 {
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 1.75rem;
-    line-height: 2.125rem;
+    font-size: 1.4rem;
+    line-height: 1.8rem;
     color: #000000;
+
+    @include sm {
+        font-size: 1.6rem;
+        line-height: 2rem;
+    }
+
+    @include md {
+        font-size: 1.75rem;
+        line-height: 2.125rem;
+    }
 }
 
 h5 {
     font-family: Montserrat;
     font-style: normal;
     font-weight: bold;
-    font-size: 24px;
-    line-height: 40px;
+    font-size: 1.2rem;
+    line-height: 1.5rem;
     color: #000000;
+
+    @include sm {
+        font-size: 1.3rem;
+        line-height: 2rem;
+    }
+
+    @include md {
+        font-size: 1.5rem;
+        line-height: 2.5rem;
+    }
 }
 
 h6 {
@@ -1103,10 +1140,20 @@ h6 {
     font-family: Open Sans;
     font-style: normal;
     font-weight: normal;
-    font-size: 24px;
-    line-height: 164.1%;
+    font-size: 1.2rem;
+    line-height: 1.5rem;
     /* or 39px */
     color: #6F6F6F;
+
+    @include sm {
+        font-size: 1.3rem;
+        line-height: 2rem;
+    }
+
+    @include md {
+        font-size: 1.5rem;
+        line-height: 2.5rem;
+    }
 }
 
 .small-addition {
@@ -1320,8 +1367,18 @@ h6 {
     font-family: Open Sans;
     font-style: normal;
     font-weight: normal;
-    font-size: 24px;
-    line-height: 33px;
+    font-size: 1.2rem;
+    line-height: 1.5rem;
+
+    @include sm {
+        font-size: 1.25rem;
+        line-height: 1.8rem;
+    }
+
+    @include md {
+        font-size: 1.5rem;
+        line-height: 2rem;
+    }
 }
 
 .title-block {
@@ -1420,7 +1477,20 @@ h6 {
     display: none;
     overflow: auto;
     max-height: 90%;
-    width: 50%;
+    width: 90%;
+
+    @include sm {
+        width: 75%;
+    }
+
+    @include lg {
+        width: 800px;
+    }
+
+    @include xl {
+        width: 50%;
+    }
+
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

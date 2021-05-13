@@ -37,15 +37,15 @@
             }' />
 
             <div class="col-12 mt-3">
-                <div class="row cards-container">
-                    @if (professions.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
-                    {
-                        <div class="col-auto">
-                            <h6>@localizer["EmptyCards"]</h6>
-                        </div>
-                    }
-                    else
-                    {
+
+                @if (professions.Count == 0 && !User.IsInRole(ApplicationRoles.Administrators))
+                {
+                    <h6>@localizer["EmptyCards"]</h6>
+                }
+                else
+                {
+                    <div class="row cards-container">
+
                         @for (var i = 0; i < professions.Count; i++)
                         {
                             var idEdit = $"profession-edit-{i}";
@@ -80,14 +80,13 @@
                                         <h5>@supportedCultures[j].Name</h5>
 
                                         <input required name="Name" type="text" placeholder="@localizer["InputName"]" autocomplete="off" class="entry-field"
-                                               value="@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name"/>
+                                               value="@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Name" />
 
-                                        <textarea required name="Description" type="text" placeholder="@localizer["InputDescription"]" autocomplete="off" class="entry-field mt-3"
-                                                  >@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
+                                        <textarea required name="Description" type="text" placeholder="@localizer["InputDescription"]" autocomplete="off" class="entry-field mt-3">@professions[i].ProfessionTranslations.Where(x => x.Language == supportedCultures[j].Name).SingleOrDefault().Description</textarea>
 
                                         <hr>
 
-                                        <input required hidden name="Language" type="text" value="@supportedCultures[j].Name"  />
+                                        <input required hidden name="Language" type="text" value="@supportedCultures[j].Name" />
                                     }
 
                                     <div class="mt-3 d-flex justify-content-end">
@@ -124,44 +123,47 @@
                                 <partial name="_PopupClose" />
                             }
                         }
-                    }
 
-                    @* CREATE PROFESSION CARD *@
-                    @if (User.IsInRole(ApplicationRoles.Administrators))
-                    {
-                        var idCreate = $"profession-create";
 
-                        <div class="col-md-6 col-lg-6 col-xl-4 card-container">
-                            <div class="card box adding-card">
-                                <input type="button" class="open-popup add-btn" rel="@idCreate" />
-                            </div>
-                        </div>
+                        @* CREATE PROFESSION CARD *@
+                        @if (User.IsInRole(ApplicationRoles.Administrators))
+                        {
+                            var idCreate = $"profession-create";
 
-                        <partial name="_PopupOpen" model="idCreate" />
-                        <form asp-action="CreateProfession" method="post">
-
-                            <h4>@localizer["AddAction"]</h4>
-
-                            @for (var i = 0; i < supportedCultures.Count; i++)
-                            {
-                                <h5>@supportedCultures[i].Name</h5>
-
-                                <input required name="Name" type="text" placeholder="@localizer["InputName"]" autocomplete="off" class="entry-field"/>
-                                <textarea required name="Description" type="text" placeholder="@localizer["InputDescription"]" autocomplete="off" class="entry-field mt-3"></textarea>
-
-                                <input required hidden name="Language" type="text" value="@supportedCultures[i].Name" />
-                                <hr>
-                            }
-
-                            <div class="mt-3 d-flex justify-content-end">
-                                <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
-                                <button type="submit" class="btn btn-primary">@localizer["ButtonSave"]</button>
+                            <div class="col-md-6 col-lg-6 col-xl-4 card-container">
+                                <div class="card box adding-card">
+                                    <input type="button" class="open-popup add-btn" rel="@idCreate" />
+                                </div>
                             </div>
 
-                        </form>
-                        <partial name="_PopupClose" />
-                    }
-                </div>
+                            <partial name="_PopupOpen" model="idCreate" />
+                            <form asp-action="CreateProfession" method="post">
+
+                                <h4>@localizer["AddAction"]</h4>
+
+                                @for (var i = 0; i < supportedCultures.Count; i++)
+                                {
+                                    <h5>@supportedCultures[i].Name</h5>
+
+                                    <input required name="Name" type="text" placeholder="@localizer["InputName"]" autocomplete="off" class="entry-field" />
+                                    <textarea required name="Description" type="text" placeholder="@localizer["InputDescription"]" autocomplete="off" class="entry-field mt-3"></textarea>
+
+                                    <input required hidden name="Language" type="text" value="@supportedCultures[i].Name" />
+                                    <hr>
+                                }
+
+                                <div class="mt-3 d-flex justify-content-end">
+                                    <button type="button" class="close-popup btn btn-outline-danger mr-2">@localizer["ButtonCancel"]</button>
+                                    <button type="submit" class="btn btn-primary">@localizer["ButtonSave"]</button>
+                                </div>
+
+                            </form>
+                            <partial name="_PopupClose" />
+                        }
+                    </div>
+                }
+
+
             </div>
         </div>
 
@@ -182,7 +184,7 @@
                             <div class="col-12">
                                 <h6>@localizer["JokeQuestion1"]</h6>
                             </div>
-                            <div class="col-11 col-lg-6 col-xl-5">
+                            <div class="col-12 col-lg-6 col-xl-5">
                                 <input class="entry-field" type="text" placeholder="@localizer["Answer"]" />
                             </div>
                         </div>
@@ -210,7 +212,7 @@
                             <div class="col-12">
                                 <h6>@localizer["JokeQuestion3"]</h6>
                             </div>
-                            <div class="col-11 col-lg-6 col-xl-5">
+                            <div class="col-12 col-lg-6 col-xl-5">
                                 <input class="entry-field" type="text" placeholder="@localizer["Answer"]" />
                             </div>
                         </div>
@@ -219,7 +221,7 @@
                     <div class="col-md-6 col-lg-12">
 
                         <div class="row mt-lg-4">
-                            <div class="col-11 col-lg-5 col-xl-4">
+                            <div class="col-12 col-lg-5 col-xl-4">
                                 <button type="button" class="big-btn">@localizer["Result"]</button>
                             </div>
                         </div>

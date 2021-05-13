@@ -129,7 +129,7 @@ $(document).ready(function () {
     $navbar.on("click", "a", function (event) {
         event.preventDefault();
         let sc = $(this).attr("href")
-        let dn = $(`a[name*='${sc}']`).first().offset().top
+        let dn = $(`a[name*='${sc}']`).first().offset().top - 10
         $('html, body').stop()                                                              //Остановка текущей анимации
         $('html, body').animate({ scrollTop: dn }, animationTime)                           //Запуск анимации
         $navbar.addClass("inAnimState")                                                     //Добваления класса, показываеющего что находится в состоянии анимации
@@ -265,7 +265,6 @@ $('.load-input').change(function () {
         if ($(this).val() != '') $(this).prev().text($(this).val());
         else $(this).prev().text('Выберите файл');
     }
-
     
 });
 

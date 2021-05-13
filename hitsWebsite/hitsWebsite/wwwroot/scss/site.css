@@ -66,22 +66,7 @@
 nav {
   font-family: Montserrat;
   font-style: normal;
-  font-size: 1.125rem;
-  /*.header-logo-name {
-        font-family: Montserrat;
-        font-style: normal;
-        font-weight: 500;
-        font-size: $header-logo-name_font-size; // 1.5rem by default
-        //width: $header-logo-name_width + em; // 5 by default (Fixed width to calculate left-margin for main content)
-        font-weight: 500;
-        line-height: 1.04em;
-        color: #393939;
-
-
-        > p {
-            margin-bottom: 0;
-        }
-    }*/ }
+  font-size: 1.125rem; }
   @media (min-width: 62em) {
     nav {
       font-size: 0.875rem; } }
@@ -91,6 +76,11 @@ nav {
   @media (min-width: 1300px) {
     nav {
       font-size: 1.125rem; } }
+  nav > div {
+    padding: 0 0.8rem; }
+    @media (min-width: 36em) {
+      nav > div {
+        padding: 0 2rem; } }
   nav .header-logo {
     font-weight: 500;
     font-size: 1.5rem;
@@ -138,22 +128,7 @@ nav {
 
 main {
   margin: 0.8rem;
-  flex: 1;
-  /*@include lg {
-        @include calculate-left-margin($dynamic-left-margin-lg);
-    }
-
-    @include rwd(1050) {
-        @include calculate-left-margin($dynamic-left-margin-rwd-1050);
-    }
-
-    @include rwd(1100) {
-        @include calculate-left-margin($dynamic-left-margin-rwd-1100);
-    }
-
-    @include rwd(1400) {
-        @include calculate-left-margin($dynamic-left-margin-rwd-1400);
-    }*/ }
+  flex: 1; }
   @media (min-width: 36em) {
     main {
       margin: 2rem; } }
@@ -600,23 +575,35 @@ main {
   line-height: 1.3125rem;
   color: #BD4EEE; }
 
-@media (min-width: 36em) {
-  .title-page h1 {
-    font-size: 4rem;
-    line-height: 4.875rem; } }
+.title-page h1 {
+  /*@include sm {
+            font-size: 4rem;
+            line-height: 4.875rem;
+        }*/ }
 
 .title-page p {
   font-family: "Open Sans";
   font-style: normal;
   font-weight: normal;
-  font-size: 1.5rem;
-  line-height: 2.0625rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
   color: #000000; }
+  @media (min-width: 36em) {
+    .title-page p {
+      font-size: 1.25rem;
+      line-height: 1.7rem; } }
+  @media (min-width: 48em) {
+    .title-page p {
+      font-size: 1.5rem;
+      line-height: 2.0625rem; } }
 
-@media (min-width: 36em) {
-  #blocks-container h2 {
-    font-size: 3rem;
-    line-height: 3.7rem; } }
+#blocks-container {
+  /*h2 {
+        @include sm {
+            font-size: 3rem;
+            line-height: 3.7rem;
+        }
+    }*/ }
 
 .card-container {
   padding-bottom: 30px; }
@@ -667,40 +654,80 @@ h1 {
   font-family: Montserrat;
   font-style: normal;
   font-weight: bold;
-  font-size: 2.8rem;
-  line-height: 3rem;
+  font-size: 2rem;
+  line-height: 2.2rem;
   color: #000000; }
+  @media (min-width: 36em) {
+    h1 {
+      font-size: 2.2rem;
+      line-height: 2.4rem; } }
+  @media (min-width: 48em) {
+    h1 {
+      font-size: 2.8rem;
+      line-height: 3rem; } }
 
 h2 {
   font-family: Montserrat;
   font-style: normal;
   font-weight: bold;
-  font-size: 2.4rem;
-  line-height: 3rem;
+  font-size: 1.75rem;
+  line-height: 1.95rem;
   color: #000000; }
+  @media (min-width: 36em) {
+    h2 {
+      font-size: 2rem;
+      line-height: 2.2rem; } }
+  @media (min-width: 48em) {
+    h2 {
+      font-size: 2.4rem;
+      line-height: 3rem; } }
 
 h3 {
   font-family: Montserrat;
   font-style: normal;
   font-weight: bold;
-  font-size: 36px;
-  line-height: 44px; }
+  font-size: 1.5rem;
+  line-height: 1.9rem; }
+  @media (min-width: 36em) {
+    h3 {
+      font-size: 1.8rem;
+      line-height: 2rem; } }
+  @media (min-width: 48em) {
+    h3 {
+      font-size: 2rem;
+      line-height: 2.75rem; } }
 
 h4 {
   font-family: Montserrat;
   font-style: normal;
   font-weight: bold;
-  font-size: 1.75rem;
-  line-height: 2.125rem;
+  font-size: 1.4rem;
+  line-height: 1.8rem;
   color: #000000; }
+  @media (min-width: 36em) {
+    h4 {
+      font-size: 1.6rem;
+      line-height: 2rem; } }
+  @media (min-width: 48em) {
+    h4 {
+      font-size: 1.75rem;
+      line-height: 2.125rem; } }
 
 h5 {
   font-family: Montserrat;
   font-style: normal;
   font-weight: bold;
-  font-size: 24px;
-  line-height: 40px;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
   color: #000000; }
+  @media (min-width: 36em) {
+    h5 {
+      font-size: 1.3rem;
+      line-height: 2rem; } }
+  @media (min-width: 48em) {
+    h5 {
+      font-size: 1.5rem;
+      line-height: 2.5rem; } }
 
 h6 {
   font-family: Montserrat;
@@ -736,10 +763,18 @@ h6 {
   font-family: Open Sans;
   font-style: normal;
   font-weight: normal;
-  font-size: 24px;
-  line-height: 164.1%;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
   /* or 39px */
   color: #6F6F6F; }
+  @media (min-width: 36em) {
+    #budgetary-chance, #paid-chance {
+      font-size: 1.3rem;
+      line-height: 2rem; } }
+  @media (min-width: 48em) {
+    #budgetary-chance, #paid-chance {
+      font-size: 1.5rem;
+      line-height: 2.5rem; } }
 
 .small-addition {
   display: flex; }
@@ -894,8 +929,16 @@ h6 {
   font-family: Open Sans;
   font-style: normal;
   font-weight: normal;
-  font-size: 24px;
-  line-height: 33px; }
+  font-size: 1.2rem;
+  line-height: 1.5rem; }
+  @media (min-width: 36em) {
+    .large-text {
+      font-size: 1.25rem;
+      line-height: 1.8rem; } }
+  @media (min-width: 48em) {
+    .large-text {
+      font-size: 1.5rem;
+      line-height: 2rem; } }
 
 .title-block {
   display: inline; }
@@ -973,7 +1016,7 @@ h6 {
   display: none;
   overflow: auto;
   max-height: 90%;
-  width: 50%;
+  width: 90%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -982,6 +1025,15 @@ h6 {
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   border-radius: 0.925rem;
   z-index: 101; }
+  @media (min-width: 36em) {
+    .popup {
+      width: 75%; } }
+  @media (min-width: 62em) {
+    .popup {
+      width: 800px; } }
+  @media (min-width: 75em) {
+    .popup {
+      width: 50%; } }
   .popup::-webkit-scrollbar {
     width: 1.85rem; }
   .popup::-webkit-scrollbar-track {
