@@ -137,7 +137,7 @@ nav {
       margin-left: 13%; } }
 
 main {
-  margin: 2rem;
+  margin: 0.8rem;
   flex: 1;
   /*@include lg {
         @include calculate-left-margin($dynamic-left-margin-lg);
@@ -154,6 +154,9 @@ main {
     @include rwd(1400) {
         @include calculate-left-margin($dynamic-left-margin-rwd-1400);
     }*/ }
+  @media (min-width: 36em) {
+    main {
+      margin: 2rem; } }
 
 .footer {
   margin-top: 3rem;
@@ -709,7 +712,6 @@ h6 {
 
 .box {
   position: relative;
-  padding: 1.6rem;
   background: #FFFFFF;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   border-radius: 0.925rem;
@@ -718,13 +720,17 @@ h6 {
   font-weight: normal;
   font-size: 18px;
   line-height: 24.5px;
-  color: #6F6F6F; }
+  color: #6F6F6F;
+  padding: 0.8rem; }
   .box .additional-info {
     font-family: Open Sans;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
     line-height: 25px; }
+  @media (min-width: 36em) {
+    .box {
+      padding: 1.6rem; } }
 
 #budgetary-chance, #paid-chance {
   font-family: Open Sans;
@@ -1123,10 +1129,13 @@ h6 {
 
 #learn-more-popup {
   max-width: 90%;
-  padding: 2.5rem;
+  padding: 1.25rem;
   overflow: visible;
   background: #FBFBFB;
   width: 720px; }
+  @media (min-width: 36em) {
+    #learn-more-popup {
+      padding: 2.5rem; } }
   #learn-more-popup p {
     font-family: Open Sans;
     font-style: normal;
