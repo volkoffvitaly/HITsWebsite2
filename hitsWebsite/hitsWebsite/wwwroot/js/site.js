@@ -295,3 +295,5 @@ function YandexReadyHandler() {
     ); return map;
 }
 
+$('#third-figure').css('top', $('body').height() * 0.55)
+$('#second-figure').css('top', $('body').height() * 0.40)
